@@ -1,0 +1,364 @@
+/* DPU EduBot — Minimal Custom CSS (Tailwind handles layout, spacing, colors) */
+
+/* ─── Fonts ─────────────────────────────────────────────── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', 'Roboto', sans-serif; }
+
+/* ─── Custom Scrollbar ───────────────────────────────────── */
+.custom-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
+.custom-scroll::-webkit-scrollbar-track { background: transparent; }
+.custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+.custom-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+.no-scroll::-webkit-scrollbar { display: none; }
+
+/* ─── Sidebar ────────────────────────────────────────────── */
+.sidebar-panel { min-height: 0; }
+
+/* ─── Nav Button ─────────────────────────────────────────── */
+.nav-btn {
+  color: rgba(255,255,255,0.45);
+  border: 1px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+.nav-btn:hover {
+  background: rgba(255,255,255,0.04);
+  color: rgba(255,255,255,0.8);
+}
+.nav-btn.active {
+  background: rgba(37,99,235,0.12);
+  border-color: rgba(37,99,235,0.25);
+  color: #fff;
+}
+.nav-btn.active .material-icons-round { color: #3b82f6; }
+
+/* ─── Ripple Effect ──────────────────────────────────────── */
+.nav-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.08) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.nav-btn:active::after { opacity: 1; }
+
+/* ─── Tab Buttons (Admin Toolbar) ────────────────────────── */
+.tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.45);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: #fff; background: rgba(255,255,255,0.05); }
+.tab-btn.active { background: rgba(37,99,235,0.15); color: #fff; border: 1px solid rgba(37,99,235,0.2); }
+
+/* ─── Login Dialog Animation ─────────────────────────────── */
+.login-dialog { animation: dialogSlide 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+@keyframes dialogSlide {
+  from { transform: translateY(-16px); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+
+/* ─── Role Tab in Login Dialog ───────────────────────────── */
+.role-tab {
+  color: rgba(255,255,255,0.4);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+.role-tab.active {
+  background: rgba(37,99,235,0.2);
+  color: #fff;
+}
+.role-tab:hover:not(.active) { color: rgba(255,255,255,0.7); }
+
+/* ─── MUI-style Inputs ───────────────────────────────────── */
+.mui-input {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #fff;
+  padding: 9px 12px;
+  border-radius: 8px;
+  outline: none;
+  font-size: 13px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.mui-input:focus {
+  border-color: rgba(37,99,235,0.6);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.08);
+}
+.mui-input::placeholder { color: rgba(255,255,255,0.2); }
+
+/* ─── Buttons ────────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.3);
+}
+.btn-primary:hover { background: #1d4ed8; }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.8);
+  border: 1px solid rgba(255,255,255,0.1);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-secondary:hover { background: rgba(255,255,255,0.08); }
+
+/* ─── Chat Bubbles ───────────────────────────────────────── */
+.msg-wrapper {
+  display: flex;
+  gap: 10px;
+  animation: msgIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.msg-wrapper.user  { align-self: flex-end;  flex-direction: row-reverse; max-width: 78%; }
+.msg-wrapper.assistant { align-self: flex-start; max-width: 84%; }
+
+@keyframes msgIn {
+  from { transform: translateY(6px); opacity: 0; }
+  to   { transform: translateY(0);   opacity: 1; }
+}
+
+.msg-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 16px;
+}
+.msg-wrapper.user .msg-avatar {
+  background: #2563eb;
+  color: #fff;
+}
+.msg-wrapper.assistant .msg-avatar {
+  background: rgba(37,99,235,0.12);
+  border: 1px solid rgba(37,99,235,0.2);
+  color: #3b82f6;
+}
+
+.msg-bubble {
+  padding: 11px 15px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  line-height: 1.65;
+}
+.msg-wrapper.user .msg-bubble {
+  background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
+  border-top-right-radius: 3px;
+  color: #fff;
+}
+.msg-wrapper.assistant .msg-bubble {
+  background: rgba(28, 35, 51, 0.9);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-top-left-radius: 3px;
+  color: rgba(255,255,255,0.88);
+}
+
+/* ─── Source Chips ───────────────────────────────────────── */
+.src-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(37,99,235,0.1);
+  border: 1px solid rgba(37,99,235,0.2);
+  color: #60a5fa;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+/* ─── ERP Action Button ──────────────────────────────────── */
+.erp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border-radius: 7px;
+  background: linear-gradient(135deg, #92400e, #d97706);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  margin-top: 10px;
+  box-shadow: 0 2px 8px rgba(217,119,6,0.25);
+  transition: opacity 0.15s;
+}
+.erp-btn:hover { opacity: 0.88; }
+
+/* ─── Suggestion Chips ───────────────────────────────────── */
+.suggestion-chip {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 500;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.suggestion-chip:hover {
+  background: rgba(37,99,235,0.1);
+  border-color: rgba(37,99,235,0.3);
+  color: #fff;
+}
+
+/* ─── Stats Cards ────────────────────────────────────────── */
+.stat-card {
+  background: rgba(28, 35, 51, 0.8);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+}
+.stat-value { font-size: 28px; font-weight: 800; line-height: 1.1; color: #fff; }
+.stat-label { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.4); margin-top: 5px; }
+.stat-trend { font-size: 10px; margin-top: 3px; }
+.stat-trend.up { color: #34d399; }
+
+/* ─── Panel Cards ────────────────────────────────────────── */
+.panel-card {
+  background: rgba(28, 35, 51, 0.7);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  padding: 20px;
+}
+.panel-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 16px;
+}
+
+/* ─── Chart Bars ─────────────────────────────────────────── */
+.bar-row { display: flex; align-items: center; gap: 10px; }
+.bar-lbl { font-size: 11px; color: rgba(255,255,255,0.4); width: 120px; text-align: right; white-space: nowrap; flex-shrink: 0; }
+.bar-bg { flex: 1; background: rgba(255,255,255,0.04); height: 20px; border-radius: 4px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 7px; min-width: 24px; }
+.bar-fill span { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.85); }
+.bar-pct { font-size: 10px; color: rgba(255,255,255,0.3); width: 30px; text-align: right; flex-shrink: 0; }
+
+/* ─── Ticket Row ─────────────────────────────────────────── */
+.tkt-row {
+  background: rgba(22,27,34,0.8);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 10px;
+  padding: 11px 13px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.tkt-row:hover { border-color: rgba(37,99,235,0.35); }
+.tkt-row.selected { border-color: rgba(37,99,235,0.6); background: rgba(37,99,235,0.06); }
+
+.tkt-id { font-family: monospace; font-size: 10px; font-weight: 700; background: rgba(37,99,235,0.15); color: #60a5fa; padding: 2px 6px; border-radius: 4px; flex-shrink: 0; }
+.tkt-q  { font-size: 12px; color: rgba(255,255,255,0.85); font-weight: 500; line-height: 1.4; }
+.tkt-meta { font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 3px; }
+
+/* ─── Category Chips ─────────────────────────────────────── */
+.cat-chip {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 10px;
+  margin-right: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.cat-accounts { background: rgba(239,68,68,0.15); color: #f87171; }
+.cat-academic  { background: rgba(59,130,246,0.15); color: #60a5fa; }
+.cat-exam      { background: rgba(245,158,11,0.15); color: #fbbf24; }
+.cat-dispatch  { background: rgba(139,92,246,0.15); color: #a78bfa; }
+
+/* ─── Priority Badge ─────────────────────────────────────── */
+.pri-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+.pri-high   { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+.pri-medium { background: rgba(245,158,11,0.12); color: #fbbf24; border: 1px solid rgba(245,158,11,0.2); }
+.pri-low    { background: rgba(52,211,153,0.12); color: #34d399; border: 1px solid rgba(52,211,153,0.2); }
+
+/* ─── SLA Elements ───────────────────────────────────────── */
+.sla-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  border-radius: 10px;
+  border-width: 1px;
+  border-style: solid;
+}
+.sla-bar-bg  { background: rgba(255,255,255,0.06); height: 5px; border-radius: 4px; overflow: hidden; margin: 5px 0; }
+.sla-bar-fill { height: 100%; border-radius: 4px; }
+.sla-green { background: #10b981; }
+.sla-amber { background: #f59e0b; }
+.sla-red   { background: #ef4444; }
+
+/* ─── FAQ Cards ──────────────────────────────────────────── */
+.faq-section-title { font-size: 12px; font-weight: 700; color: #60a5fa; border-bottom: 1px solid rgba(255,255,255,0.07); padding-bottom: 8px; margin-bottom: 10px; }
+.faq-item { background: rgba(22,27,34,0.8); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 11px 13px; margin-bottom: 7px; }
+.faq-q { font-size: 13px; font-weight: 600; color: #fff; }
+.faq-a { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 5px; line-height: 1.55; }
+
+/* ─── Topic Row (Faculty) ────────────────────────────────── */
+.topic-row { display: flex; align-items: center; gap: 10px; }
+.topic-lbl  { font-size: 11px; color: rgba(255,255,255,0.45); width: 140px; flex-shrink: 0; }
+
+/* ─── Spinner ────────────────────────────────────────────── */
+.spinner { animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── View Sections ──────────────────────────────────────── */
+.view-section { display: flex; flex-direction: column; }
+.view-section.hidden { display: none !important; }
+.admin-tab-content.hidden { display: none !important; }

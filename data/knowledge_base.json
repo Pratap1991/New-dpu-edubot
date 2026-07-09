@@ -1,0 +1,1561 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "description": "DPU EduBot Knowledge Base - 4 layer architecture",
+    "layer_0": "Personal ERP data - NEVER answer, always redirect to ERP or Mentor",
+    "layer_1": "Verified FAQ doc - applies to ALL enrolled learners",
+    "layer_2": "Batch-specific - MBA Jan26 Sem1 and BBA Jan26 Sem1",
+    "layer_3": "Website dypatilonline.com - general program info"
+  },
+  "layer_0_redirect_rules": {
+    "triggers": [
+      "my attendance",
+      "attendance percentage",
+      "how much attendance",
+      "my fees",
+      "pending fees",
+      "my payment",
+      "my receipt",
+      "my result",
+      "my marks",
+      "my grade",
+      "my cgpa",
+      "my admit card",
+      "hall ticket",
+      "my exam form status",
+      "my assignment status",
+      "did i submit",
+      "my submission",
+      "my profile",
+      "my erp id",
+      "my prn",
+      "my student id",
+      "who is my mentor",
+      "my mentor contact",
+      "my mentor name",
+      "my backlog",
+      "my subjects enrolled",
+      "my courses enrolled"
+    ],
+    "redirects": {
+      "attendance": {
+        "message": "Your attendance details are on the LMS portal. Please log in to LMS and check your course progress section.",
+        "link": "https://collms.dpuerp.in/d2l/home",
+        "label": "Open LMS Portal"
+      },
+      "fees": {
+        "message": "Your semester-wise fee details, pending amounts, and payment receipts are on ERP under the Payments section.",
+        "link": "https://col5.dpuerp.in/Secured/StudentCOL/PaymentServices.aspx",
+        "label": "Open ERP Payments"
+      },
+      "result": {
+        "message": "Results are on ERP under the Examination section once declared by the university.",
+        "link": "https://col5.dpuerp.in/Secured/StudentCOL/COLExaminations.aspx",
+        "label": "Open ERP Examination"
+      },
+      "admit_card": {
+        "message": "Your admit card is on ERP — Examination — Filled Exam Form — Admit Card column.",
+        "link": "https://col5.dpuerp.in/Secured/StudentCOL/COLExaminations.aspx",
+        "label": "Open ERP Examination"
+      },
+      "assignment_status": {
+        "message": "Check your submission status on ERP — Assignments — Assignment History tab.",
+        "link": "https://col5.dpuerp.in/Secured/StudentCOL/StudentAssignment.aspx",
+        "label": "Open ERP Assignments"
+      },
+      "profile": {
+        "message": "Your ERP Student ID, PRN, program details and mentor info are all on ERP under My Profile.",
+        "link": "https://col5.dpuerp.in/Secured/StudentCOL/StudentProfile.aspx",
+        "label": "Open My Profile on ERP"
+      },
+      "mentor": {
+        "message": "Your assigned mentor's name and email are on ERP — My Profile — scroll to Mentor Details section. Contact them via WhatsApp or email during working hours (10am to 6pm).",
+        "link": "https://col5.dpuerp.in/Secured/StudentCOL/StudentProfile.aspx",
+        "label": "View Mentor Details on ERP"
+      }
+    }
+  },
+  "support_ticket_taxonomy": {
+    "Accounts": [
+      "Online Fee Payment Issues",
+      "Issues Related To Fee Receipt",
+      "Fees, Loan Not Mapped Or Updated",
+      "Excess Fees Refund"
+    ],
+    "Academic": [
+      "Recording Of Session Not Uploaded In LMS",
+      "Content Related (LMS, Books)",
+      "Project Related",
+      "Assignment Related",
+      "Session Related"
+    ],
+    "Examination": [
+      "Exam Form & Hall Ticket Related",
+      "Result Related",
+      "Exam Login Credential",
+      "Exam Time Table Related"
+    ],
+    "Students Section": [
+      "Past Educational Details Change",
+      "Photo And Signature Update",
+      "Calculation Of CGPA To Percentage",
+      "Name Correction In Marksheet",
+      "Duplicate Marksheet",
+      "Letter For Medium Of Instruction",
+      "Letter Of Recommendation",
+      "Fee Structure Letter Request",
+      "Bonafide Certificate Request",
+      "Mentor Response Issue"
+    ],
+    "Dispatch": [
+      "Marksheet Delivery Issue",
+      "Books Delivery Issue"
+    ]
+  },
+  "layer_1_faqs": {
+    "onboarding": {
+      "label": "Getting Started and Onboarding",
+      "faqs": [
+        {
+          "q": "What is the Welcome Email?",
+          "a": "An official email from the Student Section containing your ERP login credentials and portal link. Sent after successful completion of your admission process.",
+          "tags": [
+            "welcome email",
+            "erp credentials",
+            "login",
+            "first time"
+          ]
+        },
+        {
+          "q": "I have not received the Welcome Email. What should I do?",
+          "a": "Ensure your admission process is fully completed. Also check your spam folder. If the issue persists, contact your counsellor.",
+          "tags": [
+            "welcome email",
+            "not received",
+            "missing"
+          ]
+        },
+        {
+          "q": "What is the Mentor Introduction Email?",
+          "a": "An official email from your assigned mentor sharing their contact details and the WhatsApp community link.",
+          "tags": [
+            "mentor email",
+            "whatsapp group",
+            "introduction"
+          ]
+        },
+        {
+          "q": "What are Login Credentials?",
+          "a": "Your User ID and password to access the ERP portal. These are provided in your Welcome Email from the Student Section.",
+          "tags": [
+            "login",
+            "credentials",
+            "user id",
+            "password"
+          ]
+        },
+        {
+          "q": "How do I log in to the ERP student portal?",
+          "a": "Visit col5.dpuerp.in and use your User ID and password from the Welcome Email.",
+          "tags": [
+            "erp login",
+            "how to login",
+            "portal link"
+          ]
+        },
+        {
+          "q": "What if I forget my ERP login details?",
+          "a": "Use the Forgot Password option on the ERP login page. If that does not work, contact your mentor.",
+          "tags": [
+            "forgot password",
+            "login issue",
+            "credentials lost"
+          ]
+        },
+        {
+          "q": "I cannot log in to ERP. What should I do?",
+          "a": "Check your credentials and internet connection. If still not working, contact your mentor during working hours (10am to 6pm).",
+          "tags": [
+            "cannot login",
+            "erp not working",
+            "login problem"
+          ]
+        },
+        {
+          "q": "What is the ERP portal?",
+          "a": "ERP is your official student support system for all academic and administrative activities including fee payment, examination, assignments, and accessing LMS.",
+          "tags": [
+            "erp",
+            "what is erp",
+            "student portal"
+          ]
+        },
+        {
+          "q": "What is the difference between Student ID and PRN?",
+          "a": "Student ID is your ERP ID assigned by the college system. PRN (Permanent Registration Number) is your university registration number generated after document verification and admission confirmation.",
+          "tags": [
+            "student id",
+            "prn",
+            "difference",
+            "erp id"
+          ]
+        },
+        {
+          "q": "When will I receive my PRN number?",
+          "a": "PRN is generated after document verification and admission confirmation by the university.",
+          "tags": [
+            "prn",
+            "when",
+            "permanent registration"
+          ]
+        }
+      ]
+    },
+    "lms_learning": {
+      "label": "LMS and Learning",
+      "faqs": [
+        {
+          "q": "What is the LMS portal?",
+          "a": "LMS (Learning Management System) at collms.dpuerp.in is the platform for your lectures, study materials, e-books, case studies, recorded sessions, and practice assessments.",
+          "tags": [
+            "lms",
+            "what is lms",
+            "learning portal"
+          ]
+        },
+        {
+          "q": "Where can I find the LMS portal?",
+          "a": "On ERP, click My Courses in the left menu. It will redirect you to LMS via Single Sign-On (SSO) directly into your enrolled courses.",
+          "tags": [
+            "lms link",
+            "my courses",
+            "sso"
+          ]
+        },
+        {
+          "q": "When will I get LMS access?",
+          "a": "LMS access is provided after your fees are successfully paid and admission is confirmed.",
+          "tags": [
+            "lms access",
+            "when",
+            "fees required"
+          ]
+        },
+        {
+          "q": "What are Live Sessions?",
+          "a": "Real-time online classes conducted by faculty or subject experts at scheduled times. You can interact, ask questions, and participate just like a classroom.",
+          "tags": [
+            "live sessions",
+            "online class",
+            "real time"
+          ]
+        },
+        {
+          "q": "How do I join a live lecture?",
+          "a": "Lecture join links are available on your LMS portal. Click the link at the scheduled time.",
+          "tags": [
+            "join lecture",
+            "live class link",
+            "how to join"
+          ]
+        },
+        {
+          "q": "What if I miss a lecture?",
+          "a": "Recorded sessions are available on LMS and can be accessed any time. However, attending live sessions is important for your attendance record.",
+          "tags": [
+            "missed lecture",
+            "recorded session",
+            "absent from class"
+          ]
+        },
+        {
+          "q": "Is attendance compulsory?",
+          "a": "Yes. Regular attendance is expected and is monitored by the academic team through LMS participation in live sessions.",
+          "tags": [
+            "attendance",
+            "compulsory",
+            "mandatory"
+          ]
+        },
+        {
+          "q": "How is my attendance tracked?",
+          "a": "Once you log in to LMS and participate in live sessions, your attendance is automatically monitored. You can check your attendance status on the LMS portal.",
+          "tags": [
+            "attendance tracking",
+            "how tracked",
+            "lms attendance"
+          ]
+        },
+        {
+          "q": "How can I improve my attendance?",
+          "a": "Regularly attend live sessions on LMS, join on time, and stay for the full duration. Watching recorded sessions helps with learning but does NOT count for attendance.",
+          "tags": [
+            "improve attendance",
+            "low attendance",
+            "tips"
+          ]
+        },
+        {
+          "q": "Can I download study materials from LMS?",
+          "a": "Yes. E-books and PPTs are available for download from LMS.",
+          "tags": [
+            "download",
+            "study material",
+            "ebooks",
+            "ppt"
+          ]
+        },
+        {
+          "q": "Are lecture recordings available?",
+          "a": "Yes. Most lectures are recorded and uploaded to LMS. You can access and watch them at any time.",
+          "tags": [
+            "recordings",
+            "recorded sessions",
+            "past lectures"
+          ]
+        },
+        {
+          "q": "Can I access LMS from mobile?",
+          "a": "Yes. LMS is accessible via mobile browser or app. Google Chrome or updated browsers work best.",
+          "tags": [
+            "mobile",
+            "phone",
+            "lms app",
+            "tablet"
+          ]
+        },
+        {
+          "q": "Which browser is best for LMS?",
+          "a": "Google Chrome or any updated browser is recommended for the best LMS experience.",
+          "tags": [
+            "browser",
+            "chrome",
+            "compatibility"
+          ]
+        },
+        {
+          "q": "Where will I find the program syllabus?",
+          "a": "The syllabus is available on LMS under your respective course or subject section.",
+          "tags": [
+            "syllabus",
+            "program syllabus",
+            "subjects list"
+          ]
+        },
+        {
+          "q": "What if lecture recordings are not visible on LMS?",
+          "a": "Raise a support ticket: Category — Academic | Nature of Support — Recording Of Session Not Uploaded In LMS.",
+          "tags": [
+            "recording missing",
+            "not visible",
+            "lms issue"
+          ]
+        },
+        {
+          "q": "What if LMS is not opening?",
+          "a": "Check your browser compatibility and internet connection. Use Google Chrome. If it still does not work, raise a support ticket under Academic category.",
+          "tags": [
+            "lms not opening",
+            "lms down",
+            "technical issue"
+          ]
+        },
+        {
+          "q": "What is EDX?",
+          "a": "EDX is an online platform offering free courses from international universities with certifications. These are valuable for career advancement and your resume. You will receive a separate link via email from EDX.",
+          "tags": [
+            "edx",
+            "online courses",
+            "certification",
+            "international"
+          ]
+        },
+        {
+          "q": "Are live lectures compulsory?",
+          "a": "Yes, attending live sessions is strongly recommended as attendance is tracked through your LMS participation.",
+          "tags": [
+            "live lectures compulsory",
+            "mandatory"
+          ]
+        }
+      ]
+    },
+    "assignments": {
+      "label": "Assignments",
+      "faqs": [
+        {
+          "q": "Where can I find my assignments?",
+          "a": "Your assignments are available on ERP portal under the Assignments section in the left menu.",
+          "tags": [
+            "assignments",
+            "where",
+            "find assignments"
+          ]
+        },
+        {
+          "q": "How do I submit assignments?",
+          "a": "Go to ERP — Assignments — New Assignments. Complete Assignment 1 and Assignment 2 for each subject (formative assignments), then click Submit Assignment for final submission. Once submitted, editing is NOT allowed.",
+          "tags": [
+            "submit assignment",
+            "how to submit",
+            "assignment process"
+          ]
+        },
+        {
+          "q": "Is assignment submission mandatory?",
+          "a": "Yes. Assignment submission is mandatory and assignments are an important part of evaluation contributing to your overall marks.",
+          "tags": [
+            "assignment mandatory",
+            "compulsory",
+            "required"
+          ]
+        },
+        {
+          "q": "Are assignments counted in the final result?",
+          "a": "Yes. Formative Assessment (assignments and internal) carries 30 marks. Summative Assessment (term-end exam) carries 70 marks. Total is 100 marks per subject.",
+          "tags": [
+            "assignment marks",
+            "result",
+            "formative",
+            "weightage",
+            "30 70"
+          ]
+        },
+        {
+          "q": "What is the last date to submit assignments?",
+          "a": "The assignment deadline is mentioned on your ERP portal under the Assignments section for each subject.",
+          "tags": [
+            "assignment deadline",
+            "last date",
+            "due date"
+          ]
+        },
+        {
+          "q": "What happens if I miss the assignment deadline?",
+          "a": "Late submissions may not be accepted. Ensure you submit within the mentioned deadline shown on ERP.",
+          "tags": [
+            "missed deadline",
+            "late submission",
+            "overdue"
+          ]
+        },
+        {
+          "q": "Can I edit my assignment after submission?",
+          "a": "No. Once you submit your assignment on ERP, editing is not allowed.",
+          "tags": [
+            "edit assignment",
+            "change after submit",
+            "modify"
+          ]
+        },
+        {
+          "q": "Will I get confirmation after submitting my assignment?",
+          "a": "Yes. You will receive confirmation after successfully submitting assignments on the ERP portal.",
+          "tags": [
+            "assignment confirmation",
+            "submitted successfully"
+          ]
+        },
+        {
+          "q": "What if my assignments are not visible on ERP?",
+          "a": "Contact your mentor immediately. You can also raise a support ticket: Category — Academic | Nature of Support — Assignment Related.",
+          "tags": [
+            "assignments not visible",
+            "missing assignments",
+            "not showing"
+          ]
+        }
+      ]
+    },
+    "project_work": {
+      "label": "Project Work",
+      "faqs": [
+        {
+          "q": "Is doing an internship at industry/corporate/organisation mandatory for the project?",
+          "a": "No, internship is not mandatory but is highly recommended for practical exposure. If not possible, you can work on a relevant research topic for preparing a project report based on secondary data, in consultation with your internal guide appointed by the institute.",
+          "tags": [
+            "internship",
+            "mandatory",
+            "project",
+            "training",
+            "industry"
+          ]
+        },
+        {
+          "q": "What is the minimum duration of an internship?",
+          "a": "Minimum 6 to 8 weeks to ensure sufficient learning and data collection.",
+          "tags": [
+            "internship duration",
+            "minimum weeks",
+            "training period"
+          ]
+        },
+        {
+          "q": "I am a working student. Can I do the internship at my current place of work?",
+          "a": "Yes, you can do the internship at your current workplace. However, you need to produce an internship completion certificate from the organisation in the format prescribed by the institute.",
+          "tags": [
+            "working student",
+            "current workplace",
+            "internship",
+            "completion certificate"
+          ]
+        },
+        {
+          "q": "What documents are required for internship confirmation?",
+          "a": "An internship offer letter is helpful but it is not mandatory.",
+          "tags": [
+            "internship documents",
+            "offer letter",
+            "confirmation"
+          ]
+        },
+        {
+          "q": "How can I find internship opportunities?",
+          "a": "You can find internships through job portals, your own networking, the university placement cell, or by directly contacting organizations relevant to your domain.",
+          "tags": [
+            "find internship",
+            "internship opportunities",
+            "placement"
+          ]
+        },
+        {
+          "q": "Can I do a virtual internship?",
+          "a": "Yes, virtual internships are available through Qollabb — DPU's partner organization that provides industry-relevant projects with experienced industry mentors. You can work on real-world challenges remotely while enhancing your professional profile.",
+          "tags": [
+            "virtual internship",
+            "online internship",
+            "qollabb",
+            "remote"
+          ]
+        },
+        {
+          "q": "What is the correct format for the project report?",
+          "a": "Follow the prescribed structure: Introduction, Literature Review, Methodology, Data Analysis, Findings, Recommendations and Conclusion. Recordings explaining the format are available on LMS.",
+          "tags": [
+            "project format",
+            "report structure",
+            "project report sections"
+          ]
+        },
+        {
+          "q": "In which format should the project report be uploaded?",
+          "a": "Submit the project report in PDF format only.",
+          "tags": [
+            "report format",
+            "pdf",
+            "file format",
+            "upload format"
+          ]
+        },
+        {
+          "q": "What happens if I miss the project report submission deadline?",
+          "a": "If you miss the project report deadline, your project will be deferred to the next exam cycle, and you will be marked absent for the current one.",
+          "tags": [
+            "missed deadline",
+            "project deadline",
+            "late submission",
+            "deferred"
+          ]
+        },
+        {
+          "q": "Where should I submit my final project report soft copy (PDF file)?",
+          "a": "Upload your final project report PDF on the ERP portal within the specified deadline. The deadline is declared from time to time and informed via email and displayed on the portal.",
+          "tags": [
+            "submit project",
+            "soft copy",
+            "erp upload",
+            "where to submit"
+          ]
+        },
+        {
+          "q": "Where should I send my final project report black book (hard copy)?",
+          "a": "Send the project report black book hard copy to: Dr. D.Y. Patil Vidyapeeth Centre for Online Learning, Sant Tukaram Nagar, Pimpri, Pune - 411018, Maharashtra, India. Kind Attention: (Name of your mentor). In case of difficulty in courier delivery, contact 020-27805700/59.",
+          "tags": [
+            "black book",
+            "hard copy",
+            "courier address",
+            "physical submission",
+            "postal address"
+          ]
+        },
+        {
+          "q": "Is submitting a project report black book (hard copy) mandatory?",
+          "a": "Yes, submitting the project report black book hard copy is mandatory. Non-submission may result in incomplete or absent remarks on your mark sheet. The project will be considered complete only after receipt of the hard copy.",
+          "tags": [
+            "black book mandatory",
+            "hard copy required",
+            "compulsory submission"
+          ]
+        },
+        {
+          "q": "How do I improve the quality of my project report?",
+          "a": "To improve quality: use authentic data sources, ensure logical flow and clarity, proofread for grammar and formatting errors, and strictly follow university guidelines.",
+          "tags": [
+            "project quality",
+            "improve report",
+            "guidelines"
+          ]
+        },
+        {
+          "q": "What are the guidelines for preparing the project PPT?",
+          "a": "The project PPT structure is: Slide 1 - Title of project, Name of learner with ERP ID and PRN Number | Slide 2 - Project objectives | Slide 3 - Research Methodology (type of research, sampling method, population, sample size, data collection method) | Slides 4-8 - Data Analysis and presentation | Slide 9 - Findings, recommendations and conclusion | Slide 10 - Bibliography.",
+          "tags": [
+            "ppt",
+            "presentation",
+            "slides",
+            "ppt guidelines",
+            "project presentation"
+          ]
+        },
+        {
+          "q": "How many pages should the project report be?",
+          "a": "The project report should ideally be 40 to 80 pages, and not more than 120 pages.",
+          "tags": [
+            "project pages",
+            "page count",
+            "report length",
+            "how long"
+          ]
+        },
+        {
+          "q": "Can I get a sample copy of the project report and PPT?",
+          "a": "Yes, sample copies of the project report and PPT are uploaded on the LMS as applicable for your specialization.",
+          "tags": [
+            "sample project",
+            "template",
+            "sample ppt",
+            "example"
+          ]
+        },
+        {
+          "q": "Is project work compulsory?",
+          "a": "Yes, the project is a compulsory course carrying 8 credits and is assessed for 200 marks.",
+          "tags": [
+            "project compulsory",
+            "project credits",
+            "project marks",
+            "200 marks"
+          ]
+        },
+        {
+          "q": "Is this a group project or an individual project?",
+          "a": "It is an individual project to be completed by each learner individually. It is NOT a group project.",
+          "tags": [
+            "group project",
+            "individual project",
+            "team project"
+          ]
+        },
+        {
+          "q": "Is the project a research project or an internship project?",
+          "a": "It is an internship project. However, if you have done research work, you can include it in your project report.",
+          "tags": [
+            "research project",
+            "internship project",
+            "project type"
+          ]
+        },
+        {
+          "q": "How should I communicate with my project supervisor?",
+          "a": "Communication with your project supervisor through email is preferred.",
+          "tags": [
+            "supervisor communication",
+            "guide email",
+            "contact guide"
+          ]
+        },
+        {
+          "q": "How long does the project supervisor take to respond?",
+          "a": "Depending on availability, expect a response within 3 working days. Supervisors try to respond as early as possible.",
+          "tags": [
+            "supervisor response time",
+            "guide reply",
+            "response time",
+            "3 days"
+          ]
+        },
+        {
+          "q": "Which type of queries should I address to my project supervisor?",
+          "a": "Most information and resources for the internship and project report are available on LMS. Anything beyond what is covered in LMS, or queries requiring personalised solutions, should be addressed to your project supervisor. Administrative queries unrelated to research should be addressed through your mentor.",
+          "tags": [
+            "supervisor queries",
+            "what to ask guide",
+            "research queries"
+          ]
+        },
+        {
+          "q": "Where can I look for project guidance other than my supervisor?",
+          "a": "Go through the LMS Research Project Report course at course code OMBC 405. It contains in-depth information for preparing the project report based on research carried out. All required formats for ERP submission are available for download and use as templates on LMS.",
+          "tags": [
+            "project guidance",
+            "ombc 405",
+            "lms project course",
+            "templates"
+          ]
+        }
+      ]
+    },
+    "payments_fees": {
+      "label": "Payments and Fees",
+      "faqs": [
+        {
+          "q": "How can I pay my semester fees?",
+          "a": "Log in to ERP — Payments — Course Fees Payment. Accept terms and conditions, select payment type, enter amount, and click Pay Now via DPU Payment Gateway.",
+          "tags": [
+            "pay fees",
+            "fee payment",
+            "how to pay"
+          ]
+        },
+        {
+          "q": "What payment modes are available?",
+          "a": "Credit Card, Debit Card, Net Banking, and UPI. All payments are online only. No offline payment is accepted.",
+          "tags": [
+            "payment modes",
+            "upi",
+            "credit card",
+            "net banking",
+            "debit card"
+          ]
+        },
+        {
+          "q": "Can I pay in installments?",
+          "a": "Yes. Fees are paid semester-wise. Partial payment within a semester is also allowed.",
+          "tags": [
+            "installments",
+            "partial payment",
+            "semester fees"
+          ]
+        },
+        {
+          "q": "What is the total MBA fee structure?",
+          "a": "MBA total fee is Rs 1,89,400 across 4 semesters — Semester 1: Rs 50,000 | Semester 2: Rs 50,000 | Semester 3: Rs 45,000 | Semester 4: Rs 44,400.",
+          "tags": [
+            "mba fees",
+            "fee structure",
+            "total fees",
+            "semester fees"
+          ]
+        },
+        {
+          "q": "What happens if I do not pay fees on time?",
+          "a": "You will lose LMS access, books will not be dispatched, and you will not be eligible for examinations.",
+          "tags": [
+            "fee not paid",
+            "consequences",
+            "no payment",
+            "fee overdue"
+          ]
+        },
+        {
+          "q": "Will I get LMS access without paying fees?",
+          "a": "No. LMS access is provided only after confirmation of fee payment or loan approval.",
+          "tags": [
+            "lms without fees",
+            "access before payment"
+          ]
+        },
+        {
+          "q": "Where can I download my payment receipt?",
+          "a": "Log in to ERP — Payments section. You can view and download your receipt from the receipts table on the right side.",
+          "tags": [
+            "payment receipt",
+            "download receipt",
+            "fee receipt"
+          ]
+        },
+        {
+          "q": "What if my payment fails?",
+          "a": "Retry using another payment method. If amount was deducted but not reflected, wait at least 2 hours before retrying. Share your transaction proof with your mentor for mapping.",
+          "tags": [
+            "payment failed",
+            "deducted not reflected",
+            "failed transaction"
+          ]
+        },
+        {
+          "q": "What is a UTR number?",
+          "a": "UTR (Unique Transaction Reference) is your payment reference number. It is needed for payment mapping if the payment is not reflected in ERP.",
+          "tags": [
+            "utr",
+            "transaction reference",
+            "payment reference"
+          ]
+        },
+        {
+          "q": "What if payment is deducted but not reflected in ERP?",
+          "a": "Wait at least 2 hours. If still not updated, share payment proof with your mentor. Also raise a support ticket: Category — Accounts | Nature — Fees, Loan Not Mapped Or Updated.",
+          "tags": [
+            "payment not reflected",
+            "deducted not updated",
+            "payment mapping"
+          ]
+        },
+        {
+          "q": "Can I apply for an education loan?",
+          "a": "Yes. Check ERP — Payments — Apply for Loan for available loan options and the application process.",
+          "tags": [
+            "education loan",
+            "loan",
+            "finance"
+          ]
+        },
+        {
+          "q": "Will books be sent if fees are not paid?",
+          "a": "No. Study materials and books are dispatched only after fee payment or loan approval is confirmed.",
+          "tags": [
+            "books without fees",
+            "study material dispatch"
+          ]
+        },
+        {
+          "q": "Will I get fee payment reminders?",
+          "a": "Yes. You will receive fee payment reminders via email, SMS, and notifications on the ERP portal.",
+          "tags": [
+            "fee reminder",
+            "payment reminder",
+            "due date notification"
+          ]
+        }
+      ]
+    },
+    "examination": {
+      "label": "Examination",
+      "faqs": [
+        {
+          "q": "How will I know when exam forms are available?",
+          "a": "You will receive notification via email and WhatsApp when exam forms are released.",
+          "tags": [
+            "exam form",
+            "notification",
+            "when available"
+          ]
+        },
+        {
+          "q": "Where do I fill my exam form?",
+          "a": "Log in to ERP — Examination section. New Exam Forms will appear there when released.",
+          "tags": [
+            "exam form",
+            "where to fill",
+            "erp examination"
+          ]
+        },
+        {
+          "q": "Is filling the exam form mandatory?",
+          "a": "Yes. Without submitting the exam form you will not be eligible to appear for examinations.",
+          "tags": [
+            "exam form mandatory",
+            "compulsory",
+            "required"
+          ]
+        },
+        {
+          "q": "Can my mentor fill the exam form for me?",
+          "a": "No. You must fill and submit the exam form yourself through the ERP portal.",
+          "tags": [
+            "mentor fill form",
+            "who fills exam form"
+          ]
+        },
+        {
+          "q": "Are exams proctored?",
+          "a": "Yes. Term-end examinations are proctored. Your activity is monitored through webcam, microphone, and system tracking during the exam.",
+          "tags": [
+            "proctored",
+            "exam monitoring",
+            "webcam",
+            "surveillance"
+          ]
+        },
+        {
+          "q": "What is a mock test and is it compulsory?",
+          "a": "Mock tests are conducted 3 days before the actual exam to help you practice and check technical readiness. Attending is strongly recommended.",
+          "tags": [
+            "mock test",
+            "practice exam",
+            "3 days before"
+          ]
+        },
+        {
+          "q": "What device should I use for the exam?",
+          "a": "A laptop is preferred. Mobile is also allowed. Ensure you have a stable high-speed internet connection.",
+          "tags": [
+            "exam device",
+            "laptop",
+            "mobile",
+            "internet requirement"
+          ]
+        },
+        {
+          "q": "What if internet disconnects during exam?",
+          "a": "Reconnect immediately and continue the exam. If you face login issues, contact the technical support team immediately.",
+          "tags": [
+            "internet disconnect",
+            "exam technical issue",
+            "disconnected during exam"
+          ]
+        },
+        {
+          "q": "What if I miss the exam?",
+          "a": "If you miss the exam, you may need to apply for a backlog exam in the next semester.",
+          "tags": [
+            "missed exam",
+            "absent from exam",
+            "backlog"
+          ]
+        },
+        {
+          "q": "What is a backlog or ATKT?",
+          "a": "ATKT (Allowed To Keep Terms) means you have backlog subjects — subjects you did not clear. You can appear for backlog exams conducted along with regular semester examinations. An additional fee is applicable.",
+          "tags": [
+            "backlog",
+            "atkt",
+            "failed subject",
+            "reappear"
+          ]
+        },
+        {
+          "q": "How do I apply for a backlog exam?",
+          "a": "Apply by filling out the exam form for the respective subject through the ERP portal. An additional fee is applicable for backlog exams.",
+          "tags": [
+            "apply backlog",
+            "backlog form",
+            "reappear process"
+          ]
+        },
+        {
+          "q": "When are exam results declared?",
+          "a": "Results are declared as per the schedule provided by the University Examination Department. You will be notified and can check results on ERP — Examination section.",
+          "tags": [
+            "result declaration",
+            "when results",
+            "result date"
+          ]
+        },
+        {
+          "q": "Will I get a physical copy of my result?",
+          "a": "Yes. A hard copy of your result will be sent to your registered postal address via courier. Ensure your address is up to date on ERP.",
+          "tags": [
+            "physical result",
+            "marksheet by post",
+            "courier result"
+          ]
+        },
+        {
+          "q": "What is the marks weightage?",
+          "a": "Formative Assessment (assignments and internal) = 30 marks. Summative Assessment (term-end exam) = 70 marks. Total = 100 marks per subject.",
+          "tags": [
+            "marks weightage",
+            "formative summative",
+            "30 70",
+            "marks distribution"
+          ]
+        }
+      ]
+    },
+    "books_dispatch": {
+      "label": "Books and Dispatch",
+      "faqs": [
+        {
+          "q": "When will my study materials and books be dispatched?",
+          "a": "Books are dispatched after fee payment confirmation and address verification.",
+          "tags": [
+            "books dispatch",
+            "when books",
+            "study material"
+          ]
+        },
+        {
+          "q": "How can I track my book delivery?",
+          "a": "You will receive an email with tracking details once books are dispatched. Contact your mentor if you need further tracking help.",
+          "tags": [
+            "track books",
+            "delivery tracking",
+            "courier"
+          ]
+        },
+        {
+          "q": "I have not received my books. What should I do?",
+          "a": "Inform your mentor for tracking or re-dispatch. Also raise a support ticket: Category — Dispatch | Nature of Support — Books Delivery Issue.",
+          "tags": [
+            "books not received",
+            "missing books",
+            "not delivered"
+          ]
+        },
+        {
+          "q": "Will I receive books every semester?",
+          "a": "Yes. Books are sent each semester after fee payment for that semester is confirmed.",
+          "tags": [
+            "books every semester",
+            "semester books"
+          ]
+        },
+        {
+          "q": "What is RTO?",
+          "a": "RTO means Return To Origin — delivery failed, usually due to incorrect or incomplete address. Your mentor will coordinate re-dispatch. Re-dispatch charges apply if the error is from your side.",
+          "tags": [
+            "rto",
+            "delivery failed",
+            "return to origin"
+          ]
+        },
+        {
+          "q": "What if books are damaged or incomplete?",
+          "a": "Report immediately to your mentor for replacement.",
+          "tags": [
+            "damaged books",
+            "incomplete books",
+            "replacement"
+          ]
+        }
+      ]
+    },
+    "specialization": {
+      "label": "Specialization",
+      "faqs": [
+        {
+          "q": "What MBA specializations are available?",
+          "a": "Marketing, HR, Finance, IT, Project Management, Operations, Business Analytics, Digital Marketing, AI and ML, FinTech, International Business, Shipping and Logistics Management, and others.",
+          "tags": [
+            "mba specialization",
+            "available specializations",
+            "which specialization"
+          ]
+        },
+        {
+          "q": "How do I select my specialization?",
+          "a": "Through a pop-up on your ERP portal. You must complete this selection within the given timeline to proceed with assignments and exam form submission.",
+          "tags": [
+            "select specialization",
+            "how to choose",
+            "erp pop-up"
+          ]
+        },
+        {
+          "q": "Can I change my specialization?",
+          "a": "Yes but only once and within the allowed timeline. The first change is free. Subsequent changes may attract a fee. Cannot be changed after exam form submission.",
+          "tags": [
+            "change specialization",
+            "switch",
+            "modify specialization"
+          ]
+        },
+        {
+          "q": "What is the deadline for specialization selection?",
+          "a": "Usually one month before exam form release. You will receive weekly reminders via email and WhatsApp.",
+          "tags": [
+            "specialization deadline",
+            "last date",
+            "timeline"
+          ]
+        },
+        {
+          "q": "What if I do not select specialization on time?",
+          "a": "You cannot proceed with assignments or exam form submission. Specialization selection is mandatory and cannot be skipped.",
+          "tags": [
+            "no specialization",
+            "not selected",
+            "skip specialization"
+          ]
+        },
+        {
+          "q": "Can I change specialization after exam form submission?",
+          "a": "No. Once the exam form is submitted, specialization cannot be changed. Select carefully.",
+          "tags": [
+            "change after exam form",
+            "too late",
+            "final specialization"
+          ]
+        }
+      ]
+    },
+    "mentor_support": {
+      "label": "Mentor and Support",
+      "faqs": [
+        {
+          "q": "What is the role of a mentor?",
+          "a": "Your mentor is your primary point of contact for academic processes, issue resolution, and ensuring smooth progress throughout the program.",
+          "tags": [
+            "mentor role",
+            "primary contact",
+            "what mentor does"
+          ]
+        },
+        {
+          "q": "What are mentor working hours?",
+          "a": "10am to 6pm on working days.",
+          "tags": [
+            "mentor hours",
+            "working hours",
+            "when to contact mentor"
+          ]
+        },
+        {
+          "q": "What if my mentor is not responding?",
+          "a": "Raise a support ticket: Category — Students Section | Nature of Support — Mentor Response Issue.",
+          "tags": [
+            "mentor not responding",
+            "no reply",
+            "escalate mentor"
+          ]
+        },
+        {
+          "q": "How quickly will my issue be resolved?",
+          "a": "Issues are generally resolved within 24 to 72 hours depending on the type.",
+          "tags": [
+            "resolution time",
+            "how long",
+            "24 hours",
+            "72 hours"
+          ]
+        }
+      ]
+    },
+    "support_tickets_guide": {
+      "label": "Raising a Support Ticket",
+      "faqs": [
+        {
+          "q": "How do I raise a support ticket?",
+          "a": "Log in to ERP — Student Support Ticket in the left menu. Select Support Category and Nature of Support, describe your issue in detail, attach a file if needed (PDF JPG PNG only), and click Save.",
+          "tags": [
+            "support ticket",
+            "raise ticket",
+            "how to complain",
+            "grievance"
+          ]
+        },
+        {
+          "q": "My payment failed or is not reflected. Which ticket do I raise?",
+          "a": "Category: Accounts | Nature of Support: Online Fee Payment Issues. Attach your transaction proof.",
+          "tags": [
+            "payment ticket",
+            "fee issue ticket",
+            "accounts ticket"
+          ]
+        },
+        {
+          "q": "My fee receipt has an issue. Which ticket?",
+          "a": "Category: Accounts | Nature: Issues Related To Fee Receipt.",
+          "tags": [
+            "receipt issue",
+            "fee receipt ticket"
+          ]
+        },
+        {
+          "q": "Fees or loan not mapped in ERP. Which ticket?",
+          "a": "Category: Accounts | Nature: Fees, Loan Not Mapped Or Updated.",
+          "tags": [
+            "loan not mapped",
+            "fees not mapped",
+            "payment not updated"
+          ]
+        },
+        {
+          "q": "I want a refund. Which ticket?",
+          "a": "Category: Accounts | Nature: Excess Fees Refund.",
+          "tags": [
+            "refund",
+            "excess fees",
+            "money back"
+          ]
+        },
+        {
+          "q": "Lecture recording not uploaded on LMS. Which ticket?",
+          "a": "Category: Academic | Nature: Recording Of Session Not Uploaded In LMS.",
+          "tags": [
+            "recording missing ticket",
+            "session not uploaded"
+          ]
+        },
+        {
+          "q": "LMS content or books issue. Which ticket?",
+          "a": "Category: Academic | Nature: Content Related (LMS, Books).",
+          "tags": [
+            "content issue",
+            "books issue",
+            "lms content ticket"
+          ]
+        },
+        {
+          "q": "Assignment issue. Which ticket?",
+          "a": "Category: Academic | Nature: Assignment Related.",
+          "tags": [
+            "assignment issue ticket",
+            "assignment problem"
+          ]
+        },
+        {
+          "q": "Session issue. Which ticket?",
+          "a": "Category: Academic | Nature: Session Related.",
+          "tags": [
+            "session issue",
+            "live class problem ticket"
+          ]
+        },
+        {
+          "q": "Project issue. Which ticket?",
+          "a": "Category: Academic | Nature: Project Related.",
+          "tags": [
+            "project issue ticket",
+            "project problem"
+          ]
+        },
+        {
+          "q": "Exam form or hall ticket issue. Which ticket?",
+          "a": "Category: Examination | Nature: Exam Form & Hall Ticket Related.",
+          "tags": [
+            "exam form ticket",
+            "hall ticket issue",
+            "admit card problem"
+          ]
+        },
+        {
+          "q": "Result issue or wrong marks. Which ticket?",
+          "a": "Category: Examination | Nature: Result Related.",
+          "tags": [
+            "result issue",
+            "marks issue ticket",
+            "wrong result"
+          ]
+        },
+        {
+          "q": "Exam login credential issue. Which ticket?",
+          "a": "Category: Examination | Nature: Exam Login Credential.",
+          "tags": [
+            "exam login issue",
+            "cannot login exam"
+          ]
+        },
+        {
+          "q": "Exam timetable issue. Which ticket?",
+          "a": "Category: Examination | Nature: Exam Time Table Related.",
+          "tags": [
+            "timetable issue",
+            "schedule problem ticket"
+          ]
+        },
+        {
+          "q": "Need Bonafide Certificate. Which ticket?",
+          "a": "Category: Students Section | Nature: Bonafide Certificate Request.",
+          "tags": [
+            "bonafide certificate",
+            "enrollment proof"
+          ]
+        },
+        {
+          "q": "Need Letter of Recommendation (LOR). Which ticket?",
+          "a": "Category: Students Section | Nature: Letter Of Recommendation.",
+          "tags": [
+            "lor",
+            "letter of recommendation"
+          ]
+        },
+        {
+          "q": "Need Medium of Instruction (MOI) certificate. Which ticket?",
+          "a": "Category: Students Section | Nature: Letter For Medium Of Instruction.",
+          "tags": [
+            "moi certificate",
+            "medium of instruction"
+          ]
+        },
+        {
+          "q": "Need Fee Structure Letter. Which ticket?",
+          "a": "Category: Students Section | Nature: Fee Structure Letter Request.",
+          "tags": [
+            "fee structure letter",
+            "fee certificate"
+          ]
+        },
+        {
+          "q": "Name correction needed. Which ticket?",
+          "a": "Category: Students Section | Nature: Name Correction In Marksheet. Required documents: Gazette copy AND Government Registered Marriage Certificate. Notarized affidavits are NOT accepted.",
+          "tags": [
+            "name change",
+            "name correction ticket",
+            "name error"
+          ]
+        },
+        {
+          "q": "Need duplicate marksheet. Which ticket?",
+          "a": "Category: Students Section | Nature: Duplicate Marksheet.",
+          "tags": [
+            "duplicate marksheet",
+            "lost marksheet"
+          ]
+        },
+        {
+          "q": "Books not delivered. Which ticket?",
+          "a": "Category: Dispatch | Nature: Books Delivery Issue.",
+          "tags": [
+            "books not delivered",
+            "delivery issue ticket"
+          ]
+        },
+        {
+          "q": "Marksheet not delivered. Which ticket?",
+          "a": "Category: Dispatch | Nature: Marksheet Delivery Issue.",
+          "tags": [
+            "marksheet not delivered",
+            "dispatch issue"
+          ]
+        },
+        {
+          "q": "Mentor not responding. Which ticket?",
+          "a": "Category: Students Section | Nature: Mentor Response Issue.",
+          "tags": [
+            "mentor not responding ticket",
+            "mentor issue"
+          ]
+        }
+      ]
+    },
+    "profile_updates": {
+      "label": "Profile and Personal Details",
+      "faqs": [
+        {
+          "q": "How do I update my mobile number?",
+          "a": "ERP — My Profile — click Communication Details button — update your mobile number.",
+          "tags": [
+            "update mobile",
+            "change phone number",
+            "contact update"
+          ]
+        },
+        {
+          "q": "How do I update my email ID?",
+          "a": "ERP — My Profile — click Communication Details button — update your email ID.",
+          "tags": [
+            "update email",
+            "change email",
+            "email update"
+          ]
+        },
+        {
+          "q": "How do I update my address?",
+          "a": "ERP — My Profile. A pop-up appears for address update or update directly from the My Profile section.",
+          "tags": [
+            "update address",
+            "change address",
+            "delivery address"
+          ]
+        },
+        {
+          "q": "How do I update my photo?",
+          "a": "Raise a support ticket: Category — Students Section | Nature — Photo And Signature Update.",
+          "tags": [
+            "update photo",
+            "change photo",
+            "profile picture"
+          ]
+        },
+        {
+          "q": "How do I change my name in ERP?",
+          "a": "Raise a support ticket: Category — Students Section | Nature — Name Correction In Marksheet. Required: Government Registered Marriage Certificate AND Gazette copy. Notarized affidavits are NOT accepted.",
+          "tags": [
+            "name change",
+            "name correction",
+            "how to change name"
+          ]
+        }
+      ]
+    },
+    "post_completion": {
+      "label": "Post Completion and Alumni",
+      "faqs": [
+        {
+          "q": "When is convocation held?",
+          "a": "Convocation is usually held in May or June. Official communication will inform you in advance.",
+          "tags": [
+            "convocation",
+            "degree ceremony",
+            "graduation"
+          ]
+        },
+        {
+          "q": "What if I cannot attend convocation?",
+          "a": "Your degree will be couriered to your registered postal address if you do not attend.",
+          "tags": [
+            "miss convocation",
+            "degree by post",
+            "cannot attend"
+          ]
+        },
+        {
+          "q": "How do I get my transcript?",
+          "a": "After course completion, apply for transcripts through the alumni portal.",
+          "tags": [
+            "transcript",
+            "marks record",
+            "academic record"
+          ]
+        },
+        {
+          "q": "Will I have LMS access after completing the program?",
+          "a": "No. LMS access is deactivated after course completion as per university policy.",
+          "tags": [
+            "lms after completion",
+            "access after graduation"
+          ]
+        },
+        {
+          "q": "Is there job assistance available?",
+          "a": "Yes. Job assistance and placement guidance may be available. Contact the placement team for further details.",
+          "tags": [
+            "job assistance",
+            "placement",
+            "career support"
+          ]
+        }
+      ]
+    }
+  },
+  "layer_2_batch_specific": {
+    "mba_jan_26_sem1": {
+      "label": "MBA Online - January 2026 Semester 1",
+      "program": "Master of Business Administration",
+      "batch_code": "MBA Online - Jan 2026",
+      "semester": 1,
+      "subjects": [
+        {
+          "code": "OMBC-101",
+          "name": "Principles and Practices of Management"
+        },
+        {
+          "code": "OMBC-102",
+          "name": "Organisational Behaviour"
+        },
+        {
+          "code": "OMBC-103",
+          "name": "Management Accounting"
+        },
+        {
+          "code": "OMBC-104",
+          "name": "Managerial Economics"
+        },
+        {
+          "code": "OMBC-105",
+          "name": "Business Communication"
+        },
+        {
+          "code": "OMBC-106",
+          "name": "Research Methodology"
+        },
+        {
+          "code": "OMBC-107",
+          "name": "Environmental Awareness and Disaster Management"
+        }
+      ],
+      "fee_structure": {
+        "sem1": 50000,
+        "sem2": 50000,
+        "sem3": 45000,
+        "sem4": 44400,
+        "total": 189400,
+        "note": "Partial payment allowed within a semester."
+      },
+      "important_dates": {
+        "semester_start": "January 2026",
+        "specialization_deadline": "To be announced - check ERP and WhatsApp group",
+        "assignment_deadline": "To be announced - check ERP Assignments section",
+        "exam_form_release": "To be announced - you will get email and WhatsApp notification",
+        "mock_test": "3 days before end-semester exam",
+        "end_sem_exam": "To be announced - check ERP Examination section",
+        "result_declaration": "To be announced by University Examination Department"
+      },
+      "specializations": [
+        "Marketing",
+        "Human Resource Management",
+        "Finance",
+        "Information Technology",
+        "Project Management",
+        "Operations Management",
+        "Business Analytics",
+        "Digital Marketing",
+        "Artificial Intelligence and Machine Learning",
+        "FinTech",
+        "International Business",
+        "Shipping and Logistics Management"
+      ],
+      "erp_links": {
+        "assignments": "https://col5.dpuerp.in/Secured/StudentCOL/StudentAssignment.aspx",
+        "payments": "https://col5.dpuerp.in/Secured/StudentCOL/PaymentServices.aspx",
+        "examination": "https://col5.dpuerp.in/Secured/StudentCOL/COLExaminations.aspx",
+        "support_ticket": "https://col5.dpuerp.in/Secured/StudentCOL/StudentGrievance.aspx",
+        "profile": "https://col5.dpuerp.in/Secured/StudentCOL/StudentProfile.aspx",
+        "e_resources": "https://col5.dpuerp.in/Secured/StudentCOL/LibaryEContent.aspx",
+        "lms": "https://collms.dpuerp.in/d2l/home"
+      }
+    },
+    "bba_jan_26_sem1": {
+      "label": "BBA Online - January 2026 Semester 1",
+      "program": "Bachelor of Business Administration",
+      "batch_code": "BBA Online - Jan 2026",
+      "semester": 1,
+      "subjects": [
+        {
+          "code": "OBBAC-101",
+          "name": "Fundamentals of Management"
+        },
+        {
+          "code": "OBBAC-102",
+          "name": "Basics of Accounting"
+        },
+        {
+          "code": "OBBAC-103",
+          "name": "Introduction to Economics"
+        },
+        {
+          "code": "OBBAC-104",
+          "name": "Basics of Marketing"
+        },
+        {
+          "code": "OBBAC-105",
+          "name": "Business English"
+        }
+      ],
+      "fee_structure": {
+        "note": "Please update BBA fee structure via Admin panel or knowledge_base.json"
+      },
+      "important_dates": {
+        "semester_start": "January 2026",
+        "semester_end": "23rd May 2026",
+        "session_days": "Thursdays, Fridays, and Saturdays",
+        "note": "Please upload BBA Jan 26 academic calendar via Admin panel"
+      },
+      "specializations": [
+        "Marketing",
+        "Finance",
+        "Human Resource Management",
+        "Retail Management",
+        "International Business",
+        "Logistics and Supply Chain Management"
+      ],
+      "erp_links": {
+        "assignments": "https://col5.dpuerp.in/Secured/StudentCOL/StudentAssignment.aspx",
+        "payments": "https://col5.dpuerp.in/Secured/StudentCOL/PaymentServices.aspx",
+        "examination": "https://col5.dpuerp.in/Secured/StudentCOL/COLExaminations.aspx",
+        "support_ticket": "https://col5.dpuerp.in/Secured/StudentCOL/StudentGrievance.aspx",
+        "profile": "https://col5.dpuerp.in/Secured/StudentCOL/StudentProfile.aspx",
+        "e_resources": "https://col5.dpuerp.in/Secured/StudentCOL/LibaryEContent.aspx",
+        "lms": "https://collms.dpuerp.in/d2l/home"
+      }
+    }
+  },
+  "layer_3_website": {
+    "source": "dypatilonline.com",
+    "scrape_schedule": "weekly",
+    "key_topics": [
+      "Programs offered: Online MBA, Online MCA, Online BBA, Certificate Courses",
+      "MBA eligibility: Bachelor degree with minimum 50% marks (45% for reserved categories)",
+      "BBA eligibility: HSC 10+2 in any stream or equivalent from a recognized board",
+      "MBA duration: 2 years (4 semesters). Validity: 4 years",
+      "MCA duration: 2 years. BBA duration: 3 years",
+      "Accreditations: UGC recognized, AICTE approved, DEB approved, NAAC A++ accreditation, Category-I Deemed University, NIRF ranked",
+      "Degree is globally recognized",
+      "Admission process is completely online",
+      "E-Resources available: J-Gate, eShodh Sindhu, Shodh Ganga, OPAC",
+      "EDX courses available to students via separate email link"
+    ]
+  }
+}

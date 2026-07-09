@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DPU EduBot — AI Learning Assistant</title>
+  <meta name="description" content="Official AI-powered learning assistant and admin dashboard for students and faculty of Dr. D.Y. Patil Centre for Online Learning." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Roboto', 'sans-serif'],
+          },
+          colors: {
+            surface: {
+              DEFAULT: '#0d1117',
+              1: '#161b22',
+              2: '#1c2333',
+              3: '#21262d',
+            },
+            primary: {
+              DEFAULT: '#2563eb',
+              hover: '#1d4ed8',
+              light: 'rgba(37,99,235,0.12)',
+            },
+            border: 'rgba(255,255,255,0.08)',
+          },
+        },
+      },
+    };
+  </script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg-surface text-white font-sans overflow-hidden h-screen">
+
+  <!-- ===================== APP LAYOUT ===================== -->
+  <div class="flex h-screen w-screen overflow-hidden">
+
+    <!-- ===================== SIDEBAR ===================== -->
+    <aside id="sidebar" class="sidebar-panel flex flex-col w-64 shrink-0 bg-surface-1 border-r border-border z-10">
+
+      <!-- Brand -->
+      <div class="flex items-center gap-3 px-5 py-5 border-b border-border">
+        <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-primary shadow-lg shadow-primary/30">
+          <span class="material-icons-round text-white text-xl">school</span>
+        </div>
+        <div>
+          <div class="text-sm font-bold text-white tracking-tight leading-none">DPU EduBot</div>
+          <div class="text-xs text-white/30 mt-0.5">Dr. D.Y. Patil COL</div>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="flex flex-col gap-1 px-3 py-4 flex-1 overflow-y-auto">
+        <p class="text-xs font-bold text-white/30 uppercase tracking-widest px-2 mb-2">Navigation</p>
+
+        <!-- Student Chat — always visible -->
+        <button id="nav-student" onclick="switchRole('student')"
+          class="nav-btn active flex items-center gap-3 px-3 py-2.5 rounded-lg w-full text-left transition-all duration-150">
+          <span class="material-icons-round text-lg">chat</span>
+          <span class="text-sm font-medium">Student Chat</span>
+        </button>
+
+        <!-- Admin Panel — hidden until logged in -->
+        <button id="nav-admin" onclick="switchRole('admin')"
+          class="nav-btn hidden flex items-center gap-3 px-3 py-2.5 rounded-lg w-full text-left transition-all duration-150">
+          <span class="material-icons-round text-lg">admin_panel_settings</span>
+          <span class="text-sm font-medium">Admin Panel</span>
+        </button>
+
+        <!-- Faculty Portal — hidden until logged in -->
+        <button id="nav-faculty" onclick="switchRole('faculty')"
+          class="nav-btn hidden flex items-center gap-3 px-3 py-2.5 rounded-lg w-full text-left transition-all duration-150">
+          <span class="material-icons-round text-lg">groups</span>
+          <span class="text-sm font-medium">Faculty Portal</span>
+        </button>
+      </nav>
+
+      <!-- Sidebar Footer -->
+      <div class="px-4 py-4 border-t border-border">
+        <!-- Index status -->
+        <div class="flex items-center gap-2 mb-3 px-2">
+          <div id="index-dot" class="w-2 h-2 rounded-full bg-gray-500"></div>
+          <span id="index-text" class="text-xs text-white/40">Index: Checking...</span>
+        </div>
+
+        <!-- Login / Logout -->
+        <div id="auth-footer">
+          <!-- Login button (shown when not logged in) -->
+          <button id="btn-login-footer" onclick="openLoginDialog()"
+            class="w-full flex items-center justify-center gap-2 py-2 rounded-lg border border-border text-sm font-semibold text-white/60 hover:bg-surface-2 hover:text-white transition-all duration-150">
+            <span class="material-icons-round text-base">lock</span>
+            Staff Login
+          </button>
+          <!-- Logout button (shown when logged in) -->
+          <div id="btn-logout-section" class="hidden">
+            <div class="flex items-center gap-2 px-2 mb-2">
+              <span class="material-icons-round text-green-400 text-base">verified_user</span>
+              <span id="logged-in-label" class="text-xs text-green-400 font-semibold"></span>
+            </div>
+            <button onclick="logout()"
+              class="w-full flex items-center justify-center gap-2 py-2 rounded-lg border border-red-900/40 text-sm font-semibold text-red-400 hover:bg-red-900/20 transition-all duration-150">
+              <span class="material-icons-round text-base">logout</span>
+              Logout
+            </button>
+          </div>
+        </div>
+
+        <p class="text-xs text-white/20 mt-3 leading-snug px-1">Answers grounded in verified DPU data only.</p>
+      </div>
+    </aside>
+
+    <!-- ===================== MAIN CONTENT ===================== -->
+    <main class="flex-1 flex flex-col overflow-hidden bg-surface">
+
+      <!-- Top App Bar -->
+      <header class="flex items-center justify-between px-6 py-3 border-b border-border bg-surface-1 shrink-0">
+        <div>
+          <h1 id="page-title" class="text-base font-bold text-white">Student Chat</h1>
+          <p id="page-subtitle" class="text-xs text-white/40 mt-0.5">Ask anything about your program, exams, fees, LMS, or support tickets.</p>
+        </div>
+
+        <!-- Student Controls (visible only in student view) -->
+        <div id="student-toolbar" class="flex items-center gap-3">
+          <div class="relative">
+            <select id="student-batch" onchange="updateBatch()"
+              class="appearance-none bg-surface-2 border border-border text-white text-xs font-semibold pl-3 pr-8 py-2 rounded-lg outline-none cursor-pointer focus:border-primary">
+              <option value="mba_jan_26_sem1">MBA Jan 26 — Sem 1</option>
+              <option value="bba_jan_26_sem1">BBA Jan 26 — Sem 1</option>
+            </select>
+            <span class="material-icons-round text-white/40 text-sm absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+          </div>
+          <div class="relative">
+            <select id="student-lang"
+              class="appearance-none bg-surface-2 border border-border text-white text-xs font-semibold pl-3 pr-8 py-2 rounded-lg outline-none cursor-pointer focus:border-primary">
+              <option value="English">English</option>
+              <option value="Hindi">Hindi</option>
+              <option value="Marathi">Marathi</option>
+            </select>
+            <span class="material-icons-round text-white/40 text-sm absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+          </div>
+        </div>
+
+        <!-- Admin Tab Bar (hidden by default) -->
+        <div id="admin-toolbar" class="hidden flex items-center gap-1 bg-surface-2 border border-border rounded-lg p-1">
+          <button class="tab-btn active" onclick="switchAdminTab('dashboard')">
+            <span class="material-icons-round text-sm">insights</span> Dashboard
+          </button>
+          <button class="tab-btn" onclick="switchAdminTab('escalations')">
+            <span class="material-icons-round text-sm">confirmation_number</span>
+            Queue
+            <span class="ml-1 bg-red-500 text-white text-xs font-bold px-1.5 rounded-full" id="escalation-badge">3</span>
+          </button>
+          <button class="tab-btn" onclick="switchAdminTab('sla')">
+            <span class="material-icons-round text-sm">timer</span> SLA
+          </button>
+          <button class="tab-btn" onclick="switchAdminTab('faqs')">
+            <span class="material-icons-round text-sm">library_books</span> FAQ Manager
+          </button>
+          <button class="tab-btn" onclick="switchAdminTab('kb')">
+            <span class="material-icons-round text-sm">storage</span> Knowledge Base
+          </button>
+        </div>
+      </header>
+
+      <!-- ===================== STUDENT VIEW ===================== -->
+      <section id="view-student" class="view-section flex-1 flex flex-col overflow-hidden p-4">
+        <div class="flex-1 flex flex-col bg-surface-1 border border-border rounded-xl overflow-hidden shadow-xl">
+
+          <!-- Chat Messages -->
+          <div id="chat-messages" class="flex-1 overflow-y-auto p-5 flex flex-col gap-4 custom-scroll">
+            <!-- Populated by JS -->
+          </div>
+
+          <!-- Quick Suggestions -->
+          <div class="flex items-center gap-2 px-5 py-2.5 border-t border-border bg-surface-2 overflow-x-auto no-scroll">
+            <span class="material-icons-round text-white/30 text-base shrink-0">tips_and_updates</span>
+            <button class="suggestion-chip" onclick="suggestQuery('How do I submit my assignment?')">How do I submit assignments?</button>
+            <button class="suggestion-chip" onclick="suggestQuery('My payment failed — which ticket?')">Payment failed ticket</button>
+            <button class="suggestion-chip" onclick="suggestQuery('What are my MBA Sem 1 subjects?')">Sem 1 subjects?</button>
+            <button class="suggestion-chip" onclick="suggestQuery('Where do I check attendance?')">Check attendance</button>
+            <button class="suggestion-chip" onclick="suggestQuery('How do I join a live session?')">Join live session</button>
+          </div>
+
+          <!-- Input Row -->
+          <div class="flex items-center gap-3 px-5 py-3 border-t border-border bg-surface-1">
+            <input type="text" id="chat-input"
+              placeholder="Type your question about DPU programs, exams, fees..."
+              onkeydown="if(event.key==='Enter') sendChatMessage()"
+              class="flex-1 bg-surface-2 border border-border text-white placeholder-white/25 text-sm px-4 py-2.5 rounded-lg outline-none focus:border-primary/60 transition-colors" />
+            <button onclick="sendChatMessage()"
+              class="flex items-center justify-center w-10 h-10 rounded-lg bg-primary hover:bg-primary-hover transition-colors shadow-md shadow-primary/20">
+              <span class="material-icons-round text-white text-lg">send</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== ADMIN VIEW ===================== -->
+      <section id="view-admin" class="view-section hidden flex-1 overflow-y-auto p-4 custom-scroll">
+
+        <!-- Dashboard Tab -->
+        <div id="admin-tab-dashboard" class="admin-tab-content">
+          <div class="grid grid-cols-5 gap-3 mb-5">
+            <div class="stat-card">
+              <div class="stat-value" id="stat-queries-today">247</div>
+              <div class="stat-label">Queries Today</div>
+              <div class="stat-trend up">+18% vs yesterday</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value text-red-400" id="stat-open-escalations">3</div>
+              <div class="stat-label">Open Escalations</div>
+              <div class="stat-trend text-red-400">2 high priority</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value text-green-400" id="stat-resolution-rate">94%</div>
+              <div class="stat-label">Bot Resolution Rate</div>
+              <div class="stat-trend up">+5% this week</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value text-blue-400" id="stat-faqs-count">113</div>
+              <div class="stat-label">Verified FAQs</div>
+              <div class="stat-trend text-blue-400/60">Layer 1 grounded</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value text-green-400" id="stat-index-status">Ready</div>
+              <div class="stat-label">Index Status</div>
+              <div class="stat-trend text-green-400/60" id="stat-index-sub">Loading...</div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="panel-card">
+              <h3 class="panel-heading"><span class="material-icons-round text-lg text-primary">bar_chart</span> Top Query Categories</h3>
+              <div class="flex flex-col gap-2.5">
+                <div class="bar-row"><span class="bar-lbl">Exam & Results</span><div class="bar-bg"><div class="bar-fill bg-blue-500" style="width:88%"><span>88</span></div></div><span class="bar-pct">35%</span></div>
+                <div class="bar-row"><span class="bar-lbl">Fee & Payments</span><div class="bar-bg"><div class="bar-fill bg-green-500" style="width:72%"><span>72</span></div></div><span class="bar-pct">29%</span></div>
+                <div class="bar-row"><span class="bar-lbl">LMS & Sessions</span><div class="bar-bg"><div class="bar-fill bg-amber-500" style="width:61%"><span>61</span></div></div><span class="bar-pct">24%</span></div>
+                <div class="bar-row"><span class="bar-lbl">Assignments</span><div class="bar-bg"><div class="bar-fill bg-purple-500" style="width:45%"><span>45</span></div></div><span class="bar-pct">18%</span></div>
+                <div class="bar-row"><span class="bar-lbl">Books & Dispatch</span><div class="bar-bg"><div class="bar-fill bg-red-500" style="width:30%"><span>30</span></div></div><span class="bar-pct">12%</span></div>
+              </div>
+            </div>
+            <div class="panel-card">
+              <h3 class="panel-heading"><span class="material-icons-round text-lg text-amber-400">confirmation_number</span> Recent Escalations</h3>
+              <div id="dashboard-recent-escalations" class="flex flex-col gap-2"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Escalation Queue Tab -->
+        <div id="admin-tab-escalations" class="admin-tab-content hidden">
+          <div class="grid grid-cols-4 gap-3 mb-5">
+            <div class="stat-card"><div class="stat-value text-red-400">2</div><div class="stat-label">Open</div></div>
+            <div class="stat-card"><div class="stat-value text-amber-400">2</div><div class="stat-label">In Progress</div></div>
+            <div class="stat-card"><div class="stat-value text-green-400">1</div><div class="stat-label">Resolved Today</div></div>
+            <div class="stat-card"><div class="stat-value text-blue-400">12</div><div class="stat-label">Resolved This Week</div></div>
+          </div>
+          <div class="flex items-center gap-3 mb-4">
+            <label class="text-xs text-white/50 font-semibold">Filter:</label>
+            <div class="relative">
+              <select id="escalation-filter" onchange="renderEscalationQueue()"
+                class="appearance-none bg-surface-2 border border-border text-white text-xs font-medium pl-3 pr-7 py-1.5 rounded-lg outline-none cursor-pointer">
+                <option value="All">All Tickets</option>
+                <option value="Open">Open</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Resolved">Resolved</option>
+              </select>
+              <span class="material-icons-round text-white/30 text-sm absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div id="tickets-queue-container" class="flex flex-col gap-2 overflow-y-auto max-h-[500px] custom-scroll"></div>
+            <div class="panel-card flex flex-col">
+              <h3 class="panel-heading"><span class="material-icons-round text-lg text-primary">reply_all</span> AI Reply Composer</h3>
+              <div id="composer-ticket-preview" class="text-sm text-white/40 italic mb-3">Select a ticket to draft a reply.</div>
+              <div id="composer-reply-box" class="hidden flex-1 flex flex-col gap-3">
+                <textarea id="ai-reply-text" rows="10"
+                  class="w-full bg-surface text-white text-xs font-mono border border-border rounded-lg p-3 outline-none focus:border-primary resize-none custom-scroll"></textarea>
+                <div class="flex justify-end gap-2">
+                  <button onclick="copyReplyText()" class="btn-secondary text-xs"><span class="material-icons-round text-sm">content_copy</span> Copy</button>
+                  <button onclick="markTicketResolved()" class="btn-primary text-xs"><span class="material-icons-round text-sm">check_circle</span> Mark Resolved</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLA Tracker Tab -->
+        <div id="admin-tab-sla" class="admin-tab-content hidden">
+          <div class="panel-card mb-4">
+            <h3 class="panel-heading mb-4"><span class="material-icons-round text-lg text-primary">schedule</span> DPU COL SLA Policy Matrix</h3>
+            <div class="grid grid-cols-5 gap-3">
+              <div class="sla-chip text-red-400 bg-red-900/20 border-red-900/40"><span class="font-bold text-lg">24h</span><span class="text-xs mt-1">Accounts & Fees</span></div>
+              <div class="sla-chip text-blue-400 bg-blue-900/20 border-blue-900/40"><span class="font-bold text-lg">48h</span><span class="text-xs mt-1">Academics</span></div>
+              <div class="sla-chip text-amber-400 bg-amber-900/20 border-amber-900/40"><span class="font-bold text-lg">24h</span><span class="text-xs mt-1">Examinations</span></div>
+              <div class="sla-chip text-green-400 bg-green-900/20 border-green-900/40"><span class="font-bold text-lg">48h</span><span class="text-xs mt-1">Students Section</span></div>
+              <div class="sla-chip text-purple-400 bg-purple-900/20 border-purple-900/40"><span class="font-bold text-lg">72h</span><span class="text-xs mt-1">Books Dispatch</span></div>
+            </div>
+          </div>
+          <div class="panel-card">
+            <h3 class="panel-heading mb-4"><span class="material-icons-round text-base text-red-400">warning</span> Active SLA Countdowns</h3>
+            <div id="sla-countdown-container" class="flex flex-col gap-4"></div>
+          </div>
+        </div>
+
+        <!-- FAQ Manager Tab -->
+        <div id="admin-tab-faqs" class="admin-tab-content hidden">
+          <div class="flex items-center justify-between mb-4">
+            <div class="relative">
+              <select id="faq-cat-filter" onchange="renderFAQList()"
+                class="appearance-none bg-surface-2 border border-border text-white text-xs font-medium pl-3 pr-7 py-1.5 rounded-lg outline-none cursor-pointer">
+                <option value="All">All Categories</option>
+                <option value="accounts">Accounts & Fees</option>
+                <option value="academic">Academic & LMS</option>
+                <option value="examination">Examinations</option>
+                <option value="dispatch">Books Dispatch</option>
+              </select>
+              <span class="material-icons-round text-white/30 text-sm absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+            </div>
+            <button onclick="toggleAddFAQModal()" class="btn-primary text-xs"><span class="material-icons-round text-sm">add</span> Add FAQ</button>
+          </div>
+
+          <div id="add-faq-form" class="hidden panel-card mb-4">
+            <h4 class="text-sm font-bold mb-3 text-white">Add New Knowledge Base Entry</h4>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="flex flex-col gap-1">
+                <label class="text-xs text-white/50 font-semibold">Category</label>
+                <select id="new-faq-cat" class="mui-input text-sm">
+                  <option value="accounts">Accounts & Fees</option>
+                  <option value="academic">Academic & LMS</option>
+                  <option value="examination">Examinations</option>
+                </select>
+              </div>
+              <div class="flex flex-col gap-1">
+                <label class="text-xs text-white/50 font-semibold">Question</label>
+                <input type="text" id="new-faq-q" placeholder="Enter verified question..." class="mui-input text-sm" />
+              </div>
+              <div class="flex flex-col gap-1 col-span-2">
+                <label class="text-xs text-white/50 font-semibold">Answer</label>
+                <textarea id="new-faq-a" rows="3" placeholder="Enter verified answer..." class="mui-input text-sm resize-none"></textarea>
+              </div>
+              <div class="flex flex-col gap-1 col-span-2">
+                <label class="text-xs text-white/50 font-semibold">Tags (comma-separated)</label>
+                <input type="text" id="new-faq-tags" placeholder="e.g. fee, payment, upi" class="mui-input text-sm" />
+              </div>
+            </div>
+            <div class="flex justify-end gap-2 mt-3">
+              <button onclick="toggleAddFAQModal()" class="btn-secondary text-xs">Cancel</button>
+              <button onclick="saveFAQ()" class="btn-primary text-xs"><span class="material-icons-round text-sm">save</span> Save FAQ</button>
+            </div>
+          </div>
+
+          <div id="faq-list-container" class="flex flex-col gap-3"></div>
+        </div>
+
+        <!-- Knowledge Base Tab -->
+        <div id="admin-tab-kb" class="admin-tab-content hidden">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="panel-card">
+              <h3 class="panel-heading mb-4"><span class="material-icons-round text-lg text-primary">sync</span> Vector Index Builder</h3>
+              <p class="text-xs text-white/40 mb-4">Recompile the cosine-similarity vector store from the current knowledge base and staged batch documents.</p>
+              <div class="bg-surface-3 rounded-lg p-3 mb-4 text-xs flex flex-col gap-2">
+                <div class="flex justify-between"><span class="text-white/50">Vector Store:</span><strong class="text-white">NumPy Cosine Similarity</strong></div>
+                <div class="flex justify-between"><span class="text-white/50">Chunks Indexed:</span><strong class="text-white" id="kb-chunks-count">Loading...</strong></div>
+              </div>
+              <button id="btn-rebuild-index" onclick="rebuildIndexAPI()" class="btn-primary w-full justify-center">
+                <span class="material-icons-round text-base">refresh</span> Rebuild Vector Index
+              </button>
+              <div id="rebuild-spinner" class="hidden flex items-center gap-3 mt-4 text-xs text-white/40">
+                <div class="spinner w-4 h-4 border-2 border-white/10 border-t-primary rounded-full"></div>
+                Compiling embeddings and saving matrix...
+              </div>
+            </div>
+            <div class="panel-card">
+              <h3 class="panel-heading mb-4"><span class="material-icons-round text-lg text-green-400">upload_file</span> Upload Batch Document</h3>
+              <form id="doc-upload-form" onsubmit="uploadDocumentAPI(event)" class="flex flex-col gap-3">
+                <div class="flex flex-col gap-1">
+                  <label class="text-xs text-white/50 font-semibold">Target Batch</label>
+                  <select name="batch_id" class="mui-input text-sm" required>
+                    <option value="mba_jan_26_sem1">MBA Jan 2026 — Semester 1</option>
+                    <option value="bba_jan_26_sem1">BBA Jan 2026 — Semester 1</option>
+                  </select>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <label class="text-xs text-white/50 font-semibold">Document Type</label>
+                  <select name="doc_type" class="mui-input text-sm" required>
+                    <option value="academic_calendar">Academic Calendar</option>
+                    <option value="session_schedule">Session Schedule</option>
+                    <option value="exam_dates">Exam Dates</option>
+                    <option value="fee_structure">Fee Structure</option>
+                    <option value="subject_list">Subject List</option>
+                  </select>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <label class="text-xs text-white/50 font-semibold">File (PDF, DOCX, XLSX)</label>
+                  <input type="file" name="file" accept=".pdf,.docx,.xlsx" required
+                    class="text-xs text-white/60 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-white hover:file:bg-primary-hover cursor-pointer" />
+                </div>
+                <button type="submit" class="btn-primary text-xs justify-center mt-1">
+                  <span class="material-icons-round text-sm">cloud_upload</span> Parse and Stage
+                </button>
+              </form>
+              <div id="upload-status" class="mt-3 text-xs"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== FACULTY VIEW ===================== -->
+      <section id="view-faculty" class="view-section hidden flex-1 overflow-y-auto p-4 custom-scroll">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="panel-card">
+            <h3 class="panel-heading mb-4"><span class="material-icons-round text-lg text-primary">calendar_month</span> Batch Quick Reference</h3>
+            <div class="relative mb-4">
+              <select id="faculty-batch-select" onchange="renderFacultyBatchInfo()"
+                class="appearance-none w-full bg-surface-2 border border-border text-white text-sm font-medium pl-3 pr-8 py-2 rounded-lg outline-none cursor-pointer">
+                <option value="mba_jan_26_sem1">MBA Jan 2026 — Semester 1</option>
+                <option value="bba_jan_26_sem1">BBA Jan 2026 — Semester 1</option>
+              </select>
+              <span class="material-icons-round text-white/30 text-sm absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+            </div>
+            <div id="faculty-batch-info" class="text-sm text-white/70 flex flex-col gap-2"></div>
+          </div>
+
+          <div class="panel-card">
+            <h3 class="panel-heading mb-4"><span class="material-icons-round text-lg text-green-400">upload</span> Upload Study Material</h3>
+            <form id="faculty-upload-form" onsubmit="uploadFacultyDoc(event)" class="flex flex-col gap-3">
+              <div class="flex flex-col gap-1">
+                <label class="text-xs text-white/50 font-semibold">Target Batch</label>
+                <select name="batch_id" class="mui-input text-sm" required>
+                  <option value="mba_jan_26_sem1">MBA Jan 2026 — Semester 1</option>
+                  <option value="bba_jan_26_sem1">BBA Jan 2026 — Semester 1</option>
+                </select>
+              </div>
+              <div class="flex flex-col gap-1">
+                <label class="text-xs text-white/50 font-semibold">Material Type</label>
+                <select name="doc_type" class="mui-input text-sm" required>
+                  <option value="reading_list">Reading List</option>
+                  <option value="assignment_guide">Assignment Guide</option>
+                  <option value="project_guidelines">Project Guidelines</option>
+                </select>
+              </div>
+              <div class="flex flex-col gap-1">
+                <label class="text-xs text-white/50 font-semibold">File (PDF, DOCX, XLSX)</label>
+                <input type="file" name="file" accept=".pdf,.docx,.xlsx" required
+                  class="text-xs text-white/60 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-white hover:file:bg-primary-hover cursor-pointer" />
+              </div>
+              <button type="submit" class="btn-primary text-xs justify-center mt-1">
+                <span class="material-icons-round text-sm">publish</span> Upload and Stage
+              </button>
+            </form>
+            <div id="faculty-upload-status" class="mt-3 text-xs"></div>
+
+            <hr class="border-border my-4" />
+
+            <h3 class="panel-heading mb-3"><span class="material-icons-round text-lg text-blue-400">query_stats</span> Top Query Topics</h3>
+            <div class="flex flex-col gap-2.5">
+              <div class="topic-row"><span class="topic-lbl">Exam & Hall Ticket</span><div class="bar-bg"><div class="bar-fill bg-blue-500" style="width:88%"></div></div><span class="text-xs text-white/30">88</span></div>
+              <div class="topic-row"><span class="topic-lbl">Fee Payment</span><div class="bar-bg"><div class="bar-fill bg-blue-500" style="width:72%"></div></div><span class="text-xs text-white/30">72</span></div>
+              <div class="topic-row"><span class="topic-lbl">Assignment Submission</span><div class="bar-bg"><div class="bar-fill bg-blue-500" style="width:61%"></div></div><span class="text-xs text-white/30">61</span></div>
+              <div class="topic-row"><span class="topic-lbl">LMS Access</span><div class="bar-bg"><div class="bar-fill bg-blue-500" style="width:55%"></div></div><span class="text-xs text-white/30">55</span></div>
+              <div class="topic-row"><span class="topic-lbl">Support Tickets</span><div class="bar-bg"><div class="bar-fill bg-blue-500" style="width:45%"></div></div><span class="text-xs text-white/30">45</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===================== LOGIN DIALOG ===================== -->
+  <div id="login-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center">
+    <div class="login-dialog w-full max-w-sm mx-4 bg-surface-1 border border-border rounded-2xl shadow-2xl overflow-hidden">
+      <!-- Dialog Header -->
+      <div class="px-6 pt-6 pb-4 border-b border-border">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
+              <span class="material-icons-round text-primary text-lg">lock</span>
+            </div>
+            <div>
+              <h2 class="text-base font-bold text-white">Staff Login</h2>
+              <p class="text-xs text-white/40">Access Admin or Faculty portal</p>
+            </div>
+          </div>
+          <button onclick="closeLoginDialog()" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface-2 transition-colors">
+            <span class="material-icons-round text-white/40 text-lg">close</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Dialog Body -->
+      <div class="px-6 py-5">
+        <!-- Role Selector (segmented control) -->
+        <div class="flex rounded-lg overflow-hidden border border-border mb-5 bg-surface-2">
+          <button id="role-tab-admin" onclick="selectLoginRole('admin')"
+            class="role-tab active flex-1 py-2 text-xs font-bold flex items-center justify-center gap-1.5">
+            <span class="material-icons-round text-sm">admin_panel_settings</span> Admin
+          </button>
+          <button id="role-tab-faculty" onclick="selectLoginRole('faculty')"
+            class="role-tab flex-1 py-2 text-xs font-bold flex items-center justify-center gap-1.5">
+            <span class="material-icons-round text-sm">groups</span> Faculty
+          </button>
+        </div>
+
+        <!-- Password Field -->
+        <div class="relative mb-4">
+          <input type="password" id="login-password"
+            placeholder="Enter your password..."
+            onkeydown="if(event.key==='Enter') submitLogin()"
+            class="mui-input w-full text-sm pr-10" />
+          <span class="material-icons-round text-white/20 absolute right-3 top-1/2 -translate-y-1/2 text-base">key</span>
+        </div>
+
+        <!-- Error Message -->
+        <p id="login-error" class="hidden text-xs text-red-400 font-medium mb-3 flex items-center gap-1.5">
+          <span class="material-icons-round text-sm">error</span>
+          Incorrect password. Please try again.
+        </p>
+
+        <!-- Submit Button -->
+        <button onclick="submitLogin()"
+          class="btn-primary w-full justify-center py-2.5">
+          <span class="material-icons-round text-base">login</span>
+          Sign In
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
