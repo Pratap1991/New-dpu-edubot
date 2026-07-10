@@ -75,22 +75,18 @@ function applyAuthState() {
   document.getElementById('btn-logout-section').classList.toggle('hidden', !isLoggedIn);
 
   // Profile card update
-  const profileId   = document.getElementById('profile-id');
   const profileName = document.getElementById('profile-name');
   const profileRole = document.getElementById('profile-role');
 
   if (isAdmin) {
-    profileId.textContent   = '11735';
-    profileName.textContent = 'Mr. Sanket Dhondibhau Dongare';
-    profileRole.textContent = 'Admin — Technical Assistant';
+    profileName.textContent = 'ADMIN';
+    profileRole.textContent = 'Administration Portal';
   } else if (isFaculty) {
-    profileId.textContent   = '11735';
-    profileName.textContent = 'Mr. Sanket Dhondibhau Dongare';
-    profileRole.textContent = 'Faculty — Technical Assistant';
+    profileName.textContent = 'FACULTY';
+    profileRole.textContent = 'Academic Portal';
   } else {
-    profileId.textContent   = 'GUEST';
-    profileName.textContent = 'DPU Student / Visitor';
-    profileRole.textContent = 'Student Chat Mode';
+    profileName.textContent = 'STUDENT';
+    profileRole.textContent = 'Online Learning Portal';
   }
 
   if (isLoggedIn) {
