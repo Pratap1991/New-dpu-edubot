@@ -44,23 +44,30 @@
 
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="bg-surface text-white font-sans overflow-hidden h-screen">
+<body class="bg-[#F4F6F9] text-slate-800 font-sans overflow-hidden h-screen">
 
   <!-- ===================== APP LAYOUT ===================== -->
   <div class="flex h-screen w-screen overflow-hidden">
 
     <!-- ===================== SIDEBAR ===================== -->
-    <aside id="sidebar" class="sidebar-panel flex flex-col w-64 shrink-0 bg-surface-1 border-r border-border z-10">
+    <aside id="sidebar" class="sidebar-panel flex flex-col w-64 shrink-0 bg-[#AE2E2D] text-white border-r border-red-955/20 z-10">
 
       <!-- Brand -->
-      <div class="flex items-center gap-3 px-5 py-5 border-b border-border">
-        <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-primary shadow-lg shadow-primary/30">
-          <span class="material-icons-round text-white text-xl">school</span>
+      <div class="flex items-center gap-3 px-5 py-5 border-b border-red-900/30">
+        <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-white shadow-md text-[#AE2E2D]">
+          <span class="material-icons-round text-[#AE2E2D] text-xl">school</span>
         </div>
         <div>
-          <div class="text-sm font-bold text-white tracking-tight leading-none">DPU EduBot</div>
-          <div class="text-xs text-white/30 mt-0.5">Dr. D.Y. Patil COL</div>
+          <div class="text-sm font-bold text-white tracking-tight leading-none">DPU ERP</div>
+          <div class="text-xs text-red-200 mt-0.5">Centre for Online Learning</div>
         </div>
+      </div>
+
+      <!-- User Profile Box (DPU Reference Style) -->
+      <div class="mx-3 my-3 p-3 rounded bg-[#E6C35C] text-slate-900 flex flex-col gap-0.5 shadow-sm">
+        <div class="text-[10px] font-bold text-slate-700">11735</div>
+        <div class="text-xs font-bold leading-tight">Mr. Sanket Dhondibhau Dongare</div>
+        <div class="text-[10px] text-slate-700 font-medium">Technical Assistant</div>
       </div>
 
       <!-- Navigation -->
@@ -90,72 +97,72 @@
       </nav>
 
       <!-- Sidebar Footer -->
-      <div class="px-4 py-4 border-t border-border">
+      <div class="px-4 py-4 border-t border-red-900/30">
         <!-- Index status -->
         <div class="flex items-center gap-2 mb-3 px-2">
-          <div id="index-dot" class="w-2 h-2 rounded-full bg-gray-500"></div>
-          <span id="index-text" class="text-xs text-white/40">Index: Checking...</span>
+          <div id="index-dot" class="w-2 h-2 rounded-full bg-red-400"></div>
+          <span id="index-text" class="text-xs text-white/70">Index: Checking...</span>
         </div>
 
         <!-- Login / Logout -->
         <div id="auth-footer">
           <!-- Login button (shown when not logged in) -->
           <button id="btn-login-footer" onclick="openLoginDialog()"
-            class="w-full flex items-center justify-center gap-2 py-2 rounded-lg border border-border text-sm font-semibold text-white/60 hover:bg-surface-2 hover:text-white transition-all duration-150">
+            class="w-full flex items-center justify-center gap-2 py-2 rounded-lg border border-white/20 text-sm font-semibold text-white/80 hover:bg-white/10 hover:text-white transition-all duration-150">
             <span class="material-icons-round text-base">lock</span>
             Staff Login
           </button>
           <!-- Logout button (shown when logged in) -->
           <div id="btn-logout-section" class="hidden">
             <div class="flex items-center gap-2 px-2 mb-2">
-              <span class="material-icons-round text-green-400 text-base">verified_user</span>
-              <span id="logged-in-label" class="text-xs text-green-400 font-semibold"></span>
+              <span class="material-icons-round text-green-300 text-base">verified_user</span>
+              <span id="logged-in-label" class="text-xs text-green-300 font-semibold"></span>
             </div>
             <button onclick="logout()"
-              class="w-full flex items-center justify-center gap-2 py-2 rounded-lg border border-red-900/40 text-sm font-semibold text-red-400 hover:bg-red-900/20 transition-all duration-150">
+              class="w-full flex items-center justify-center gap-2 py-2 rounded-lg border border-white/15 text-sm font-semibold text-red-200 hover:bg-red-950/20 transition-all duration-150">
               <span class="material-icons-round text-base">logout</span>
               Logout
             </button>
           </div>
         </div>
 
-        <p class="text-xs text-white/20 mt-3 leading-snug px-1">Answers grounded in verified DPU data only.</p>
+        <p class="text-xs text-white/40 mt-3 leading-snug px-1">Answers grounded in verified DPU data only.</p>
       </div>
     </aside>
 
     <!-- ===================== MAIN CONTENT ===================== -->
-    <main class="flex-1 flex flex-col overflow-hidden bg-surface">
+    <main class="flex-1 flex flex-col overflow-hidden bg-[#F4F6F9]">
 
       <!-- Top App Bar -->
-      <header class="flex items-center justify-between px-6 py-3 border-b border-border bg-surface-1 shrink-0">
+      <header class="flex items-center justify-between px-6 py-3 border-b border-slate-200 bg-white shrink-0">
         <div>
-          <h1 id="page-title" class="text-base font-bold text-white">Student Chat</h1>
-          <p id="page-subtitle" class="text-xs text-white/40 mt-0.5">Ask anything about your program, exams, fees, LMS, or support tickets.</p>
+          <h1 id="page-title" class="text-base font-bold text-slate-800">Student Chat</h1>
+          <p id="page-subtitle" class="text-xs text-slate-500 mt-0.5">Ask anything about your program, exams, fees, LMS, or support tickets.</p>
         </div>
 
         <!-- Student Controls (visible only in student view) -->
         <div id="student-toolbar" class="flex items-center gap-3">
           <div class="relative">
             <select id="student-batch" onchange="updateBatch()"
-              class="appearance-none bg-surface-2 border border-border text-white text-xs font-semibold pl-3 pr-8 py-2 rounded-lg outline-none cursor-pointer focus:border-primary">
+              class="appearance-none bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold pl-3 pr-8 py-2 rounded-lg outline-none cursor-pointer focus:border-[#AE2E2D]">
               <option value="mba_jan_26_sem1">MBA Jan 26 — Sem 1</option>
               <option value="bba_jan_26_sem1">BBA Jan 26 — Sem 1</option>
             </select>
-            <span class="material-icons-round text-white/40 text-sm absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+            <span class="material-icons-round text-slate-500 text-sm absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
           </div>
           <div class="relative">
             <select id="student-lang"
-              class="appearance-none bg-surface-2 border border-border text-white text-xs font-semibold pl-3 pr-8 py-2 rounded-lg outline-none cursor-pointer focus:border-primary">
+              class="appearance-none bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold pl-3 pr-8 py-2 rounded-lg outline-none cursor-pointer focus:border-[#AE2E2D]">
               <option value="English">English</option>
               <option value="Hindi">Hindi</option>
               <option value="Marathi">Marathi</option>
             </select>
-            <span class="material-icons-round text-white/40 text-sm absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+            <span class="material-icons-round text-slate-500 text-sm absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
           </div>
         </div>
 
         <!-- Admin Tab Bar (hidden by default) -->
-        <div id="admin-toolbar" class="hidden flex items-center gap-1 bg-surface-2 border border-border rounded-lg p-1">
+        <div id="admin-toolbar" class="hidden flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-lg p-1">
           <button class="tab-btn active" onclick="switchAdminTab('dashboard')">
             <span class="material-icons-round text-sm">insights</span> Dashboard
           </button>
@@ -178,7 +185,7 @@
 
       <!-- ===================== STUDENT VIEW ===================== -->
       <section id="view-student" class="view-section flex-1 flex flex-col overflow-hidden p-4">
-        <div class="flex-1 flex flex-col bg-surface-1 border border-border rounded-xl overflow-hidden shadow-xl">
+        <div class="flex-1 flex flex-col bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
 
           <!-- Chat Messages -->
           <div id="chat-messages" class="flex-1 overflow-y-auto p-5 flex flex-col gap-4 custom-scroll">
@@ -186,8 +193,8 @@
           </div>
 
           <!-- Quick Suggestions -->
-          <div class="flex items-center gap-2 px-5 py-2.5 border-t border-border bg-surface-2 overflow-x-auto no-scroll">
-            <span class="material-icons-round text-white/30 text-base shrink-0">tips_and_updates</span>
+          <div class="flex items-center gap-2 px-5 py-2.5 border-t border-slate-100 bg-slate-50 overflow-x-auto no-scroll">
+            <span class="material-icons-round text-slate-400 text-base shrink-0">tips_and_updates</span>
             <button class="suggestion-chip" onclick="suggestQuery('How do I submit my assignment?')">How do I submit assignments?</button>
             <button class="suggestion-chip" onclick="suggestQuery('My payment failed — which ticket?')">Payment failed ticket</button>
             <button class="suggestion-chip" onclick="suggestQuery('What are my MBA Sem 1 subjects?')">Sem 1 subjects?</button>
@@ -196,13 +203,13 @@
           </div>
 
           <!-- Input Row -->
-          <div class="flex items-center gap-3 px-5 py-3 border-t border-border bg-surface-1">
+          <div class="flex items-center gap-3 px-5 py-3 border-t border-slate-100 bg-white">
             <input type="text" id="chat-input"
               placeholder="Type your question about DPU programs, exams, fees..."
               onkeydown="if(event.key==='Enter') sendChatMessage()"
-              class="flex-1 bg-surface-2 border border-border text-white placeholder-white/25 text-sm px-4 py-2.5 rounded-lg outline-none focus:border-primary/60 transition-colors" />
+              class="flex-1 bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 text-sm px-4 py-2.5 rounded-lg outline-none focus:border-[#AE2E2D]/60 transition-colors" />
             <button onclick="sendChatMessage()"
-              class="flex items-center justify-center w-10 h-10 rounded-lg bg-primary hover:bg-primary-hover transition-colors shadow-md shadow-primary/20">
+              class="flex items-center justify-center w-10 h-10 rounded-lg bg-[#AE2E2D] hover:bg-[#902423] transition-colors shadow-sm">
               <span class="material-icons-round text-white text-lg">send</span>
             </button>
           </div>
@@ -221,41 +228,45 @@
               <div class="stat-trend up">+18% vs yesterday</div>
             </div>
             <div class="stat-card">
-              <div class="stat-value text-red-400" id="stat-open-escalations">3</div>
+              <div class="stat-value text-red-600" id="stat-open-escalations">3</div>
               <div class="stat-label">Open Escalations</div>
-              <div class="stat-trend text-red-400">2 high priority</div>
+              <div class="stat-trend text-red-600">2 high priority</div>
             </div>
             <div class="stat-card">
-              <div class="stat-value text-green-400" id="stat-resolution-rate">94%</div>
+              <div class="stat-value text-emerald-600" id="stat-resolution-rate">94%</div>
               <div class="stat-label">Bot Resolution Rate</div>
               <div class="stat-trend up">+5% this week</div>
             </div>
             <div class="stat-card">
-              <div class="stat-value text-blue-400" id="stat-faqs-count">113</div>
+              <div class="stat-value text-blue-600" id="stat-faqs-count">113</div>
               <div class="stat-label">Verified FAQs</div>
-              <div class="stat-trend text-blue-400/60">Layer 1 grounded</div>
+              <div class="stat-trend text-blue-600/70">Layer 1 grounded</div>
             </div>
             <div class="stat-card">
-              <div class="stat-value text-green-400" id="stat-index-status">Ready</div>
+              <div class="stat-value text-emerald-600" id="stat-index-status">Ready</div>
               <div class="stat-label">Index Status</div>
-              <div class="stat-trend text-green-400/60" id="stat-index-sub">Loading...</div>
+              <div class="stat-trend text-emerald-600/70" id="stat-index-sub">Loading...</div>
             </div>
           </div>
 
           <div class="grid grid-cols-2 gap-4">
-            <div class="panel-card">
-              <h3 class="panel-heading"><span class="material-icons-round text-lg text-primary">bar_chart</span> Top Query Categories</h3>
-              <div class="flex flex-col gap-2.5">
+            <div class="panel-card !p-0 overflow-hidden flex flex-col">
+              <div class="bg-[#B2EBF2] text-[#006064] px-5 py-3 font-bold text-sm flex items-center gap-2 border-b border-cyan-100">
+                <span class="material-icons-round text-base">bar_chart</span> Top Query Categories
+              </div>
+              <div class="p-5 flex-1 flex flex-col gap-2.5">
                 <div class="bar-row"><span class="bar-lbl">Exam & Results</span><div class="bar-bg"><div class="bar-fill bg-blue-500" style="width:88%"><span>88</span></div></div><span class="bar-pct">35%</span></div>
-                <div class="bar-row"><span class="bar-lbl">Fee & Payments</span><div class="bar-bg"><div class="bar-fill bg-green-500" style="width:72%"><span>72</span></div></div><span class="bar-pct">29%</span></div>
+                <div class="bar-row"><span class="bar-lbl">Fee & Payments</span><div class="bar-bg"><div class="bar-fill bg-emerald-500" style="width:72%"><span>72</span></div></div><span class="bar-pct">29%</span></div>
                 <div class="bar-row"><span class="bar-lbl">LMS & Sessions</span><div class="bar-bg"><div class="bar-fill bg-amber-500" style="width:61%"><span>61</span></div></div><span class="bar-pct">24%</span></div>
                 <div class="bar-row"><span class="bar-lbl">Assignments</span><div class="bar-bg"><div class="bar-fill bg-purple-500" style="width:45%"><span>45</span></div></div><span class="bar-pct">18%</span></div>
-                <div class="bar-row"><span class="bar-lbl">Books & Dispatch</span><div class="bar-bg"><div class="bar-fill bg-red-500" style="width:30%"><span>30</span></div></div><span class="bar-pct">12%</span></div>
+                <div class="bar-row"><span class="bar-lbl">Books & Dispatch</span><div class="bar-bg"><div class="bar-fill bg-[#AE2E2D]" style="width:30%"><span>30</span></div></div><span class="bar-pct">12%</span></div>
               </div>
             </div>
-            <div class="panel-card">
-              <h3 class="panel-heading"><span class="material-icons-round text-lg text-amber-400">confirmation_number</span> Recent Escalations</h3>
-              <div id="dashboard-recent-escalations" class="flex flex-col gap-2"></div>
+            <div class="panel-card !p-0 overflow-hidden flex flex-col">
+              <div class="bg-[#C8E6C9] text-[#1B5E20] px-5 py-3 font-bold text-sm flex items-center gap-2 border-b border-emerald-100">
+                <span class="material-icons-round text-base">confirmation_number</span> Recent Escalations
+              </div>
+              <div id="dashboard-recent-escalations" class="p-5 flex-1 flex flex-col gap-2"></div>
             </div>
           </div>
         </div>
@@ -288,7 +299,7 @@
               <div id="composer-ticket-preview" class="text-sm text-white/40 italic mb-3">Select a ticket to draft a reply.</div>
               <div id="composer-reply-box" class="hidden flex-1 flex flex-col gap-3">
                 <textarea id="ai-reply-text" rows="10"
-                  class="w-full bg-surface text-white text-xs font-mono border border-border rounded-lg p-3 outline-none focus:border-primary resize-none custom-scroll"></textarea>
+                  class="w-full bg-slate-50 text-slate-800 text-xs font-mono border border-slate-200 rounded-lg p-3 outline-none focus:border-[#AE2E2D] resize-none custom-scroll"></textarea>
                 <div class="flex justify-end gap-2">
                   <button onclick="copyReplyText()" class="btn-secondary text-xs"><span class="material-icons-round text-sm">content_copy</span> Copy</button>
                   <button onclick="markTicketResolved()" class="btn-primary text-xs"><span class="material-icons-round text-sm">check_circle</span> Mark Resolved</button>
@@ -300,19 +311,23 @@
 
         <!-- SLA Tracker Tab -->
         <div id="admin-tab-sla" class="admin-tab-content hidden">
-          <div class="panel-card mb-4">
-            <h3 class="panel-heading mb-4"><span class="material-icons-round text-lg text-primary">schedule</span> DPU COL SLA Policy Matrix</h3>
-            <div class="grid grid-cols-5 gap-3">
-              <div class="sla-chip text-red-400 bg-red-900/20 border-red-900/40"><span class="font-bold text-lg">24h</span><span class="text-xs mt-1">Accounts & Fees</span></div>
-              <div class="sla-chip text-blue-400 bg-blue-900/20 border-blue-900/40"><span class="font-bold text-lg">48h</span><span class="text-xs mt-1">Academics</span></div>
-              <div class="sla-chip text-amber-400 bg-amber-900/20 border-amber-900/40"><span class="font-bold text-lg">24h</span><span class="text-xs mt-1">Examinations</span></div>
-              <div class="sla-chip text-green-400 bg-green-900/20 border-green-900/40"><span class="font-bold text-lg">48h</span><span class="text-xs mt-1">Students Section</span></div>
-              <div class="sla-chip text-purple-400 bg-purple-900/20 border-purple-900/40"><span class="font-bold text-lg">72h</span><span class="text-xs mt-1">Books Dispatch</span></div>
+          <div class="panel-card mb-4 !p-0 overflow-hidden flex flex-col">
+            <div class="bg-[#FFE0B2] text-[#E65100] px-5 py-3 font-bold text-sm flex items-center gap-2 border-b border-orange-100">
+              <span class="material-icons-round text-base">schedule</span> DPU COL SLA Policy Matrix
+            </div>
+            <div class="p-5 grid grid-cols-5 gap-3">
+              <div class="sla-chip text-red-600 bg-red-50 border-red-200"><span class="font-bold text-lg">24h</span><span class="text-xs mt-1">Accounts & Fees</span></div>
+              <div class="sla-chip text-blue-600 bg-blue-50 border-blue-200"><span class="font-bold text-lg">48h</span><span class="text-xs mt-1">Academics</span></div>
+              <div class="sla-chip text-amber-600 bg-amber-50 border-amber-200"><span class="font-bold text-lg">24h</span><span class="text-xs mt-1">Examinations</span></div>
+              <div class="sla-chip text-green-600 bg-green-50 border-green-200"><span class="font-bold text-lg">48h</span><span class="text-xs mt-1">Students Section</span></div>
+              <div class="sla-chip text-purple-600 bg-purple-50 border-purple-200"><span class="font-bold text-lg">72h</span><span class="text-xs mt-1">Books Dispatch</span></div>
             </div>
           </div>
-          <div class="panel-card">
-            <h3 class="panel-heading mb-4"><span class="material-icons-round text-base text-red-400">warning</span> Active SLA Countdowns</h3>
-            <div id="sla-countdown-container" class="flex flex-col gap-4"></div>
+          <div class="panel-card !p-0 overflow-hidden flex flex-col">
+            <div class="bg-[#B2EBF2] text-[#006064] px-5 py-3 font-bold text-sm flex items-center gap-2 border-b border-cyan-100">
+              <span class="material-icons-round text-base">warning</span> Active SLA Countdowns
+            </div>
+            <div id="sla-countdown-container" class="p-5 flex flex-col gap-4"></div>
           </div>
         </div>
 
