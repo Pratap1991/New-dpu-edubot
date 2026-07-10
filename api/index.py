@@ -129,5 +129,7 @@ async def upload_document(
         raise HTTPException(status_code=500, detail=str(e))
 
 # Mount static folder for local UI rendering (dev only)
-os.makedirs("public", exist_ok=True)
-app.mount("/", StaticFiles(directory="public", html=True), name="public")
+if not os.environ.get("VERCEL"):
+    os.makedirs("public", exist_ok=True)
+    app.mount("/", StaticFiles(directory="public", html=True), name="public")
+
