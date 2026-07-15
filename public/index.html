@@ -46,6 +46,9 @@
 </head>
 <body class="bg-[#F4F6F9] text-slate-800 font-sans overflow-hidden h-screen">
 
+  <!-- Sidebar overlay for mobile -->
+  <div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
   <!-- ===================== APP LAYOUT ===================== -->
   <div class="flex h-screen w-screen overflow-hidden">
 
@@ -128,9 +131,15 @@
 
       <!-- Top App Bar -->
       <header class="flex items-center justify-between px-6 py-3 border-b border-slate-200 bg-white shrink-0">
-        <div>
-          <h1 id="page-title" class="text-base font-bold text-slate-800">Student Chat</h1>
-          <p id="page-subtitle" class="text-xs text-slate-500 mt-0.5">Ask anything about your program, exams, fees, LMS, or support tickets.</p>
+        <div class="flex items-center gap-3">
+          <!-- Hamburger (mobile only) -->
+          <button id="hamburger-btn" onclick="toggleSidebar()" aria-label="Toggle menu">
+            <span class="material-icons-round text-2xl">menu</span>
+          </button>
+          <div>
+            <h1 id="page-title" class="text-base font-bold text-slate-800">Student Chat</h1>
+            <p id="page-subtitle" class="text-xs text-slate-500 mt-0.5">Ask anything about your program, exams, fees, LMS, or support tickets.</p>
+          </div>
         </div>
 
         <!-- Student Controls (visible only in student view) -->

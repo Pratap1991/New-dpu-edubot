@@ -805,6 +805,34 @@ document.getElementById('login-overlay')?.addEventListener('click', function(e) 
 });
 
 // ──────────────────────────────────────────────────────────
+// RESPONSIVE SIDEBAR TOGGLE (MOBILE)
+// ──────────────────────────────────────────────────────────
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  const isOpen = sidebar.classList.contains('open');
+  if (isOpen) {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('active');
+  } else {
+    sidebar.classList.add('open');
+    overlay.classList.add('active');
+  }
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('active');
+}
+
+// Auto-close sidebar on mobile when a nav item is clicked
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (window.innerWidth <= 768) closeSidebar();
+  });
+});
+
+// ──────────────────────────────────────────────────────────
 // SPEECH RECOGNITION (VOICE INPUT)
 // ──────────────────────────────────────────────────────────
 let recognition = null;

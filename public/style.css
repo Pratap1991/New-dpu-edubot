@@ -369,3 +369,124 @@ body { font-family: 'Inter', 'Roboto', sans-serif; }
 .view-section { display: flex; flex-direction: column; }
 .view-section.hidden { display: none !important; }
 .admin-tab-content.hidden { display: none !important; }
+
+/* ─── Hamburger Button ───────────────────────────────────── */
+#hamburger-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #475569;
+  transition: background 0.15s;
+}
+#hamburger-btn:hover { background: #f1f5f9; }
+
+/* ─── Sidebar Overlay (mobile) ───────────────────────────── */
+#sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 40;
+}
+#sidebar-overlay.active { display: block; }
+
+/* ─── Responsive Breakpoints ─────────────────────────────── */
+@media (max-width: 1024px) {
+  /* Admin tabs scroll horizontally */
+  #admin-toolbar {
+    overflow-x: auto;
+    flex-wrap: nowrap !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  /* Dashboard 5-col → 3-col */
+  .grid.grid-cols-5 { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+}
+
+@media (max-width: 768px) {
+  /* Show hamburger, hide sidebar by default */
+  #hamburger-btn { display: flex; }
+
+  /* Sidebar slides in from left as overlay */
+  #sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+    width: 260px !important;
+  }
+  #sidebar.open { transform: translateX(0); }
+
+  /* Main stretches full width */
+  main { width: 100%; }
+
+  /* Header stacks on mobile */
+  header {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 14px !important;
+  }
+  #student-toolbar {
+    flex-wrap: wrap;
+    gap: 6px;
+    width: 100%;
+  }
+  #admin-toolbar {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Chat section padding reduced */
+  #view-student { padding: 8px !important; }
+  #chat-messages { padding: 12px !important; }
+
+  /* Admin / Faculty grids → single column */
+  .grid.grid-cols-2  { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
+  .grid.grid-cols-3  { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
+  .grid.grid-cols-4  { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .grid.grid-cols-5  { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+
+  /* Escalation queue stacks */
+  .grid.grid-cols-2.gap-4 { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
+
+  /* Make stat cards more compact */
+  .stat-card { padding: 12px 14px; }
+  .stat-value { font-size: 22px; }
+
+  /* Panel cards */
+  .panel-card { padding: 14px; }
+
+  /* Message bubbles full width */
+  .msg-wrapper.user      { max-width: 95% !important; }
+  .msg-wrapper.assistant { max-width: 95% !important; }
+
+  /* Suggestion chips area scrollable */
+  .suggestion-chip { font-size: 11px; padding: 4px 10px; }
+
+  /* Bar label narrower */
+  .bar-lbl  { width: 90px; }
+  .topic-lbl { width: 100px; }
+
+  /* Login dialog full-width on mobile */
+  .login-dialog { margin: 0 12px; }
+
+  /* View sections full height */
+  #view-admin, #view-faculty { padding: 8px !important; }
+}
+
+@media (max-width: 480px) {
+  .grid.grid-cols-4 { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
+  .grid.grid-cols-5 { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
+  .stat-value { font-size: 20px; }
+  #page-title { font-size: 14px; }
+  #page-subtitle { display: none; }
+}
