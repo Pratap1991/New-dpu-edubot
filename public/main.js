@@ -709,15 +709,15 @@ function renderFacultyBatchInfo() {
 
   cont.innerHTML = `
     <div class="grid grid-cols-2 gap-2">
-      <div class="bg-surface-2 rounded-lg p-3"><div class="text-xs text-white/40 mb-0.5">Enrolled Students</div><div class="text-lg font-bold text-white">${d.students}</div></div>
-      <div class="bg-surface-2 rounded-lg p-3"><div class="text-xs text-white/40 mb-0.5">Exam Start</div><div class="text-sm font-bold text-amber-400">${d.examStart}</div></div>
-      <div class="bg-surface-2 rounded-lg p-3 col-span-2"><div class="text-xs text-white/40 mb-0.5">Assignment Due</div><div class="text-sm font-bold text-red-400">${d.assignmentDue}</div></div>
-      <div class="bg-surface-2 rounded-lg p-3 col-span-2"><div class="text-xs text-white/40 mb-1">Session Days</div><div class="text-sm text-white">${d.sessionDays}</div></div>
+      <div class="bg-slate-50 border border-slate-200 rounded-lg p-3"><div class="text-xs text-slate-500 mb-0.5">Enrolled Students</div><div class="text-lg font-bold text-slate-800">${d.students}</div></div>
+      <div class="bg-slate-50 border border-slate-200 rounded-lg p-3"><div class="text-xs text-slate-500 mb-0.5">Exam Start</div><div class="text-sm font-bold text-amber-600">${d.examStart}</div></div>
+      <div class="bg-slate-50 border border-slate-200 rounded-lg p-3 col-span-2"><div class="text-xs text-slate-500 mb-0.5">Assignment Due</div><div class="text-sm font-bold text-red-600">${d.assignmentDue}</div></div>
+      <div class="bg-slate-50 border border-slate-200 rounded-lg p-3 col-span-2"><div class="text-xs text-slate-500 mb-1">Session Days</div><div class="text-sm text-slate-800">${d.sessionDays}</div></div>
     </div>
     <div class="mt-3">
-      <div class="text-xs text-white/40 font-semibold mb-2">Subjects (Sem 1)</div>
+      <div class="text-xs text-slate-500 font-semibold mb-2">Subjects (Sem 1)</div>
       <div class="flex flex-col gap-1">
-        ${d.subjects.map((s, i) => `<div class="text-xs bg-surface-2 rounded px-2 py-1.5 flex items-center gap-2"><span class="material-icons-round text-primary text-sm">book</span>${s}</div>`).join('')}
+        ${d.subjects.map((s, i) => `<div class="text-xs bg-slate-50 border border-slate-100 rounded px-2 py-1.5 flex items-center gap-2 text-slate-700"><span class="material-icons-round text-[#AE2E2D] text-sm">book</span>${s}</div>`).join('')}
       </div>
     </div>
   `;
@@ -803,3 +803,86 @@ document.addEventListener('DOMContentLoaded', init);
 document.getElementById('login-overlay')?.addEventListener('click', function(e) {
   if (e.target === this) closeLoginDialog();
 });
+
+// ──────────────────────────────────────────────────────────
+// SPEECH RECOGNITION (VOICE INPUT)
+// ──────────────────────────────────────────────────────────
+let recognition = null;
+let isListening = false;
+
+function initSpeechRecognition() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    console.warn("Speech recognition is not supported in this browser.");
+    const micBtn = document.getElementById('mic-btn');
+    if (micBtn) micBtn.style.display = 'none';
+    return;
+  }
+
+  recognition = new SpeechRecognition();
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  recognition.onstart = () => {
+    isListening = true;
+    const micIcon = document.getElementById('mic-icon');
+    if (micIcon) {
+      micIcon.textContent = 'mic_off';
+      micIcon.classList.add('text-red-600', 'animate-pulse');
+    }
+    const chatInput = document.getElementById('chat-input');
+    if (chatInput) chatInput.placeholder = 'Listening... Speak now...';
+  };
+
+  recognition.onend = () => {
+    isListening = false;
+    const micIcon = document.getElementById('mic-icon');
+    if (micIcon) {
+      micIcon.textContent = 'mic';
+      micIcon.classList.remove('text-red-600', 'animate-pulse');
+    }
+    const chatInput = document.getElementById('chat-input');
+    if (chatInput) chatInput.placeholder = 'Type your question about DPU programs, exams, fees...';
+  };
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    const chatInput = document.getElementById('chat-input');
+    if (chatInput) {
+      chatInput.value = transcript;
+    }
+  };
+
+  recognition.onerror = (event) => {
+    console.error("Speech recognition error:", event.error);
+    isListening = false;
+    const micIcon = document.getElementById('mic-icon');
+    if (micIcon) {
+      micIcon.textContent = 'mic';
+      micIcon.classList.remove('text-red-600', 'animate-pulse');
+    }
+  };
+}
+
+function toggleVoiceInput() {
+  if (!recognition) {
+    initSpeechRecognition();
+  }
+
+  if (!recognition) return;
+
+  if (isListening) {
+    recognition.stop();
+  } else {
+    // Select language code dynamically
+    const selectedLang = document.getElementById('student-lang')?.value || 'English';
+    if (selectedLang === 'Hindi') {
+      recognition.lang = 'hi-IN';
+    } else if (selectedLang === 'Marathi') {
+      recognition.lang = 'mr-IN';
+    } else {
+      recognition.lang = 'en-IN';
+    }
+    recognition.start();
+  }
+}

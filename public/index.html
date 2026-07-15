@@ -197,10 +197,16 @@
 
           <!-- Input Row -->
           <div class="flex items-center gap-3 px-5 py-3 border-t border-slate-100 bg-white">
-            <input type="text" id="chat-input"
-              placeholder="Type your question about DPU programs, exams, fees..."
-              onkeydown="if(event.key==='Enter') sendChatMessage()"
-              class="flex-1 bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 text-sm px-4 py-2.5 rounded-lg outline-none focus:border-[#AE2E2D]/60 transition-colors" />
+            <div class="flex-1 relative flex items-center">
+              <input type="text" id="chat-input"
+                placeholder="Type your question about DPU programs, exams, fees..."
+                onkeydown="if(event.key==='Enter') sendChatMessage()"
+                class="w-full bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 text-sm pl-4 pr-12 py-2.5 rounded-lg outline-none focus:border-[#AE2E2D]/60 transition-colors" />
+              <button id="mic-btn" onclick="toggleVoiceInput()"
+                class="absolute right-2 text-slate-400 hover:text-[#AE2E2D] p-1.5 rounded-full transition-colors flex items-center justify-center">
+                <span id="mic-icon" class="material-icons-round text-xl">mic</span>
+              </button>
+            </div>
             <button onclick="sendChatMessage()"
               class="flex items-center justify-center w-10 h-10 rounded-lg bg-[#AE2E2D] hover:bg-[#902423] transition-colors shadow-sm">
               <span class="material-icons-round text-white text-lg">send</span>
