@@ -142,6 +142,7 @@ body { font-family: 'Inter', 'Roboto', sans-serif; }
   display: flex;
   gap: 10px;
   animation: msgIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 0; /* prevent flex overflow */
 }
 .msg-wrapper.user  { align-self: flex-end;  flex-direction: row-reverse; max-width: 78%; }
 .msg-wrapper.assistant { align-self: flex-start; max-width: 84%; }
@@ -176,6 +177,10 @@ body { font-family: 'Inter', 'Roboto', sans-serif; }
   border-radius: 10px;
   font-size: 13.5px;
   line-height: 1.65;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  min-width: 0;
 }
 .msg-wrapper.user .msg-bubble {
   background: linear-gradient(135deg, #ae2e2d, #8f2322);
@@ -445,9 +450,43 @@ body { font-family: 'Inter', 'Roboto', sans-serif; }
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Chat section padding reduced */
-  #view-student { padding: 8px !important; }
-  #chat-messages { padding: 12px !important; }
+  /* ─── Chat container fix for mobile ─── */
+  #view-student {
+    padding: 4px !important;
+    min-height: 0;
+    overflow: hidden;
+  }
+  /* Inner chat card must not exceed available height */
+  #view-student > div {
+    min-height: 0;
+    max-height: 100%;
+  }
+  #chat-messages {
+    padding: 10px !important;
+    min-height: 0;
+  }
+  /* Chat bubble text wrapping on small screens */
+  .msg-bubble {
+    font-size: 13px;
+    padding: 9px 12px;
+    max-width: 100%;
+  }
+  .msg-wrapper.user      { max-width: 90% !important; }
+  .msg-wrapper.assistant { max-width: 95% !important; }
+  .msg-avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+
+  /* Suggestion row compact */
+  .suggestion-chip { font-size: 11px; padding: 4px 10px; }
+
+  /* Input row compact */
+  #view-student .flex.items-center.gap-3 {
+    padding: 8px 10px !important;
+    gap: 8px !important;
+  }
 
   /* Admin / Faculty grids → single column */
   .grid.grid-cols-2  { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
@@ -464,13 +503,6 @@ body { font-family: 'Inter', 'Roboto', sans-serif; }
 
   /* Panel cards */
   .panel-card { padding: 14px; }
-
-  /* Message bubbles full width */
-  .msg-wrapper.user      { max-width: 95% !important; }
-  .msg-wrapper.assistant { max-width: 95% !important; }
-
-  /* Suggestion chips area scrollable */
-  .suggestion-chip { font-size: 11px; padding: 4px 10px; }
 
   /* Bar label narrower */
   .bar-lbl  { width: 90px; }
@@ -489,4 +521,7 @@ body { font-family: 'Inter', 'Roboto', sans-serif; }
   .stat-value { font-size: 20px; }
   #page-title { font-size: 14px; }
   #page-subtitle { display: none; }
+  .msg-avatar { width: 24px; height: 24px; font-size: 12px; }
+  .msg-bubble { font-size: 12.5px; padding: 8px 10px; }
+  .msg-wrapper { gap: 6px; }
 }
