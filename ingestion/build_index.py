@@ -216,41 +216,84 @@ def build_index():
     """Main function to build and save the knowledge base index."""
     print("\n[Build] Building DPU EduBot Index...")
 
-    # Load knowledge base
-    with open(KB_PATH, encoding="utf-8") as f:
-        kb = json.load(f)
+    # 1. Load pre-built default index and chunks
+    try:
+        default_vectors = np.load("data/faiss_index/index.npy")
+        with open("data/faiss_index/chunks.pkl", "rb") as f:
+            default_chunks = pickle.load(f)
+        print(f"  Loaded pre-built base index with {len(default_chunks)} chunks.")
+    except Exception as e:
+        print(f"  Failed to load base index: {e}")
+        default_vectors = None
+        default_chunks = []
 
-    # Build chunks
-    chunks = build_chunks_from_kb(kb)
-    print(f"\n  Total chunks to embed: {len(chunks)}")
+    # 2. Get uploaded chunks that need to be appended
+    import tempfile
+    uploads_dir = os.path.join(tempfile.gettempdir(), "batch_uploads")
+    uploaded_chunks = []
+    if os.path.exists(uploads_dir):
+        for f in os.listdir(uploads_dir):
+            if f.endswith(".pkl"):
+                pkl_path = os.path.join(uploads_dir, f)
+                try:
+                    with open(pkl_path, "rb") as pf:
+                        uploaded_chunks.extend(pickle.load(pf))
+                except Exception as e:
+                    print(f"    Error loading uploaded chunks from {f}: {e}")
+    print(f"  Loaded {len(uploaded_chunks)} uploaded chunks to index.")
 
-    # Embed all chunks
-    print("\n  Embedding chunks (this may take 1-2 minutes)...")
-    vectors = []
-    for i, chunk in enumerate(chunks):
-        vec = embed_text(chunk["text"])
-        vectors.append(vec)
-        if (i + 1) % 10 == 0 or (i + 1) == len(chunks):
-            print(f"  Progress: {i+1}/{len(chunks)} chunks embedded")
+    # 3. If there are no uploaded chunks and we have the default index, just copy it to temp
+    if not uploaded_chunks and default_vectors is not None:
+        os.makedirs(os.path.dirname(INDEX_PATH), exist_ok=True)
+        np.save(INDEX_PATH, default_vectors)
+        with open(CHUNKS_PATH, "wb") as f:
+            pickle.dump(default_chunks, f)
+        print("[Success] Reused base index (no uploads).")
+        return len(default_chunks)
 
-    # Save as numpy array
-    vectors_np = np.array(vectors, dtype="float32")
-    # Normalize vectors for cosine similarity (dot product of normalized vectors)
-    norms = np.linalg.norm(vectors_np, axis=1, keepdims=True)
-    # Avoid division by zero
-    norms[norms == 0] = 1.0
-    vectors_np = vectors_np / norms
+    # 4. Generate vectors for uploaded chunks only
+    uploaded_vectors = []
+    if uploaded_chunks:
+        print(f"  Embedding {len(uploaded_chunks)} uploaded chunks...")
+        for i, chunk in enumerate(uploaded_chunks):
+            vec = embed_text(chunk["text"])
+            uploaded_vectors.append(vec)
+        
+        uploaded_vectors_np = np.array(uploaded_vectors, dtype="float32")
+        # Normalize
+        norms = np.linalg.norm(uploaded_vectors_np, axis=1, keepdims=True)
+        norms[norms == 0] = 1.0
+        uploaded_vectors_np = uploaded_vectors_np / norms
 
+    # 5. Combine base vectors/chunks and uploaded vectors/chunks
+    if default_vectors is not None:
+        if uploaded_chunks:
+            combined_vectors = np.vstack([default_vectors, uploaded_vectors_np])
+            combined_chunks = default_chunks + uploaded_chunks
+        else:
+            combined_vectors = default_vectors
+            combined_chunks = default_chunks
+    else:
+        # Fall back to rebuilding everything if base index failed to load
+        with open(KB_PATH, encoding="utf-8") as f:
+            kb = json.load(f)
+        combined_chunks = build_chunks_from_kb(kb) + uploaded_chunks
+        print(f"  Fallback: Embedding all {len(combined_chunks)} chunks...")
+        combined_vectors_list = [embed_text(c["text"]) for c in combined_chunks]
+        combined_vectors = np.array(combined_vectors_list, dtype="float32")
+        norms = np.linalg.norm(combined_vectors, axis=1, keepdims=True)
+        norms[norms == 0] = 1.0
+        combined_vectors = combined_vectors / norms
+
+    # 6. Save the combined index
     os.makedirs(os.path.dirname(INDEX_PATH), exist_ok=True)
-    np.save(INDEX_PATH, vectors_np)
+    np.save(INDEX_PATH, combined_vectors)
     with open(CHUNKS_PATH, "wb") as f:
-        pickle.dump(chunks, f)
+        pickle.dump(combined_chunks, f)
 
     print(f"\n[Success] Index built successfully!")
-    print(f"   Chunks indexed: {len(chunks)}")
-    print(f"   Index saved to: {INDEX_PATH}")
-    print(f"   Chunks saved to: {CHUNKS_PATH}")
-    return len(chunks)
+    print(f"   Total chunks indexed: {len(combined_chunks)}")
+    return len(combined_chunks)
 
 
 if __name__ == "__main__":
