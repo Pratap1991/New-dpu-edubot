@@ -257,7 +257,7 @@ async function sendChatMessage() {
   const typingId = appendTypingIndicator();
 
   try {
-    const lang = document.getElementById('student-lang').value;
+    const lang = 'English';
     const erpIdVal = document.getElementById('student-erp-id')?.value || null;
     const resp = await fetch('/api/chat', {
       method: 'POST',
