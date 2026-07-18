@@ -102,10 +102,12 @@ async def upload_document(
     file: UploadFile = File(...)
 ):
     try:
-        # Save temporary file
-        os.makedirs("data/batch_uploads", exist_ok=True)
+        # Save temporary file using OS tmp directory to support Vercel serverless environment
+        import tempfile
+        upload_dir = os.path.join(tempfile.gettempdir(), "batch_uploads")
+        os.makedirs(upload_dir, exist_ok=True)
         filename = file.filename.replace(" ", "_")
-        tmp_path = os.path.join("data/batch_uploads", filename)
+        tmp_path = os.path.join(upload_dir, filename)
         
         with open(tmp_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)

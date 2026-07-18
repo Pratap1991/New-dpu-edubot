@@ -194,7 +194,8 @@ def build_chunks_from_kb(kb: dict) -> list:
 
     # ── Layer 4: Uploaded batch documents ───────────────────────────
     print("  Processing Layer 4 Uploaded batch documents...")
-    uploads_dir = "data/batch_uploads"
+    import tempfile
+    uploads_dir = os.path.join(tempfile.gettempdir(), "batch_uploads")
     if os.path.exists(uploads_dir):
         for f in os.listdir(uploads_dir):
             if f.endswith(".pkl"):
