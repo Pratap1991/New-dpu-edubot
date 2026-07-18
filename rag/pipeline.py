@@ -29,6 +29,87 @@ INDEX_PATH = "data/faiss_index/index.npy"
 CHUNKS_PATH = "data/faiss_index/chunks.pkl"
 KB_PATH = "data/knowledge_base.json"
 
+# ════════════════════════════════════════════════════════════════════
+# MOCK DATA — 5 sample students (extracted from erp_demo.py)
+# ════════════════════════════════════════════════════════════════════
+MOCK_STUDENTS = {
+    "ERP001": {
+        "name": "Pratap Nayadkar", "program": "MBA Online", "batch": "MBA Jan 2026",
+        "semester": 1, "specialization": "Marketing", "prn": "DPU2026MBA001",
+        "mentor": "Ms. Sneha Mehta",
+        "fees": {"total": 189400, "paid": 50000, "outstanding": 139400,
+                 "sem1": "Paid (Rs 50,000 on 5 Jan 2026)",
+                 "sem2": "Due Rs 50,000 by 15 Feb 2026"},
+        "assignments": {"total": 14, "submitted": 9, "pending": 5,
+                        "pending_list": [
+                            "OMBC-103 Management Accounting — Assignment 2",
+                            "OMBC-105 Business Communication — Assignment 1 & 2",
+                            "OMBC-107 Environmental Awareness — Assignment 1 & 2"]},
+        "exam": {"form": "Submitted", "admit_card": "Available on ERP",
+                 "exam_date": "5 March 2026 (Tentative)", "result": "Not declared",
+                 "backlog": []},
+        "attendance": 78,
+        "books": "Delivered on 12 January 2026"
+    },
+    "ERP002": {
+        "name": "Riya Sharma", "program": "MBA Online", "batch": "MBA Jan 2026",
+        "semester": 1, "specialization": "Finance", "prn": "DPU2026MBA002",
+        "mentor": "Mr. Vivek Nair",
+        "fees": {"total": 189400, "paid": 100000, "outstanding": 89400,
+                 "sem1": "Paid", "sem2": "Paid (Rs 50,000 on 5 Feb 2026)"},
+        "assignments": {"total": 14, "submitted": 14, "pending": 0, "pending_list": []},
+        "exam": {"form": "Submitted", "admit_card": "Available on ERP",
+                 "exam_date": "5 March 2026", "result": "Not declared", "backlog": []},
+        "attendance": 92,
+        "books": "Delivered on 10 January 2026"
+    },
+    "ERP003": {
+        "name": "Arjun Mehta", "program": "MBA Online", "batch": "MBA Jan 2026",
+        "semester": 1, "specialization": "Operations Management", "prn": "DPU2026MBA003",
+        "mentor": "Ms. Priya Rao",
+        "fees": {"total": 189400, "paid": 0, "outstanding": 189400,
+                 "sem1": "OVERDUE — Rs 50,000 pending since 15 Jan 2026",
+                 "sem2": "Not yet due"},
+        "assignments": {"total": 14, "submitted": 0, "pending": 14,
+                        "pending_list": ["All assignments locked — fees pending"]},
+        "exam": {"form": "Not submitted (fees pending)",
+                 "admit_card": "Not eligible — pay fees first",
+                 "exam_date": "5 March 2026", "result": "Not eligible", "backlog": []},
+        "attendance": 0,
+        "books": "Not dispatched — awaiting fee payment"
+    },
+    "ERP006": {
+        "name": "Sneha Iyer", "program": "BBA Online", "batch": "BBA Jan 2026",
+        "semester": 1, "specialization": "Marketing", "prn": "DPU2026BBA042",
+        "mentor": "Ms. Priya Rao",
+        "fees": {"total": 165000, "paid": 55000, "outstanding": 110000,
+                 "sem1": "Paid (Rs 55,000 on 7 Jan 2026)",
+                 "sem2": "Due Rs 55,000 by 1 March 2026"},
+        "assignments": {"total": 10, "submitted": 7, "pending": 3,
+                        "pending_list": [
+                            "OBBAC-103 Introduction to Economics — Assignment 2",
+                            "OBBAC-105 Business English — Assignment 1 & 2"]},
+        "exam": {"form": "Submitted", "admit_card": "Available on ERP",
+                 "exam_date": "20 May 2026", "result": "Not declared", "backlog": []},
+        "attendance": 81,
+        "books": "Delivered on 14 January 2026"
+    },
+    "ERP009": {
+        "name": "Vikram Joshi", "program": "MBA Online", "batch": "MBA Jul 2024",
+        "semester": 4, "specialization": "Business Analytics", "prn": "DPU2024MBA152",
+        "mentor": "Mr. Arjun Kumar",
+        "fees": {"total": 189400, "paid": 189400, "outstanding": 2500,
+                 "sem1": "Paid", "sem2": "Paid"},
+        "assignments": {"total": 14, "submitted": 14, "pending": 0, "pending_list": []},
+        "exam": {"form": "Submitted (with 1 backlog)", "admit_card": "Available on ERP",
+                 "exam_date": "10 March 2026",
+                 "result": "Sem 1: 7.2 | Sem 2: 7.5 | Sem 3: FAIL in OMBC-303",
+                 "backlog": ["OMBC-303 Strategic Management"]},
+        "attendance": 86,
+        "books": "Delivered on 18 January 2026"
+    },
+}
+
 # Load knowledge base for Layer 0 rules
 with open(KB_PATH, encoding="utf-8") as f:
     KB = json.load(f)
@@ -161,7 +242,7 @@ def retrieve(query: str, batch_id: str, index, chunks: list, top_k: int = 5) -> 
 
 # ─── Main answer function ─────────────────────────────────────────
 
-def answer(query: str, batch_id: str = "mba_jan_26_sem1", language: str = "English") -> dict:
+def answer(query: str, batch_id: str = "mba_jan_26_sem1", language: str = "English", erp_id: str = None) -> dict:
     """
     Main entry point for EduBot.
 
@@ -178,15 +259,84 @@ def answer(query: str, batch_id: str = "mba_jan_26_sem1", language: str = "Engli
     # ── STEP 1: Layer 0 check ─────────────────────────────────────
     redirect = check_layer0(query)
     if redirect:
-        return {
-            "answer": redirect["message"],
-            "sources": [],
-            "confidence": 1.0,
-            "escalate": False,
-            "is_redirect": True,
-            "erp_link": redirect["link"],
-            "erp_label": redirect["label"]
-        }
+        if erp_id and erp_id in MOCK_STUDENTS:
+            student = MOCK_STUDENTS[erp_id]
+            personal_context = f"""=== VERIFIED ERP DATA FOR {student['name']} ===
+Student: {student['name']}
+ERP ID: {erp_id}
+PRN: {student['prn']}
+Program: {student['program']}
+Batch: {student['batch']}, Semester {student['semester']}
+Specialization: {student['specialization']}
+Mentor: {student['mentor']}
+
+FEES:
+- Total program fee: Rs {student['fees']['total']:,}
+- Paid so far: Rs {student['fees']['paid']:,}
+- Outstanding: Rs {student['fees']['outstanding']:,}
+- Sem 1: {student['fees']['sem1']}
+- Sem 2: {student['fees']['sem2']}
+
+ASSIGNMENTS:
+- Total: {student['assignments']['total']}
+- Submitted: {student['assignments']['submitted']}
+- Pending: {student['assignments']['pending']}
+- Pending list: {', '.join(student['assignments']['pending_list']) if student['assignments']['pending_list'] else 'None'}
+
+EXAMINATION:
+- Exam form: {student['exam']['form']}
+- Admit card: {student['exam']['admit_card']}
+- Exam date: {student['exam']['exam_date']}
+- Result: {student['exam']['result']}
+- Backlog subjects: {', '.join(student['exam']['backlog']) if student['exam']['backlog'] else 'None'}
+
+ATTENDANCE: {student['attendance']}%
+BOOKS DISPATCH: {student['books']}"""
+
+            system_prompt = f"""You are DPU EduBot answering a personal query for an enrolled student.
+             
+STRICT RULES:
+1. Use ONLY the verified ERP data below. Never invent numbers, dates, or details.
+2. Address the student by their first name.
+3. Be warm, concise, and helpful — like a kind mentor.
+4. If their data shows an issue (overdue fees, pending assignments), be direct but supportive.
+5. End with a clear next step where useful (e.g. "You can pay online at ERP — Payments section").
+6. Respond in {language}.
+
+{personal_context}"""
+            try:
+                response = client.chat.completions.create(
+                    model=CHAT_MODEL,
+                    temperature=0.1,
+                    max_tokens=400,
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user",   "content": query}
+                    ]
+                )
+                bot_answer = response.choices[0].message.content
+            except Exception as e:
+                bot_answer = f"Unable to fetch personalized details: {str(e)}"
+            
+            return {
+                "answer": bot_answer,
+                "sources": ["DPU ERP Student Record"],
+                "confidence": 1.0,
+                "escalate": False,
+                "is_redirect": False,
+                "erp_link": redirect["link"],
+                "erp_label": redirect["label"]
+            }
+        else:
+            return {
+                "answer": redirect["message"] + "\n\n💡 **Tip:** If you want to check your personal account info directly in this chat, please select your ERP ID from the dropdown at the top of the chat page.",
+                "sources": [],
+                "confidence": 1.0,
+                "escalate": False,
+                "is_redirect": True,
+                "erp_link": redirect["link"],
+                "erp_label": redirect["label"]
+            }
 
     # ── STEP 2: Check index exists ────────────────────────────────
     if not index_exists():

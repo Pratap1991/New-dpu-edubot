@@ -61,6 +61,14 @@ function logout() {
   switchRole('student');
 }
 
+const MOCK_STUDENT_METADATA = {
+  ERP001: { name: 'Pratap Nayadkar', role: 'Student — MBA Online' },
+  ERP002: { name: 'Riya Sharma', role: 'Student — MBA Online' },
+  ERP003: { name: 'Arjun Mehta', role: 'Student — MBA Online' },
+  ERP006: { name: 'Sneha Iyer', role: 'Student — BBA Online' },
+  ERP009: { name: 'Vikram Joshi', role: 'Student — MBA Online' }
+};
+
 function applyAuthState() {
   const isAdmin   = authRole === 'admin';
   const isFaculty = authRole === 'faculty';
@@ -85,8 +93,14 @@ function applyAuthState() {
     profileName.textContent = 'FACULTY';
     profileRole.textContent = 'Academic Portal';
   } else {
-    profileName.textContent = 'STUDENT';
-    profileRole.textContent = 'Online Learning Portal';
+    const selectedErp = document.getElementById('student-erp-id')?.value;
+    if (selectedErp && MOCK_STUDENT_METADATA[selectedErp]) {
+      profileName.textContent = MOCK_STUDENT_METADATA[selectedErp].name.toUpperCase();
+      profileRole.textContent = MOCK_STUDENT_METADATA[selectedErp].role;
+    } else {
+      profileName.textContent = 'STUDENT';
+      profileRole.textContent = 'Online Learning Portal';
+    }
   }
 
   if (isLoggedIn) {
@@ -163,6 +177,10 @@ function updateBatch() {
   batchId = document.getElementById('student-batch').value;
 }
 
+function updateErpId() {
+  applyAuthState();
+}
+
 function suggestQuery(text) {
   document.getElementById('chat-input').value = text;
   sendChatMessage();
@@ -179,10 +197,11 @@ async function sendChatMessage() {
 
   try {
     const lang = document.getElementById('student-lang').value;
+    const erpIdVal = document.getElementById('student-erp-id')?.value || null;
     const resp = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query, batch_id: batchId, language: lang }),
+      body: JSON.stringify({ query, batch_id: batchId, language: lang, erp_id: erpIdVal }),
     });
 
     const data = await resp.json();
@@ -191,7 +210,8 @@ async function sendChatMessage() {
     if (data.error) {
       appendMessage('assistant', data.error, [], null);
     } else {
-      appendMessage('assistant', data.answer, data.sources || [], data.erp_action || null);
+      const erpAction = data.erp_action || (data.erp_link ? { url: data.erp_link, label: data.erp_label } : null);
+      appendMessage('assistant', data.answer, data.sources || [], erpAction);
     }
   } catch (err) {
     removeTypingIndicator(typingId);

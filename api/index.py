@@ -35,16 +35,18 @@ class ChatRequest(BaseModel):
     query: str
     batch_id: str = "mba_jan_26_sem1"
     language: str = "English"
+    erp_id: Optional[str] = None
 
 class RebuildResponse(BaseModel):
     success: bool
     message: str
+    padding: int = 0
     chunks_count: int
 
 @app.post("/api/chat")
 async def chat_endpoint(payload: ChatRequest):
     try:
-        res = answer(payload.query, payload.batch_id, payload.language)
+        res = answer(payload.query, payload.batch_id, payload.language, payload.erp_id)
         return res
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

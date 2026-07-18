@@ -145,6 +145,18 @@
         <!-- Student Controls (visible only in student view) -->
         <div id="student-toolbar" class="flex items-center gap-3">
           <div class="relative">
+            <select id="student-erp-id" onchange="updateErpId()"
+              class="appearance-none bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold pl-3 pr-8 py-2 rounded-lg outline-none cursor-pointer focus:border-[#AE2E2D]">
+              <option value="">Guest Mode (No ID)</option>
+              <option value="ERP001">ERP001 (Pratap)</option>
+              <option value="ERP002">ERP002 (Riya)</option>
+              <option value="ERP003">ERP003 (Arjun)</option>
+              <option value="ERP006">ERP006 (Sneha)</option>
+              <option value="ERP009">ERP009 (Vikram)</option>
+            </select>
+            <span class="material-icons-round text-slate-500 text-sm absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+          </div>
+          <div class="relative">
             <select id="student-batch" onchange="updateBatch()"
               class="appearance-none bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold pl-3 pr-8 py-2 rounded-lg outline-none cursor-pointer focus:border-[#AE2E2D]">
               <option value="mba_jan_26_sem1">MBA Jan 26 — Sem 1</option>
