@@ -205,46 +205,39 @@
       </header>
 
       <!-- ===================== STUDENT VIEW — PREMIUM REDESIGN ===================== -->
-      <section id="view-student" class="view-section flex-1 flex flex-col overflow-hidden relative" style="background: linear-gradient(135deg, #0f1923 0%, #1a0a0a 40%, #0f1923 100%);">
-
-        <!-- Animated Mesh Background -->
-        <div class="chat-mesh-bg" aria-hidden="true">
-          <div class="mesh-orb orb-1"></div>
-          <div class="mesh-orb orb-2"></div>
-          <div class="mesh-orb orb-3"></div>
-        </div>
+      <section id="view-student" class="view-section flex-1 flex flex-col overflow-hidden relative" style="background: #FFFFFF;">
 
         <!-- Hero Banner (shown when chat is empty) -->
         <div id="chat-hero" class="flex flex-col items-center justify-center gap-5 py-10 px-6 animate-hero-in">
           <div class="hero-bot-avatar">
-            <span class="material-icons-round text-5xl text-white/90">smart_toy</span>
+            <span class="material-icons-round text-5xl text-[#AE2E2D]">smart_toy</span>
             <div class="hero-pulse-ring"></div>
           </div>
           <div class="text-center">
-            <h2 class="text-2xl font-extrabold text-white tracking-tight">DPU EduBot</h2>
-            <p class="text-white/50 text-sm mt-1 max-w-sm mx-auto leading-relaxed">Your verified AI assistant for Dr. D.Y. Patil Centre for Online Learning. Ask anything about your program.</p>
+            <h2 class="text-2xl font-extrabold text-slate-850 tracking-tight">DPU EduBot</h2>
+            <p class="text-slate-500 text-sm mt-1 max-w-sm mx-auto leading-relaxed">Your verified AI assistant for Dr. D.Y. Patil Centre for Online Learning. Ask anything about your program.</p>
           </div>
           <!-- Quick Action Cards -->
           <div class="grid grid-cols-2 gap-3 w-full max-w-md mt-2">
             <button onclick="suggestQuery('What is my fee status?')" class="quick-card">
-              <span class="material-icons-round text-amber-400 text-2xl">payments</span>
-              <span class="text-sm font-semibold text-white">Fee Status</span>
-              <span class="text-[11px] text-white/40">Check balance & dues</span>
+              <span class="material-icons-round text-amber-500 text-2xl">payments</span>
+              <span class="text-sm font-semibold text-slate-800">Fee Status</span>
+              <span class="text-[11px] text-slate-400">Check balance & dues</span>
             </button>
             <button onclick="suggestQuery('What assignments are pending?')" class="quick-card">
-              <span class="material-icons-round text-blue-400 text-2xl">assignment</span>
-              <span class="text-sm font-semibold text-white">Assignments</span>
-              <span class="text-[11px] text-white/40">Pending & submitted</span>
+              <span class="material-icons-round text-blue-500 text-2xl">assignment</span>
+              <span class="text-sm font-semibold text-slate-800">Assignments</span>
+              <span class="text-[11px] text-slate-400">Pending & submitted</span>
             </button>
             <button onclick="suggestQuery('When is my exam and is my admit card available?')" class="quick-card">
-              <span class="material-icons-round text-emerald-400 text-2xl">event</span>
-              <span class="text-sm font-semibold text-white">Exam & Admit Card</span>
-              <span class="text-[11px] text-white/40">Dates & eligibility</span>
+              <span class="material-icons-round text-emerald-500 text-2xl">event</span>
+              <span class="text-sm font-semibold text-slate-800">Exam & Admit Card</span>
+              <span class="text-[11px] text-slate-400">Dates & eligibility</span>
             </button>
             <button onclick="suggestQuery('How do I join a live session on LMS?')" class="quick-card">
-              <span class="material-icons-round text-purple-400 text-2xl">play_circle</span>
-              <span class="text-sm font-semibold text-white">Live Sessions</span>
-              <span class="text-[11px] text-white/40">Access & recordings</span>
+              <span class="material-icons-round text-purple-500 text-2xl">play_circle</span>
+              <span class="text-sm font-semibold text-slate-800">Live Sessions</span>
+              <span class="text-[11px] text-slate-400">Access & recordings</span>
             </button>
           </div>
         </div>
