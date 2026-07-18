@@ -139,6 +139,10 @@ function applyAuthState() {
   document.getElementById('nav-admin').classList.toggle('hidden', !isAdmin);
   document.getElementById('nav-faculty').classList.toggle('hidden', !isFaculty);
 
+  // ERP ID dropdown: only show when logged in as student
+  const erpDropdownWrap = document.getElementById('erp-id-dropdown-wrap');
+  if (erpDropdownWrap) erpDropdownWrap.classList.toggle('hidden', !isStudent);
+
   // Footer — hide login when any role is active, show logout
   document.getElementById('btn-login-footer').classList.toggle('hidden', isLoggedIn);
   document.getElementById('btn-logout-section').classList.toggle('hidden', !isLoggedIn);
@@ -392,8 +396,23 @@ async function checkIndexStatus() {
 }
 
 // ──────────────────────────────────────────────────────────
-// ESCALATION DATA (mock until live API)
+// ESCALATION DATA — persisted in localStorage for cross-session
 // ──────────────────────────────────────────────────────────
+function saveTickets() {
+  try { localStorage.setItem('dpu_tickets', JSON.stringify(mockTickets)); } catch(e) {}
+}
+function loadPersistedTickets() {
+  try {
+    const saved = localStorage.getItem('dpu_tickets');
+    if (saved) {
+      const arr = JSON.parse(saved);
+      // Merge: add saved tickets that aren't already in the array
+      arr.forEach(t => { if (!mockTickets.find(x => x.id === t.id)) mockTickets.push(t); });
+      // Sort by id desc (student-submitted appear first)
+      mockTickets.sort((a, b) => b.id.localeCompare(a.id));
+    }
+  } catch(e) {}
+}
 const mockTickets = [
   {
     id: 'ESC-001', student: 'Rahul Patil', roll: 'MBA-JAN26-101',
@@ -542,6 +561,7 @@ function markTicketResolved() {
   if (!selectedTicketId) return;
   const tkt = mockTickets.find(t => t.id === selectedTicketId);
   if (tkt) tkt.status = 'Resolved';
+  saveTickets();
   showToast(`Ticket ${selectedTicketId} marked as resolved`);
   selectedTicketId = null;
   document.getElementById('composer-ticket-preview').classList.remove('hidden');
@@ -903,6 +923,9 @@ function init() {
 
   appendMessage('assistant', welcomeText);
 
+  // Load student-submitted tickets from localStorage so Admin can see them
+  loadPersistedTickets();
+
   // Poll index status every 30s
   setInterval(checkIndexStatus, 30000);
 }
@@ -1059,6 +1082,26 @@ function closeRaiseTicketDialog() {
   }
 }
 
+function openRaiseTicketDialogWithAutoFill() {
+  openRaiseTicketDialog();
+  // Auto-fill ERP ID from logged-in student session
+  const sessionErp = sessionStorage.getItem('dpu_erp_id');
+  const erpInput = document.getElementById('ticket-erp-id');
+  if (erpInput && sessionErp && MOCK_STUDENT_METADATA[sessionErp]) {
+    erpInput.value = sessionErp;
+    erpInput.readOnly = true;
+    erpInput.classList.add('bg-slate-100', 'cursor-not-allowed');
+    // Also show student name next to field
+    const nameHint = document.getElementById('ticket-erp-name-hint');
+    if (nameHint) nameHint.textContent = `👤 ${MOCK_STUDENT_METADATA[sessionErp].name}`;
+  } else if (erpInput) {
+    erpInput.readOnly = false;
+    erpInput.classList.remove('bg-slate-100', 'cursor-not-allowed');
+    const nameHint = document.getElementById('ticket-erp-name-hint');
+    if (nameHint) nameHint.textContent = '';
+  }
+}
+
 function submitGrievanceTicket() {
   const erpId = document.getElementById('ticket-erp-id').value.trim();
   const cat = document.getElementById('ticket-category').value;
@@ -1070,22 +1113,28 @@ function submitGrievanceTicket() {
     return;
   }
 
+  const studentName = MOCK_STUDENT_METADATA[erpId]?.name || erpId;
+  const now = new Date();
+  const timeLabel = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) + ', ' + now.toLocaleDateString('en-IN');
+
   const newTicket = {
-    id: `ESC-${Math.floor(100 + Math.random() * 900)}`,
-    student: MOCK_STUDENT_METADATA[erpId]?.name || erpId,
+    id: `TKT-${Date.now().toString().slice(-5)}`,
+    student: studentName,
     roll: erpId,
     category: cat.toLowerCase(),
     priority: 'high',
     status: 'Open',
     question: subject,
-    time: 'Just now',
+    time: timeLabel,
+    batch: MOCK_STUDENT_METADATA[erpId]?.batch || 'Unknown Batch',
     context: desc,
-    ai_reply: 'Suggested AI reply: Please check the ticket description. Our team will get back to you shortly.'
+    ai_reply: `Dear ${studentName.split(' ')[0]},\n\nThank you for raising this ticket regarding: "${subject}".\n\nOur support team has received your request and will review it within 24 hours. You can track its status in the ERP portal.\n\nCategory: ${cat}\nTicket ID: TKT-${Date.now().toString().slice(-5)}\n\nBest regards,\nDPU COL Student Support`
   };
 
-  mockTickets.unshift(newTicket); // Add to the top of mockTickets!
+  mockTickets.unshift(newTicket);
+  saveTickets();  // ← Persist so Admin can see it
   closeRaiseTicketDialog();
-  showToast(`Ticket ${newTicket.id} raised successfully!`);
+  showToast(`✅ Ticket raised successfully! Ticket ID: ${newTicket.id}`);
 
   // Re-render escalation lists if open
   if (currentAdminTab === 'escalations') renderEscalationQueue();

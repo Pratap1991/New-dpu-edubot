@@ -92,10 +92,10 @@
         </button>
 
         <!-- Raise Support Ticket — always visible -->
-        <button id="nav-raise-ticket" onclick="openRaiseTicketDialog()"
-          class="nav-btn flex items-center gap-3 px-3 py-2.5 rounded-lg w-full text-left transition-all duration-150">
-          <span class="material-icons-round text-lg">confirmation_number</span>
-          <span class="text-sm font-medium">Raise Support Ticket</span>
+        <button id="nav-raise-ticket" onclick="openRaiseTicketDialogWithAutoFill()"
+          class="nav-btn flex items-center gap-3 px-3 py-2.5 rounded-lg w-full text-left bg-amber-400/20 border border-amber-300/40 text-amber-200 hover:bg-amber-400/30 transition-all duration-150">
+          <span class="material-icons-round text-lg text-amber-300">confirmation_number</span>
+          <span class="text-sm font-semibold">Raise Ticket</span>
         </button>
       </nav>
 
@@ -151,7 +151,8 @@
 
         <!-- Student Controls -->
         <div id="student-toolbar" class="flex items-center gap-2">
-          <div class="relative">
+          <!-- ERP ID Dropdown: only visible when student is logged in -->
+          <div id="erp-id-dropdown-wrap" class="relative hidden">
             <select id="student-erp-id" onchange="updateErpId()"
               class="appearance-none bg-slate-50 border border-slate-200 text-slate-700 text-[11px] font-semibold pl-2.5 pr-7 py-1.5 rounded-lg outline-none cursor-pointer focus:border-[#AE2E2D] focus:ring-2 focus:ring-[#AE2E2D]/20 transition-all">
               <option value="">👤 Guest Mode</option>
@@ -257,8 +258,8 @@
                 onkeydown="if(event.key==='Enter') sendChatMessage()"
                 class="chat-input-field w-full" />
               <button id="mic-btn" onclick="toggleVoiceInput()"
-                class="absolute right-3 text-white/30 hover:text-[#AE2E2D] p-1 rounded-full transition-all duration-200 flex items-center justify-center group">
-                <span id="mic-icon" class="material-icons-round text-xl group-hover:scale-110 transition-transform">mic</span>
+                class="absolute right-3 bg-[#AE2E2D]/10 hover:bg-[#AE2E2D]/20 text-[#AE2E2D] p-1.5 rounded-full transition-all duration-200 flex items-center justify-center group">
+                <span id="mic-icon" class="material-icons-round text-lg group-hover:scale-110 transition-transform">mic</span>
               </button>
             </div>
             <button onclick="sendChatMessage()" class="chat-send-btn" aria-label="Send message">
@@ -644,6 +645,7 @@
         <div class="flex flex-col gap-1">
           <label class="text-xs text-slate-500 font-semibold">ERP ID / Student ID</label>
           <input type="text" id="ticket-erp-id" placeholder="e.g. ERP001" class="mui-input text-sm" />
+          <span id="ticket-erp-name-hint" class="text-xs text-[#AE2E2D] font-medium"></span>
         </div>
 
         <!-- Ticket Category -->
