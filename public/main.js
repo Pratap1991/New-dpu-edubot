@@ -7,17 +7,21 @@
 // ──────────────────────────────────────────────────────────
 // AUTH STATE
 // ──────────────────────────────────────────────────────────
-let authRole = null; // null | 'admin' | 'faculty'
-let loginRoleSelected = 'admin'; // role highlighted in dialog
+let authRole = null; // null | 'admin' | 'faculty' | 'student'
+let loginRoleSelected = 'student'; // default to student
 
 function openLoginDialog() {
   const overlay = document.getElementById('login-overlay');
   overlay.classList.remove('hidden');
   overlay.classList.add('flex');
   document.getElementById('login-password').value = '';
+  const userEl = document.getElementById('login-username');
+  if (userEl) userEl.value = '';
   document.getElementById('login-error').classList.add('hidden');
-  selectLoginRole('admin');
-  setTimeout(() => document.getElementById('login-password').focus(), 120);
+  selectLoginRole('student');
+  setTimeout(() => {
+    if (userEl) userEl.focus();
+  }, 120);
 }
 
 function closeLoginDialog() {
@@ -28,8 +32,26 @@ function closeLoginDialog() {
 
 function selectLoginRole(role) {
   loginRoleSelected = role;
+  document.getElementById('role-tab-student').classList.toggle('active', role === 'student');
   document.getElementById('role-tab-admin').classList.toggle('active', role === 'admin');
   document.getElementById('role-tab-faculty').classList.toggle('active', role === 'faculty');
+
+  const usernameContainer = document.getElementById('login-username-container');
+  const passwordInput = document.getElementById('login-password');
+  const title = document.getElementById('login-dialog-title');
+  const subtitle = document.getElementById('login-dialog-subtitle');
+
+  if (role === 'student') {
+    usernameContainer.classList.remove('hidden');
+    passwordInput.placeholder = 'Enter first name as password (e.g. Pratap)...';
+    title.textContent = 'Student Login';
+    subtitle.textContent = 'Sign in using your DPU ERP credentials';
+  } else {
+    usernameContainer.classList.add('hidden');
+    passwordInput.placeholder = 'Enter your password...';
+    title.textContent = 'Staff Login';
+    subtitle.textContent = `Access ${role === 'admin' ? 'Admin' : 'Faculty'} portal`;
+  }
 }
 
 function submitLogin() {
@@ -41,6 +63,35 @@ function submitLogin() {
     faculty: 'faculty@dpu2026',
   };
 
+  if (loginRoleSelected === 'student') {
+    const erpId = document.getElementById('login-username').value.trim().toUpperCase();
+    const studentInfo = MOCK_STUDENT_METADATA[erpId];
+    if (studentInfo) {
+      const firstName = studentInfo.name.split(' ')[0].toLowerCase();
+      if (pw.toLowerCase() === 'student@dpu' || pw.toLowerCase() === firstName) {
+        authRole = 'student';
+        sessionStorage.setItem('dpu_role', 'student');
+        sessionStorage.setItem('dpu_erp_id', erpId);
+        errEl.classList.add('hidden');
+        closeLoginDialog();
+        applyAuthState();
+
+        const selectEl = document.getElementById('student-erp-id');
+        if (selectEl) {
+          selectEl.value = erpId;
+          selectEl.disabled = true;
+        }
+        showToast(`Welcome back, ${studentInfo.name}!`);
+        return;
+      }
+    }
+    errEl.classList.remove('hidden');
+    errEl.innerHTML = `<span class="material-icons-round text-sm">error</span> Invalid ERP ID or first name.`;
+    document.getElementById('login-password').value = '';
+    return;
+  }
+
+  // Admin or Faculty login
   if (pw === PASSWORDS[loginRoleSelected]) {
     authRole = loginRoleSelected;
     sessionStorage.setItem('dpu_role', authRole);
@@ -49,6 +100,7 @@ function submitLogin() {
     applyAuthState();
   } else {
     errEl.classList.remove('hidden');
+    errEl.innerHTML = `<span class="material-icons-round text-sm">error</span> Incorrect password. Please try again.`;
     document.getElementById('login-password').value = '';
     document.getElementById('login-password').focus();
   }
@@ -57,6 +109,14 @@ function submitLogin() {
 function logout() {
   authRole = null;
   sessionStorage.removeItem('dpu_role');
+  sessionStorage.removeItem('dpu_erp_id');
+
+  const selectEl = document.getElementById('student-erp-id');
+  if (selectEl) {
+    selectEl.value = '';
+    selectEl.disabled = false;
+  }
+
   applyAuthState();
   switchRole('student');
 }
@@ -72,13 +132,14 @@ const MOCK_STUDENT_METADATA = {
 function applyAuthState() {
   const isAdmin   = authRole === 'admin';
   const isFaculty = authRole === 'faculty';
-  const isLoggedIn = isAdmin || isFaculty;
+  const isStudent = authRole === 'student';
+  const isLoggedIn = isAdmin || isFaculty || isStudent;
 
   // Show/hide nav buttons
   document.getElementById('nav-admin').classList.toggle('hidden', !isAdmin);
   document.getElementById('nav-faculty').classList.toggle('hidden', !isFaculty);
 
-  // Footer
+  // Footer — hide login when any role is active, show logout
   document.getElementById('btn-login-footer').classList.toggle('hidden', isLoggedIn);
   document.getElementById('btn-logout-section').classList.toggle('hidden', !isLoggedIn);
 
@@ -89,23 +150,23 @@ function applyAuthState() {
   if (isAdmin) {
     profileName.textContent = 'ADMIN';
     profileRole.textContent = 'Administration Portal';
+    document.getElementById('logged-in-label').textContent = 'Admin — Signed In';
   } else if (isFaculty) {
     profileName.textContent = 'FACULTY';
     profileRole.textContent = 'Academic Portal';
+    document.getElementById('logged-in-label').textContent = 'Faculty — Signed In';
   } else {
     const selectedErp = document.getElementById('student-erp-id')?.value;
     if (selectedErp && MOCK_STUDENT_METADATA[selectedErp]) {
       profileName.textContent = MOCK_STUDENT_METADATA[selectedErp].name.toUpperCase();
       profileRole.textContent = MOCK_STUDENT_METADATA[selectedErp].role;
+      if (isStudent) {
+        document.getElementById('logged-in-label').textContent = `${MOCK_STUDENT_METADATA[selectedErp].name.split(' ')[0]} — Signed In`;
+      }
     } else {
       profileName.textContent = 'STUDENT';
       profileRole.textContent = 'Online Learning Portal';
     }
-  }
-
-  if (isLoggedIn) {
-    const label = isAdmin ? 'Admin — Signed In' : 'Faculty — Signed In';
-    document.getElementById('logged-in-label').textContent = label;
   }
 }
 
@@ -806,21 +867,36 @@ function init() {
   const saved = sessionStorage.getItem('dpu_role');
   if (saved === 'admin' || saved === 'faculty') {
     authRole = saved;
+  } else if (saved === 'student') {
+    authRole = 'student';
+    const savedErpId = sessionStorage.getItem('dpu_erp_id');
+    if (savedErpId && MOCK_STUDENT_METADATA[savedErpId]) {
+      const selectEl = document.getElementById('student-erp-id');
+      if (selectEl) { selectEl.value = savedErpId; selectEl.disabled = true; }
+    }
   }
 
   applyAuthState();
   checkIndexStatus();
 
-  // Load initial welcome message
-  appendMessage('assistant',
-    'Hello! I am the DPU EduBot, your AI learning assistant for Dr. D.Y. Patil Centre for Online Learning.\n\n' +
+  // Personalized welcome message
+  const savedErpId2 = sessionStorage.getItem('dpu_erp_id');
+  const studentName = savedErpId2 && MOCK_STUDENT_METADATA[savedErpId2]
+    ? MOCK_STUDENT_METADATA[savedErpId2].name.split(' ')[0]
+    : null;
+
+  const welcomeText = (studentName ? 'Hello, ' + studentName : 'Hello') +
+    '! I am the DPU EduBot, your AI learning assistant for Dr. D.Y. Patil Centre for Online Learning.\n\n' +
     'I can help you with:\n' +
     '- Exam schedules and hall tickets\n' +
     '- Fee payment and refund queries\n' +
     '- LMS access, session recordings, assignments\n' +
     '- Book dispatch and support tickets\n\n' +
-    'Please select your batch above and type your question.'
-  );
+    (studentName
+      ? 'Select your batch above and ask me anything about your account or DPU programs.'
+      : 'Please select your batch above. You can also click Sign In to log in and see your personal account details.');
+
+  appendMessage('assistant', welcomeText);
 
   // Poll index status every 30s
   setInterval(checkIndexStatus, 30000);
@@ -888,7 +964,9 @@ function initSpeechRecognition() {
       micIcon.classList.add('text-red-600', 'animate-pulse');
     }
     const chatInput = document.getElementById('chat-input');
-    if (chatInput) chatInput.placeholder = 'Listening... Speak now...';
+    const selectedLang = document.getElementById('student-lang')?.value || 'English';
+    const langLabel = selectedLang === 'Hindi' ? 'Hindi 🇮🇳' : selectedLang === 'Marathi' ? 'Marathi 🇮🇳' : 'English';
+    if (chatInput) chatInput.placeholder = `Listening in ${langLabel}... Speak now...`;
   };
 
   recognition.onend = () => {
@@ -911,12 +989,26 @@ function initSpeechRecognition() {
   };
 
   recognition.onerror = (event) => {
-    console.error("Speech recognition error:", event.error);
+    console.error('Speech recognition error:', event.error);
     isListening = false;
     const micIcon = document.getElementById('mic-icon');
     if (micIcon) {
       micIcon.textContent = 'mic';
       micIcon.classList.remove('text-red-600', 'animate-pulse');
+    }
+    const chatInput = document.getElementById('chat-input');
+    if (chatInput) chatInput.placeholder = 'Type your question about DPU programs, exams, fees...';
+
+    if (event.error === 'not-allowed') {
+      showToast('Microphone permission denied. Please allow mic access in your browser settings.', 'error');
+    } else if (event.error === 'no-speech') {
+      showToast('No speech detected. Please speak clearly and try again.', 'error');
+    } else if (event.error === 'language-not-supported') {
+      showToast('This language is not supported by your browser for speech recognition.', 'error');
+    } else if (event.error === 'network') {
+      showToast('Speech recognition needs internet access. Please check your connection.', 'error');
+    } else {
+      showToast(`Voice input error: ${event.error}. Please try again.`, 'error');
     }
   };
 }

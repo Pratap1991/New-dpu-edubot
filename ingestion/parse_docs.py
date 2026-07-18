@@ -53,6 +53,23 @@ def parse_excel(filepath: str, batch_id: str, doc_type: str) -> list:
         return []
 
 
+def parse_csv(filepath: str, batch_id: str, doc_type: str) -> list:
+    """Extract text from a CSV file and return chunks."""
+    try:
+        import csv
+        text = ""
+        with open(filepath, mode="r", encoding="utf-8-sig", errors="ignore") as f:
+            reader = csv.reader(f)
+            for row in reader:
+                row_text = " | ".join([str(c) for c in row if c is not None])
+                if row_text.strip():
+                    text += row_text + "\n"
+        return _make_chunks(text, filepath, batch_id, doc_type)
+    except Exception as e:
+        print(f"CSV parse error: {e}")
+        return []
+
+
 def _make_chunks(text: str, source: str, batch_id: str, doc_type: str) -> list:
     """Split text into overlapping chunks for indexing."""
     try:

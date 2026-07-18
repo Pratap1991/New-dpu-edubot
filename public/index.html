@@ -446,8 +446,8 @@
                   </select>
                 </div>
                 <div class="flex flex-col gap-1">
-                  <label class="text-xs text-slate-500 font-semibold">File (PDF, DOCX, XLSX)</label>
-                  <input type="file" name="file" accept=".pdf,.docx,.xlsx" required
+                  <label class="text-xs text-slate-500 font-semibold">File (PDF, DOCX, XLSX, CSV)</label>
+                  <input type="file" name="file" accept=".pdf,.docx,.xlsx,.xls,.csv" required
                     class="text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#AE2E2D] file:text-white hover:file:bg-[#902423] cursor-pointer" />
                 </div>
                 <button type="submit" class="btn-primary text-xs justify-center mt-1">
@@ -495,8 +495,8 @@
                 </select>
               </div>
               <div class="flex flex-col gap-1">
-                <label class="text-xs text-slate-500 font-semibold">File (PDF, DOCX, XLSX)</label>
-                <input type="file" name="file" accept=".pdf,.docx,.xlsx" required
+                <label class="text-xs text-slate-500 font-semibold">File (PDF, DOCX, XLSX, CSV)</label>
+                <input type="file" name="file" accept=".pdf,.docx,.xlsx,.xls,.csv" required
                   class="text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#AE2E2D] file:text-white hover:file:bg-[#902423] cursor-pointer" />
               </div>
               <button type="submit" class="btn-primary text-xs justify-center mt-1">
@@ -532,8 +532,8 @@
               <span class="material-icons-round text-[#AE2E2D] text-lg">lock</span>
             </div>
             <div>
-              <h2 class="text-base font-bold text-slate-800">Staff Login</h2>
-              <p class="text-xs text-slate-400">Access Admin or Faculty portal</p>
+              <h2 id="login-dialog-title" class="text-base font-bold text-slate-800">Portal Login</h2>
+              <p id="login-dialog-subtitle" class="text-xs text-slate-400">Sign in to your learning or staff portal</p>
             </div>
           </div>
           <button onclick="closeLoginDialog()" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors">
@@ -545,21 +545,33 @@
       <!-- Dialog Body -->
       <div class="px-6 py-5">
         <!-- Role Selector (segmented control) -->
-        <div class="flex rounded-lg overflow-hidden border border-slate-200 mb-5 bg-slate-50">
+        <div class="flex rounded-lg overflow-hidden border border-slate-200 mb-4 bg-slate-50">
+          <button id="role-tab-student" onclick="selectLoginRole('student')"
+            class="role-tab active flex-1 py-2 text-[11px] font-bold flex items-center justify-center gap-1.5">
+            <span class="material-icons-round text-sm">school</span> Student
+          </button>
           <button id="role-tab-admin" onclick="selectLoginRole('admin')"
-            class="role-tab active flex-1 py-2 text-xs font-bold flex items-center justify-center gap-1.5">
+            class="role-tab flex-1 py-2 text-[11px] font-bold flex items-center justify-center gap-1.5">
             <span class="material-icons-round text-sm">admin_panel_settings</span> Admin
           </button>
           <button id="role-tab-faculty" onclick="selectLoginRole('faculty')"
-            class="role-tab flex-1 py-2 text-xs font-bold flex items-center justify-center gap-1.5">
+            class="role-tab flex-1 py-2 text-[11px] font-bold flex items-center justify-center gap-1.5">
             <span class="material-icons-round text-sm">groups</span> Faculty
           </button>
+        </div>
+
+        <!-- ERP ID / Username Field (shown for Student) -->
+        <div id="login-username-container" class="relative mb-3">
+          <input type="text" id="login-username"
+            placeholder="Enter your ERP ID (e.g. ERP001)..."
+            class="mui-input w-full text-sm pr-10" />
+          <span class="material-icons-round text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 text-base">school</span>
         </div>
 
         <!-- Password Field -->
         <div class="relative mb-4">
           <input type="password" id="login-password"
-            placeholder="Enter your password..."
+            placeholder="Enter first name as password (e.g. Pratap)..."
             onkeydown="if(event.key==='Enter') submitLogin()"
             class="mui-input w-full text-sm pr-10" />
           <span class="material-icons-round text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 text-base">key</span>

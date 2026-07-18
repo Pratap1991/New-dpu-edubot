@@ -111,7 +111,7 @@ async def upload_document(
             shutil.copyfileobj(file.file, buffer)
             
         # Parse document using the parsers in ingestion.parse_docs
-        from ingestion.parse_docs import parse_pdf, parse_docx, parse_excel
+        from ingestion.parse_docs import parse_pdf, parse_docx, parse_excel, parse_csv
         
         if filename.endswith(".pdf"):
             chunks = parse_pdf(tmp_path, batch_id, doc_type)
@@ -119,6 +119,8 @@ async def upload_document(
             chunks = parse_docx(tmp_path, batch_id, doc_type)
         elif filename.endswith(".xlsx") or filename.endswith(".xls"):
             chunks = parse_excel(tmp_path, batch_id, doc_type)
+        elif filename.endswith(".csv"):
+            chunks = parse_csv(tmp_path, batch_id, doc_type)
         else:
             raise HTTPException(status_code=400, detail="Unsupported file format.")
             
