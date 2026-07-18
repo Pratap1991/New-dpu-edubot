@@ -19,8 +19,9 @@ from openai import OpenAI
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 EMBED_MODEL = "text-embedding-3-small"
-INDEX_PATH = "data/faiss_index/index.npy"
-CHUNKS_PATH = "data/faiss_index/chunks.pkl"
+import tempfile
+INDEX_PATH = os.path.join(tempfile.gettempdir(), "faiss_index", "index.npy")
+CHUNKS_PATH = os.path.join(tempfile.gettempdir(), "faiss_index", "chunks.pkl")
 KB_PATH = "data/knowledge_base.json"
 USE_MOCK = False
 
@@ -240,7 +241,7 @@ def build_index():
     norms[norms == 0] = 1.0
     vectors_np = vectors_np / norms
 
-    os.makedirs("data/faiss_index", exist_ok=True)
+    os.makedirs(os.path.dirname(INDEX_PATH), exist_ok=True)
     np.save(INDEX_PATH, vectors_np)
     with open(CHUNKS_PATH, "wb") as f:
         pickle.dump(chunks, f)

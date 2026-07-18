@@ -94,5 +94,5 @@ def _make_chunks(text: str, source: str, batch_id: str, doc_type: str) -> list:
             "layer": "layer_2",
             "tags": [doc_type, batch_id]
         }
-        for c in raw_chunks if len(c.strip()) > 80
+        for c in raw_chunks if len(c.strip()) > 20
     ]

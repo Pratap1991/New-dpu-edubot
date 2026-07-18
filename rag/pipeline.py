@@ -25,8 +25,9 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 EMBED_MODEL = "text-embedding-3-small"
 CHAT_MODEL = "gpt-4o-mini"
 CONF_THRESHOLD = 0.50
-INDEX_PATH = "data/faiss_index/index.npy"
-CHUNKS_PATH = "data/faiss_index/chunks.pkl"
+import tempfile
+INDEX_PATH = os.path.join(tempfile.gettempdir(), "faiss_index", "index.npy")
+CHUNKS_PATH = os.path.join(tempfile.gettempdir(), "faiss_index", "chunks.pkl")
 KB_PATH = "data/knowledge_base.json"
 
 # ════════════════════════════════════════════════════════════════════
@@ -187,16 +188,21 @@ def load_index():
         return _index_cache, _chunks_cache
 
     try:
-        _index_cache = np.load(INDEX_PATH)
-        with open(CHUNKS_PATH, "rb") as f:
-            _chunks_cache = pickle.load(f)
+        if os.path.exists(INDEX_PATH) and os.path.exists(CHUNKS_PATH):
+            _index_cache = np.load(INDEX_PATH)
+            with open(CHUNKS_PATH, "rb") as f:
+                _chunks_cache = pickle.load(f)
+        else:
+            _index_cache = np.load("data/faiss_index/index.npy")
+            with open("data/faiss_index/chunks.pkl", "rb") as f:
+                _chunks_cache = pickle.load(f)
         return _index_cache, _chunks_cache
     except Exception as e:
         return None, None
 
 
 def index_exists() -> bool:
-    return os.path.exists(INDEX_PATH) and os.path.exists(CHUNKS_PATH)
+    return (os.path.exists(INDEX_PATH) and os.path.exists(CHUNKS_PATH)) or (os.path.exists("data/faiss_index/index.npy") and os.path.exists("data/faiss_index/chunks.pkl"))
 
 
 def invalidate_cache():
