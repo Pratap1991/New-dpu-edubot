@@ -969,9 +969,7 @@ function initSpeechRecognition() {
       micIcon.classList.add('text-red-600', 'animate-pulse');
     }
     const chatInput = document.getElementById('chat-input');
-    const selectedLang = document.getElementById('student-lang')?.value || 'English';
-    const langLabel = selectedLang === 'Hindi' ? 'Hindi 🇮🇳' : selectedLang === 'Marathi' ? 'Marathi 🇮🇳' : 'English';
-    if (chatInput) chatInput.placeholder = `Listening in ${langLabel}... Speak now...`;
+    if (chatInput) chatInput.placeholder = `Listening... Speak now...`;
   };
 
   recognition.onend = () => {
@@ -1028,15 +1026,8 @@ function toggleVoiceInput() {
   if (isListening) {
     recognition.stop();
   } else {
-    // Select language code dynamically
-    const selectedLang = document.getElementById('student-lang')?.value || 'English';
-    if (selectedLang === 'Hindi') {
-      recognition.lang = 'hi-IN';
-    } else if (selectedLang === 'Marathi') {
-      recognition.lang = 'mr-IN';
-    } else {
-      recognition.lang = 'en-IN';
-    }
+    // Default to en-IN for universal transcription supporting English and Hinglish phrases
+    recognition.lang = 'en-IN';
     recognition.start();
   }
 }
