@@ -49,7 +49,7 @@ function selectLoginRole(role) {
   } else {
     usernameContainer.classList.add('hidden');
     passwordInput.placeholder = 'Enter your password...';
-    title.textContent = 'Staff Login';
+    title.textContent = 'Login';
     subtitle.textContent = `Access ${role === 'admin' ? 'Admin' : 'Faculty'} portal`;
   }
 }
@@ -75,6 +75,7 @@ function submitLogin() {
         errEl.classList.add('hidden');
         closeLoginDialog();
         applyAuthState();
+        resetChat();
 
         const selectEl = document.getElementById('student-erp-id');
         if (selectEl) {
@@ -98,6 +99,7 @@ function submitLogin() {
     errEl.classList.add('hidden');
     closeLoginDialog();
     applyAuthState();
+    resetChat();
   } else {
     errEl.classList.remove('hidden');
     errEl.innerHTML = `<span class="material-icons-round text-sm">error</span> Incorrect password. Please try again.`;
@@ -119,6 +121,33 @@ function logout() {
 
   applyAuthState();
   switchRole('student');
+  resetChat();
+}
+
+function resetChat() {
+  const container = document.getElementById('chat-messages');
+  if (container) container.innerHTML = '';
+
+  const hero = document.getElementById('chat-hero');
+  if (hero) hero.classList.remove('hero-hidden');
+
+  const savedErpId2 = sessionStorage.getItem('dpu_erp_id');
+  const studentName = savedErpId2 && MOCK_STUDENT_METADATA[savedErpId2]
+    ? MOCK_STUDENT_METADATA[savedErpId2].name.split(' ')[0]
+    : null;
+
+  const welcomeText = (studentName ? 'Hello, ' + studentName : 'Hello') +
+    '! I am the DPU EduBot, your AI learning assistant for Dr. D.Y. Patil Centre for Online Learning.\n\n' +
+    'I can help you with:\n' +
+    '- Exam schedules and hall tickets\n' +
+    '- Fee payment and refund queries\n' +
+    '- LMS access, session recordings, assignments\n' +
+    '- Book dispatch and support tickets\n\n' +
+    (studentName
+      ? 'Select your batch above and ask me anything about your account or DPU programs.'
+      : 'Please select your batch above. You can also click Sign In to log in and see your personal account details.');
+
+  appendMessage('assistant', welcomeText);
 }
 
 const MOCK_STUDENT_METADATA = {
@@ -244,6 +273,7 @@ function updateBatch() {
 
 function updateErpId() {
   applyAuthState();
+  resetChat();
 }
 
 function suggestQuery(text) {
