@@ -90,6 +90,13 @@
           <span class="material-icons-round text-lg">groups</span>
           <span class="text-sm font-medium">Faculty Portal</span>
         </button>
+
+        <!-- Raise Support Ticket — always visible -->
+        <button id="nav-raise-ticket" onclick="openRaiseTicketDialog()"
+          class="nav-btn flex items-center gap-3 px-3 py-2.5 rounded-lg w-full text-left transition-all duration-150">
+          <span class="material-icons-round text-lg">confirmation_number</span>
+          <span class="text-sm font-medium">Raise Support Ticket</span>
+        </button>
       </nav>
 
       <!-- Sidebar Footer -->
@@ -569,6 +576,67 @@
           class="btn-primary w-full justify-center py-2.5">
           <span class="material-icons-round text-base">login</span>
           Sign In
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== RAISE TICKET DIALOG ===================== -->
+  <div id="ticket-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center">
+    <div class="login-dialog w-full max-w-md mx-4 bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden">
+      <!-- Dialog Header -->
+      <div class="px-6 pt-6 pb-4 border-b border-slate-100">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#AE2E2D]/10 border border-[#AE2E2D]/20 flex items-center justify-center">
+              <span class="material-icons-round text-[#AE2E2D] text-lg">confirmation_number</span>
+            </div>
+            <div>
+              <h2 class="text-base font-bold text-slate-800">Raise Support Ticket</h2>
+              <p class="text-xs text-slate-400">Submit a formal grievance to DPU Support</p>
+            </div>
+          </div>
+          <button onclick="closeRaiseTicketDialog()" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors">
+            <span class="material-icons-round text-slate-400 text-lg">close</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Dialog Body -->
+      <div class="px-6 py-5 flex flex-col gap-4">
+        <!-- ERP ID -->
+        <div class="flex flex-col gap-1">
+          <label class="text-xs text-slate-500 font-semibold">ERP ID / Student ID</label>
+          <input type="text" id="ticket-erp-id" placeholder="e.g. ERP001" class="mui-input text-sm" />
+        </div>
+
+        <!-- Ticket Category -->
+        <div class="flex flex-col gap-1">
+          <label class="text-xs text-slate-500 font-semibold">Grievance Category</label>
+          <select id="ticket-category" class="mui-input text-sm">
+            <option value="Accounts">Accounts & Fees</option>
+            <option value="Academic">Academic & LMS</option>
+            <option value="Examination">Examinations</option>
+            <option value="Students Section">General Support</option>
+          </select>
+        </div>
+
+        <!-- Subject/Nature -->
+        <div class="flex flex-col gap-1">
+          <label class="text-xs text-slate-500 font-semibold">Subject / Nature of Issue</label>
+          <input type="text" id="ticket-subject" placeholder="Enter brief subject..." class="mui-input text-sm" />
+        </div>
+
+        <!-- Description -->
+        <div class="flex flex-col gap-1">
+          <label class="text-xs text-slate-500 font-semibold">Detailed Description</label>
+          <textarea id="ticket-desc" rows="4" placeholder="Describe your issue in detail..." class="mui-input text-sm resize-none"></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <button onclick="submitGrievanceTicket()" class="btn-primary w-full justify-center py-2.5">
+          <span class="material-icons-round text-base">publish</span>
+          Submit Ticket
         </button>
       </div>
     </div>

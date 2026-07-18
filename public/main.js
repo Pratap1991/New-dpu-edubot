@@ -211,7 +211,7 @@ async function sendChatMessage() {
       appendMessage('assistant', data.error, [], null);
     } else {
       const erpAction = data.erp_action || (data.erp_link ? { url: data.erp_link, label: data.erp_label } : null);
-      appendMessage('assistant', data.answer, data.sources || [], erpAction);
+      appendMessage('assistant', data.answer, data.sources || [], erpAction, data.escalate || false);
     }
   } catch (err) {
     removeTypingIndicator(typingId);
@@ -219,7 +219,7 @@ async function sendChatMessage() {
   }
 }
 
-function appendMessage(role, text, sources = [], erpAction = null) {
+function appendMessage(role, text, sources = [], erpAction = null, showEscalate = false) {
   const container = document.getElementById('chat-messages');
   const wrap = document.createElement('div');
   wrap.className = `msg-wrapper ${role}`;
@@ -244,11 +244,20 @@ function appendMessage(role, text, sources = [], erpAction = null) {
     </button>`;
   }
 
+  let escalateHtml = '';
+  if (showEscalate) {
+    escalateHtml = `<button onclick='openRaiseTicketDialog()'
+      class="erp-btn !bg-slate-500 hover:!bg-slate-600 ml-2 shadow-none">
+      <span class="material-icons-round text-sm">add_circle</span>
+      Raise Grievance Ticket
+    </button>`;
+  }
+
   const textHtml = text.replace(/\n/g, '<br/>');
   wrap.innerHTML = `
     ${role === 'user' ? '' : avatarEl}
     <div class="flex flex-col">
-      <div class="msg-bubble">${textHtml}${srcHtml}${erpHtml}</div>
+      <div class="msg-bubble">${textHtml}${srcHtml}${erpHtml}${escalateHtml}</div>
     </div>
     ${role === 'user' ? avatarEl : ''}
   `;
@@ -933,4 +942,64 @@ function toggleVoiceInput() {
     }
     recognition.start();
   }
+}
+
+// ──────────────────────────────────────────────────────────
+// RAISE GRIVANCE TICKET DIALOG (STUDENT)
+// ──────────────────────────────────────────────────────────
+function openRaiseTicketDialog() {
+  const overlay = document.getElementById('ticket-overlay');
+  if (!overlay) return;
+  overlay.classList.remove('hidden');
+  overlay.classList.add('flex');
+
+  // Pre-fill ERP ID if selected in toolbar
+  const selectedErp = document.getElementById('student-erp-id')?.value;
+  const erpInput = document.getElementById('ticket-erp-id');
+  if (erpInput) {
+    erpInput.value = selectedErp || '';
+  }
+  document.getElementById('ticket-subject').value = '';
+  document.getElementById('ticket-desc').value = '';
+}
+
+function closeRaiseTicketDialog() {
+  const overlay = document.getElementById('ticket-overlay');
+  if (overlay) {
+    overlay.classList.add('hidden');
+    overlay.classList.remove('flex');
+  }
+}
+
+function submitGrievanceTicket() {
+  const erpId = document.getElementById('ticket-erp-id').value.trim();
+  const cat = document.getElementById('ticket-category').value;
+  const subject = document.getElementById('ticket-subject').value.trim();
+  const desc = document.getElementById('ticket-desc').value.trim();
+
+  if (!erpId || !subject || !desc) {
+    showToast('Please fill in all fields to submit.', 'error');
+    return;
+  }
+
+  const newTicket = {
+    id: `ESC-${Math.floor(100 + Math.random() * 900)}`,
+    student: MOCK_STUDENT_METADATA[erpId]?.name || erpId,
+    roll: erpId,
+    category: cat.toLowerCase(),
+    priority: 'high',
+    status: 'Open',
+    question: subject,
+    time: 'Just now',
+    context: desc,
+    ai_reply: 'Suggested AI reply: Please check the ticket description. Our team will get back to you shortly.'
+  };
+
+  mockTickets.unshift(newTicket); // Add to the top of mockTickets!
+  closeRaiseTicketDialog();
+  showToast(`Ticket ${newTicket.id} raised successfully!`);
+
+  // Re-render escalation lists if open
+  if (currentAdminTab === 'escalations') renderEscalationQueue();
+  if (currentAdminTab === 'dashboard') renderDashboardEscalations();
 }
