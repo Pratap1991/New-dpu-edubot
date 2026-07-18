@@ -515,6 +515,7 @@ body { font-family: 'Inter', 'Roboto', sans-serif; }
   #view-admin, #view-faculty { padding: 8px !important; }
 }
 
+
 @media (max-width: 480px) {
   .grid.grid-cols-4 { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
   .grid.grid-cols-5 { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
@@ -525,3 +526,260 @@ body { font-family: 'Inter', 'Roboto', sans-serif; }
   .msg-bubble { font-size: 12.5px; padding: 8px 10px; }
   .msg-wrapper { gap: 6px; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   PREMIUM HOME PAGE — DARK CHAT REDESIGN
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Mesh Animated Background ─────────────────────────────── */
+.chat-mesh-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.mesh-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+}
+.orb-1 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, #7f1d1d 0%, transparent 70%);
+  top: -120px; left: -100px;
+  animation: orbFloat1 12s ease-in-out infinite alternate;
+}
+.orb-2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, #1e3a5f 0%, transparent 70%);
+  bottom: -80px; right: -60px;
+  animation: orbFloat2 15s ease-in-out infinite alternate;
+}
+.orb-3 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, #3b1a6e 0%, transparent 70%);
+  top: 40%; left: 40%;
+  animation: orbFloat3 18s ease-in-out infinite alternate;
+}
+@keyframes orbFloat1 {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(60px, 40px) scale(1.15); }
+}
+@keyframes orbFloat2 {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(-50px, -30px) scale(1.1); }
+}
+@keyframes orbFloat3 {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(30px, -40px) scale(1.2); }
+}
+
+/* ─── Hero Section ──────────────────────────────────────────── */
+#chat-hero {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+@keyframes heroIn {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-hero-in { animation: heroIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* ─── Hero Bot Avatar ────────────────────────────────────────── */
+.hero-bot-avatar {
+  position: relative;
+  width: 88px; height: 88px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(174,46,45,0.5) 0%, rgba(30,60,100,0.4) 100%);
+  border: 1.5px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 32px rgba(174,46,45,0.25), 0 0 0 1px rgba(255,255,255,0.06);
+}
+.hero-pulse-ring {
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  border: 2px solid rgba(174,46,45,0.35);
+  animation: pulseRing 2.5s ease-out infinite;
+}
+@keyframes pulseRing {
+  0%   { transform: scale(0.92); opacity: 0.9; }
+  60%  { transform: scale(1.12); opacity: 0.3; }
+  100% { transform: scale(0.92); opacity: 0; }
+}
+
+/* ─── Quick Action Cards ─────────────────────────────────────── */
+.quick-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+}
+.quick-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.quick-card:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.18);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+.quick-card:hover::before { opacity: 1; }
+.quick-card:active { transform: translateY(0) scale(0.98); }
+
+/* ─── Dark Chat Messages (on dark background) ───────────────── */
+#view-student .msg-wrapper { position: relative; z-index: 1; }
+
+#view-student .msg-bubble {
+  background: rgba(30, 30, 40, 0.7);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.9);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+}
+#view-student .msg-wrapper.user .msg-bubble {
+  background: linear-gradient(135deg, rgba(174,46,45,0.75) 0%, rgba(120,25,25,0.8) 100%);
+  border-color: rgba(255,255,255,0.1);
+  color: #fff;
+}
+#view-student .msg-wrapper.assistant .msg-avatar {
+  background: rgba(174,46,45,0.2);
+  border-color: rgba(174,46,45,0.3);
+  color: #fc8181;
+}
+
+/* ─── Dark Suggestion Chips ─────────────────────────────────── */
+.suggestion-chip-dark {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.65);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  backdrop-filter: blur(8px);
+}
+.suggestion-chip-dark:hover {
+  background: rgba(174,46,45,0.2);
+  border-color: rgba(174,46,45,0.4);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* ─── Chat Input Zone (bottom bar) ─────────────────────────── */
+.chat-input-zone {
+  position: relative;
+  z-index: 2;
+  background: rgba(15, 15, 25, 0.75);
+  border-top: 1px solid rgba(255,255,255,0.07);
+  backdrop-filter: blur(20px);
+}
+
+/* ─── Premium Dark Input Field ──────────────────────────────── */
+.chat-input-field {
+  background: rgba(255,255,255,0.06);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.9);
+  font-size: 14px;
+  padding: 12px 48px 12px 18px;
+  border-radius: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+  font-family: 'Inter', sans-serif;
+}
+.chat-input-field::placeholder { color: rgba(255,255,255,0.3); }
+.chat-input-field:focus {
+  border-color: rgba(174,46,45,0.6);
+  background: rgba(255,255,255,0.09);
+  box-shadow: 0 0 0 3px rgba(174,46,45,0.15), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+/* ─── Premium Send Button ────────────────────────────────────── */
+.chat-send-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #AE2E2D 0%, #7f1d1d 100%);
+  border: 1px solid rgba(255,255,255,0.12);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 4px 16px rgba(174,46,45,0.35);
+  flex-shrink: 0;
+}
+.chat-send-btn:hover {
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(174,46,45,0.5);
+}
+.chat-send-btn:active { transform: scale(0.96); }
+
+/* ─── ERP Action Button (dark theme override) ───────────────── */
+#view-student .erp-btn {
+  background: rgba(174,46,45,0.25);
+  border: 1px solid rgba(174,46,45,0.4);
+  color: #fca5a5;
+}
+#view-student .erp-btn:hover {
+  background: rgba(174,46,45,0.4);
+  border-color: rgba(174,46,45,0.6);
+}
+#view-student .src-chip {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.55);
+}
+
+/* ─── Typing Indicator on Dark ───────────────────────────────── */
+#view-student .msg-bubble.flex { color: rgba(255,255,255,0.35); }
+
+/* ─── Hide hero when messages appear ─────────────────────────── */
+#chat-messages:not(:empty) ~ * #chat-hero,
+.hero-hidden { display: none !important; }
+
+/* ─── Message Entry Animation ────────────────────────────────── */
+@keyframes msgSlideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+#view-student .msg-wrapper {
+  animation: msgSlideIn 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ─── Mobile adjustments for premium view ────────────────────── */
+@media (max-width: 768px) {
+  .quick-card { padding: 10px 12px; }
+  #chat-hero { padding: 24px 12px; gap: 14px; }
+  .hero-bot-avatar { width: 68px; height: 68px; }
+  .hero-bot-avatar .material-icons-round { font-size: 36px !important; }
+  .grid.grid-cols-2 .quick-card { min-width: 0; }
+}
+

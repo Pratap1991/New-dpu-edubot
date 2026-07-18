@@ -136,49 +136,49 @@
     <!-- ===================== MAIN CONTENT ===================== -->
     <main class="flex-1 flex flex-col overflow-hidden bg-[#F4F6F9]">
 
-      <!-- Top App Bar -->
-      <header class="flex items-center justify-between px-6 py-3 border-b border-slate-200 bg-white shrink-0">
+      <!-- Top App Bar — Redesigned -->
+      <header id="main-header" class="flex items-center justify-between px-5 py-2.5 border-b border-slate-200/80 bg-white/95 backdrop-blur-md shrink-0 shadow-sm z-20">
         <div class="flex items-center gap-3">
           <!-- Hamburger (mobile only) -->
-          <button id="hamburger-btn" onclick="toggleSidebar()" aria-label="Toggle menu">
+          <button id="hamburger-btn" onclick="toggleSidebar()" aria-label="Toggle menu" class="text-slate-500 hover:text-slate-800 transition-colors">
             <span class="material-icons-round text-2xl">menu</span>
           </button>
           <div>
-            <h1 id="page-title" class="text-base font-bold text-slate-800">Student Chat</h1>
-            <p id="page-subtitle" class="text-xs text-slate-500 mt-0.5">Ask anything about your program, exams, fees, LMS, or support tickets.</p>
+            <h1 id="page-title" class="text-base font-bold text-slate-800 leading-tight">Student Chat</h1>
+            <p id="page-subtitle" class="text-[11px] text-slate-400 mt-0">Ask anything about your program, exams, fees, LMS, or support tickets.</p>
           </div>
         </div>
 
-        <!-- Student Controls (visible only in student view) -->
-        <div id="student-toolbar" class="flex items-center gap-3">
+        <!-- Student Controls -->
+        <div id="student-toolbar" class="flex items-center gap-2">
           <div class="relative">
             <select id="student-erp-id" onchange="updateErpId()"
-              class="appearance-none bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold pl-3 pr-8 py-2 rounded-lg outline-none cursor-pointer focus:border-[#AE2E2D]">
-              <option value="">Guest Mode (No ID)</option>
-              <option value="ERP001">ERP001 (Pratap)</option>
-              <option value="ERP002">ERP002 (Riya)</option>
-              <option value="ERP003">ERP003 (Arjun)</option>
-              <option value="ERP006">ERP006 (Sneha)</option>
-              <option value="ERP009">ERP009 (Vikram)</option>
+              class="appearance-none bg-slate-50 border border-slate-200 text-slate-700 text-[11px] font-semibold pl-2.5 pr-7 py-1.5 rounded-lg outline-none cursor-pointer focus:border-[#AE2E2D] focus:ring-2 focus:ring-[#AE2E2D]/20 transition-all">
+              <option value="">👤 Guest Mode</option>
+              <option value="ERP001">ERP001 — Pratap</option>
+              <option value="ERP002">ERP002 — Riya</option>
+              <option value="ERP003">ERP003 — Arjun</option>
+              <option value="ERP006">ERP006 — Sneha</option>
+              <option value="ERP009">ERP009 — Vikram</option>
             </select>
-            <span class="material-icons-round text-slate-500 text-sm absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+            <span class="material-icons-round text-slate-400 text-xs absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
           </div>
           <div class="relative">
             <select id="student-batch" onchange="updateBatch()"
-              class="appearance-none bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold pl-3 pr-8 py-2 rounded-lg outline-none cursor-pointer focus:border-[#AE2E2D]">
+              class="appearance-none bg-slate-50 border border-slate-200 text-slate-700 text-[11px] font-semibold pl-2.5 pr-7 py-1.5 rounded-lg outline-none cursor-pointer focus:border-[#AE2E2D] focus:ring-2 focus:ring-[#AE2E2D]/20 transition-all">
               <option value="mba_jan_26_sem1">MBA Jan 26 — Sem 1</option>
               <option value="bba_jan_26_sem1">BBA Jan 26 — Sem 1</option>
             </select>
-            <span class="material-icons-round text-slate-500 text-sm absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+            <span class="material-icons-round text-slate-400 text-xs absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
           </div>
           <div class="relative">
             <select id="student-lang"
-              class="appearance-none bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold pl-3 pr-8 py-2 rounded-lg outline-none cursor-pointer focus:border-[#AE2E2D]">
-              <option value="English">English</option>
-              <option value="Hindi">Hindi</option>
-              <option value="Marathi">Marathi</option>
+              class="appearance-none bg-slate-50 border border-slate-200 text-slate-700 text-[11px] font-semibold pl-2.5 pr-7 py-1.5 rounded-lg outline-none cursor-pointer focus:border-[#AE2E2D] focus:ring-2 focus:ring-[#AE2E2D]/20 transition-all">
+              <option value="English">🇺🇸 English</option>
+              <option value="Hindi">🇮🇳 Hindi</option>
+              <option value="Marathi">🇮🇳 Marathi</option>
             </select>
-            <span class="material-icons-round text-slate-500 text-sm absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+            <span class="material-icons-round text-slate-400 text-xs absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
           </div>
         </div>
 
@@ -204,44 +204,84 @@
         </div>
       </header>
 
-      <!-- ===================== STUDENT VIEW ===================== -->
-      <section id="view-student" class="view-section flex-1 flex flex-col overflow-hidden p-4">
-        <div class="flex-1 flex flex-col bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+      <!-- ===================== STUDENT VIEW — PREMIUM REDESIGN ===================== -->
+      <section id="view-student" class="view-section flex-1 flex flex-col overflow-hidden relative" style="background: linear-gradient(135deg, #0f1923 0%, #1a0a0a 40%, #0f1923 100%);">
 
-          <!-- Chat Messages -->
-          <div id="chat-messages" class="flex-1 overflow-y-auto p-5 flex flex-col gap-4 custom-scroll">
-            <!-- Populated by JS -->
+        <!-- Animated Mesh Background -->
+        <div class="chat-mesh-bg" aria-hidden="true">
+          <div class="mesh-orb orb-1"></div>
+          <div class="mesh-orb orb-2"></div>
+          <div class="mesh-orb orb-3"></div>
+        </div>
+
+        <!-- Hero Banner (shown when chat is empty) -->
+        <div id="chat-hero" class="flex flex-col items-center justify-center gap-5 py-10 px-6 animate-hero-in">
+          <div class="hero-bot-avatar">
+            <span class="material-icons-round text-5xl text-white/90">smart_toy</span>
+            <div class="hero-pulse-ring"></div>
           </div>
+          <div class="text-center">
+            <h2 class="text-2xl font-extrabold text-white tracking-tight">DPU EduBot</h2>
+            <p class="text-white/50 text-sm mt-1 max-w-sm mx-auto leading-relaxed">Your verified AI assistant for Dr. D.Y. Patil Centre for Online Learning. Ask anything about your program.</p>
+          </div>
+          <!-- Quick Action Cards -->
+          <div class="grid grid-cols-2 gap-3 w-full max-w-md mt-2">
+            <button onclick="suggestQuery('What is my fee status?')" class="quick-card">
+              <span class="material-icons-round text-amber-400 text-2xl">payments</span>
+              <span class="text-sm font-semibold text-white">Fee Status</span>
+              <span class="text-[11px] text-white/40">Check balance & dues</span>
+            </button>
+            <button onclick="suggestQuery('What assignments are pending?')" class="quick-card">
+              <span class="material-icons-round text-blue-400 text-2xl">assignment</span>
+              <span class="text-sm font-semibold text-white">Assignments</span>
+              <span class="text-[11px] text-white/40">Pending & submitted</span>
+            </button>
+            <button onclick="suggestQuery('When is my exam and is my admit card available?')" class="quick-card">
+              <span class="material-icons-round text-emerald-400 text-2xl">event</span>
+              <span class="text-sm font-semibold text-white">Exam & Admit Card</span>
+              <span class="text-[11px] text-white/40">Dates & eligibility</span>
+            </button>
+            <button onclick="suggestQuery('How do I join a live session on LMS?')" class="quick-card">
+              <span class="material-icons-round text-purple-400 text-2xl">play_circle</span>
+              <span class="text-sm font-semibold text-white">Live Sessions</span>
+              <span class="text-[11px] text-white/40">Access & recordings</span>
+            </button>
+          </div>
+        </div>
 
-          <!-- Quick Suggestions -->
-          <div class="flex items-center gap-2 px-5 py-2.5 border-t border-slate-100 bg-slate-50 overflow-x-auto no-scroll">
-            <span class="material-icons-round text-slate-400 text-base shrink-0">tips_and_updates</span>
-            <button class="suggestion-chip" onclick="suggestQuery('How do I submit my assignment?')">How do I submit assignments?</button>
-            <button class="suggestion-chip" onclick="suggestQuery('My payment failed — which ticket?')">Payment failed ticket</button>
-            <button class="suggestion-chip" onclick="suggestQuery('What are my MBA Sem 1 subjects?')">Sem 1 subjects?</button>
-            <button class="suggestion-chip" onclick="suggestQuery('Where do I check attendance?')">Check attendance</button>
-            <button class="suggestion-chip" onclick="suggestQuery('How do I join a live session?')">Join live session</button>
+        <!-- Chat Messages -->
+        <div id="chat-messages" class="flex-1 overflow-y-auto px-4 pb-3 flex flex-col gap-3 custom-scroll" style="scrollbar-color: rgba(255,255,255,0.1) transparent;">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Bottom Input Zone -->
+        <div class="chat-input-zone">
+          <!-- Quick Suggestion Chips -->
+          <div class="flex items-center gap-2 px-4 py-2 overflow-x-auto no-scroll">
+            <button class="suggestion-chip-dark" onclick="suggestQuery('How do I submit my assignment?')">📝 Assignments</button>
+            <button class="suggestion-chip-dark" onclick="suggestQuery('My payment failed — which ticket?')">💳 Payment Issue</button>
+            <button class="suggestion-chip-dark" onclick="suggestQuery('What are my MBA Sem 1 subjects?')">📚 My Subjects</button>
+            <button class="suggestion-chip-dark" onclick="suggestQuery('Where do I check attendance?')">📋 Attendance</button>
+            <button class="suggestion-chip-dark" onclick="suggestQuery('How do I join a live session?')">🎥 Live Class</button>
           </div>
 
           <!-- Input Row -->
-          <div class="flex items-center gap-3 px-5 py-3 border-t border-slate-100 bg-white">
+          <div class="flex items-center gap-3 px-4 py-3">
             <div class="flex-1 relative flex items-center">
               <input type="text" id="chat-input"
-                placeholder="Type your question about DPU programs, exams, fees..."
+                placeholder="Ask EduBot anything about your program..."
                 onkeydown="if(event.key==='Enter') sendChatMessage()"
-                class="w-full bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 text-sm pl-4 pr-12 py-2.5 rounded-lg outline-none focus:border-[#AE2E2D]/60 transition-colors" />
+                class="chat-input-field w-full" />
               <button id="mic-btn" onclick="toggleVoiceInput()"
-                class="absolute right-2 text-slate-400 hover:text-[#AE2E2D] p-1.5 rounded-full transition-colors flex items-center justify-center">
-                <span id="mic-icon" class="material-icons-round text-xl">mic</span>
+                class="absolute right-3 text-white/30 hover:text-[#AE2E2D] p-1 rounded-full transition-all duration-200 flex items-center justify-center group">
+                <span id="mic-icon" class="material-icons-round text-xl group-hover:scale-110 transition-transform">mic</span>
               </button>
             </div>
-            <button onclick="sendChatMessage()"
-              class="flex items-center justify-center w-10 h-10 rounded-lg bg-[#AE2E2D] hover:bg-[#902423] transition-colors shadow-sm">
+            <button onclick="sendChatMessage()" class="chat-send-btn" aria-label="Send message">
               <span class="material-icons-round text-white text-lg">send</span>
             </button>
           </div>
         </div>
-      </section>
 
       <!-- ===================== ADMIN VIEW ===================== -->
       <section id="view-admin" class="view-section hidden flex-1 overflow-y-auto p-4 custom-scroll">

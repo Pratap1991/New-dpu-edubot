@@ -281,6 +281,11 @@ async function sendChatMessage() {
 }
 
 function appendMessage(role, text, sources = [], erpAction = null, showEscalate = false) {
+  const hero = document.getElementById('chat-hero');
+  if (hero) {
+    hero.classList.add('hero-hidden');
+  }
+
   const container = document.getElementById('chat-messages');
   const wrap = document.createElement('div');
   wrap.className = `msg-wrapper ${role}`;
