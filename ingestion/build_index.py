@@ -192,6 +192,21 @@ def build_chunks_from_kb(kb: dict) -> list:
             "tags": ["website", "general", "program info"]
         })
 
+    # ── Layer 4: Uploaded batch documents ───────────────────────────
+    print("  Processing Layer 4 Uploaded batch documents...")
+    uploads_dir = "data/batch_uploads"
+    if os.path.exists(uploads_dir):
+        for f in os.listdir(uploads_dir):
+            if f.endswith(".pkl"):
+                pkl_path = os.path.join(uploads_dir, f)
+                try:
+                    with open(pkl_path, "rb") as pf:
+                        uploaded_chunks = pickle.load(pf)
+                        chunks.extend(uploaded_chunks)
+                        print(f"    Loaded {len(uploaded_chunks)} chunks from {f}")
+                except Exception as e:
+                    print(f"    Error loading {f}: {e}")
+
     return chunks
 
 

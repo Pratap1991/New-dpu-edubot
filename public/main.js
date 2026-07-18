@@ -852,7 +852,9 @@ async function uploadDocumentAPI(e) {
   try {
     const r = await fetch('/api/upload_doc', { method: 'POST', body: formData });
     const d = await r.json();
-    if (d.error) {
+    if (!r.ok) {
+      status.innerHTML = `<span class="text-red-400">${d.detail || d.error || 'Upload failed.'}</span>`;
+    } else if (d.error) {
       status.innerHTML = `<span class="text-red-400">${d.error}</span>`;
     } else {
       status.innerHTML = `<span class="text-green-400 flex items-center gap-1.5"><span class="material-icons-round text-sm">check_circle</span> ${d.message}</span>`;
@@ -920,7 +922,9 @@ async function uploadFacultyDoc(e) {
   try {
     const r = await fetch('/api/upload_doc', { method: 'POST', body: formData });
     const d = await r.json();
-    if (d.error) {
+    if (!r.ok) {
+      status.innerHTML = `<span class="text-red-400">${d.detail || d.error || 'Upload failed.'}</span>`;
+    } else if (d.error) {
       status.innerHTML = `<span class="text-red-400">${d.error}</span>`;
     } else {
       status.innerHTML = `<span class="text-green-400 flex items-center gap-1.5"><span class="material-icons-round text-sm">check_circle</span> ${d.message}</span>`;

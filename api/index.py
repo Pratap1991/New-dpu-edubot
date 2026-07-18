@@ -113,16 +113,22 @@ async def upload_document(
         # Parse document using the parsers in ingestion.parse_docs
         from ingestion.parse_docs import parse_pdf, parse_docx, parse_excel, parse_csv
         
-        if filename.endswith(".pdf"):
+        ext = filename.lower()
+        if ext.endswith(".pdf"):
             chunks = parse_pdf(tmp_path, batch_id, doc_type)
-        elif filename.endswith(".docx"):
+        elif ext.endswith(".docx"):
             chunks = parse_docx(tmp_path, batch_id, doc_type)
-        elif filename.endswith(".xlsx") or filename.endswith(".xls"):
+        elif ext.endswith(".xlsx") or ext.endswith(".xls"):
             chunks = parse_excel(tmp_path, batch_id, doc_type)
-        elif filename.endswith(".csv"):
+        elif ext.endswith(".csv"):
             chunks = parse_csv(tmp_path, batch_id, doc_type)
         else:
             raise HTTPException(status_code=400, detail="Unsupported file format.")
+            
+        # Save chunks as pickle file in data/batch_uploads for indexing
+        pkl_path = tmp_path + ".pkl"
+        with open(pkl_path, "wb") as f:
+            pickle.dump(chunks, f)
             
         return {
             "success": True,
