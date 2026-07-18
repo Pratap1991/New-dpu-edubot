@@ -406,12 +406,53 @@ function loadPersistedTickets() {
     const saved = localStorage.getItem('dpu_tickets');
     if (saved) {
       const arr = JSON.parse(saved);
-      // Merge: add saved tickets that aren't already in the array
-      arr.forEach(t => { if (!mockTickets.find(x => x.id === t.id)) mockTickets.push(t); });
+      // Sync all tickets from local storage, updating existing ones and adding new ones
+      arr.forEach(t => {
+        const existingIdx = mockTickets.findIndex(x => x.id === t.id);
+        if (existingIdx > -1) {
+          mockTickets[existingIdx] = t;
+        } else {
+          mockTickets.push(t);
+        }
+      });
       // Sort by id desc (student-submitted appear first)
       mockTickets.sort((a, b) => b.id.localeCompare(a.id));
     }
   } catch(e) {}
+}
+
+function autoRefreshAdminData() {
+  loadPersistedTickets();
+
+  // Update badge count (Open + In Progress tickets)
+  const badge = document.getElementById('escalation-badge');
+  if (badge) {
+    const openCount = mockTickets.filter(t => t.status === 'Open' || t.status === 'In Progress').length;
+    badge.textContent = openCount;
+  }
+
+  // Update stats on dashboard
+  const openEscStat = document.getElementById('stat-open-escalations');
+  if (openEscStat) {
+    const openCount = mockTickets.filter(t => t.status === 'Open').length;
+    openEscStat.textContent = openCount;
+  }
+
+  // Refresh current view if admin is viewing
+  if (currentRole === 'admin') {
+    if (currentAdminTab === 'escalations') {
+      // Keep track of scroll position or selected ticket to prevent jarring UX
+      const scrollPos = document.getElementById('tickets-queue-container')?.scrollTop;
+      renderEscalationQueue();
+      if (scrollPos !== undefined && document.getElementById('tickets-queue-container')) {
+        document.getElementById('tickets-queue-container').scrollTop = scrollPos;
+      }
+    } else if (currentAdminTab === 'dashboard') {
+      renderDashboardEscalations();
+    } else if (currentAdminTab === 'sla') {
+      renderSLACountdowns();
+    }
+  }
 }
 const mockTickets = [
   {
@@ -925,9 +966,19 @@ function init() {
 
   // Load student-submitted tickets from localStorage so Admin can see them
   loadPersistedTickets();
+  
+  // Initialize escalation badge count on load
+  const badge = document.getElementById('escalation-badge');
+  if (badge) {
+    const openCount = mockTickets.filter(t => t.status === 'Open' || t.status === 'In Progress').length;
+    badge.textContent = openCount;
+  }
 
   // Poll index status every 30s
   setInterval(checkIndexStatus, 30000);
+
+  // Auto refresh admin data every 5s
+  setInterval(autoRefreshAdminData, 5000);
 }
 
 document.addEventListener('DOMContentLoaded', init);

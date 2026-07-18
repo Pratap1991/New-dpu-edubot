@@ -301,7 +301,7 @@ STRICT RULES:
 3. Be warm, concise, and helpful — like a kind mentor.
 4. If their data shows an issue (overdue fees, pending assignments), be direct but supportive.
 5. End with a clear next step where useful (e.g. "You can pay online at ERP — Payments section").
-6. Respond in the same language as the student's question (e.g. if the user asks in Hindi, answer in Devanagari Hindi; if in Marathi, answer in Devanagari Marathi; if in English, answer in English).
+6. Respond in the same language, script, and style as the student's question (e.g. if the user asks in Hinglish/Latin-script Hindi, answer in Hinglish/Latin-script Hindi; if in Devanagari Hindi, answer in Devanagari Hindi; if in Devanagari Marathi, answer in Devanagari Marathi; if in Marathish/Latin-script Marathi, answer in Marathish/Latin-script Marathi; if in English, answer in English).
 
 {personal_context}"""
             try:
@@ -328,8 +328,31 @@ STRICT RULES:
                 "erp_label": redirect["label"]
             }
         else:
+            system_prompt = """You are DPU EduBot, a warm and helpful AI learning assistant.
+             
+STRICT RULES:
+1. Rephrase the redirect message below to be warm, clear, and helpful.
+2. Instruct the user to log in or select their ERP ID from the dropdown at the top of the chat page if they want to check their personal details in this chat.
+3. Respond in the exact same language, script, and style as the student's query (e.g., Hinglish, Devanagari Hindi, Marathish, Devanagari Marathi, or English).
+
+Redirect Message:
+{message}"""
+            try:
+                response = client.chat.completions.create(
+                    model=CHAT_MODEL,
+                    temperature=0.1,
+                    max_tokens=250,
+                    messages=[
+                        {"role": "system", "content": system_prompt.format(message=redirect["message"])},
+                        {"role": "user",   "content": query}
+                    ]
+                )
+                bot_answer = response.choices[0].message.content
+            except Exception:
+                bot_answer = redirect["message"] + "\n\n💡 **Tip:** If you want to check your personal account info directly in this chat, please select your ERP ID from the dropdown at the top of the chat page."
+
             return {
-                "answer": redirect["message"] + "\n\n💡 **Tip:** If you want to check your personal account info directly in this chat, please select your ERP ID from the dropdown at the top of the chat page.",
+                "answer": bot_answer,
                 "sources": [],
                 "confidence": 1.0,
                 "escalate": False,
@@ -412,7 +435,7 @@ YOUR STRICT RULES — follow these exactly, no exceptions:
    to check ERP directly. Do not try to answer from context.
 5. When guiding to raise a support ticket, always mention the EXACT Category and 
    Nature of Support (e.g. Category: Accounts | Nature: Online Fee Payment Issues).
-6. Respond in the same language as the student's question (e.g. if the user asks in Hindi, answer in Devanagari Hindi; if in Marathi, answer in Devanagari Marathi; if in English, answer in English).
+6. Respond in the same language, script, and style as the student's question (e.g. if the user asks in Hinglish/Latin-script Hindi, answer in Hinglish/Latin-script Hindi; if in Devanagari Hindi, answer in Devanagari Hindi; if in Devanagari Marathi, answer in Devanagari Marathi; if in Marathish/Latin-script Marathi, answer in Marathish/Latin-script Marathi; if in English, answer in English).
 7. Be warm, concise, and helpful. Use numbered steps for processes. Use bullet points 
    for lists. Keep answers focused and specific.
 8. Always end with a helpful next step or offer to clarify further.
