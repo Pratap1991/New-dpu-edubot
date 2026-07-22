@@ -26,9 +26,10 @@ EMBED_MODEL = "text-embedding-3-small"
 CHAT_MODEL = "gpt-4o-mini"
 CONF_THRESHOLD = 0.50
 import tempfile
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INDEX_PATH = os.path.join(tempfile.gettempdir(), "faiss_index", "index.npy")
 CHUNKS_PATH = os.path.join(tempfile.gettempdir(), "faiss_index", "chunks.pkl")
-KB_PATH = "data/knowledge_base.json"
+KB_PATH = os.path.join(ROOT_DIR, "data", "knowledge_base.json")
 
 # ════════════════════════════════════════════════════════════════════
 # MOCK DATA — 5 sample students (extracted from erp_demo.py)
@@ -193,8 +194,10 @@ def load_index():
             with open(CHUNKS_PATH, "rb") as f:
                 _chunks_cache = pickle.load(f)
         else:
-            _index_cache = np.load("data/faiss_index/index.npy")
-            with open("data/faiss_index/chunks.pkl", "rb") as f:
+            fallback_index = os.path.join(ROOT_DIR, "data", "faiss_index", "index.npy")
+            fallback_chunks = os.path.join(ROOT_DIR, "data", "faiss_index", "chunks.pkl")
+            _index_cache = np.load(fallback_index)
+            with open(fallback_chunks, "rb") as f:
                 _chunks_cache = pickle.load(f)
         return _index_cache, _chunks_cache
     except Exception as e:
@@ -202,7 +205,9 @@ def load_index():
 
 
 def index_exists() -> bool:
-    return (os.path.exists(INDEX_PATH) and os.path.exists(CHUNKS_PATH)) or (os.path.exists("data/faiss_index/index.npy") and os.path.exists("data/faiss_index/chunks.pkl"))
+    fallback_index = os.path.join(ROOT_DIR, "data", "faiss_index", "index.npy")
+    fallback_chunks = os.path.join(ROOT_DIR, "data", "faiss_index", "chunks.pkl")
+    return (os.path.exists(INDEX_PATH) and os.path.exists(CHUNKS_PATH)) or (os.path.exists(fallback_index) and os.path.exists(fallback_chunks))
 
 
 def invalidate_cache():

@@ -20,9 +20,10 @@ from openai import OpenAI
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY") or "mock_key")
 EMBED_MODEL = "text-embedding-3-small"
 import tempfile
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INDEX_PATH = os.path.join(tempfile.gettempdir(), "faiss_index", "index.npy")
 CHUNKS_PATH = os.path.join(tempfile.gettempdir(), "faiss_index", "chunks.pkl")
-KB_PATH = "data/knowledge_base.json"
+KB_PATH = os.path.join(ROOT_DIR, "data", "knowledge_base.json")
 USE_MOCK = False
 
 def embed_text(text: str) -> np.ndarray:
@@ -218,8 +219,10 @@ def build_index():
 
     # 1. Load pre-built default index and chunks
     try:
-        default_vectors = np.load("data/faiss_index/index.npy")
-        with open("data/faiss_index/chunks.pkl", "rb") as f:
+        fallback_index = os.path.join(ROOT_DIR, "data", "faiss_index", "index.npy")
+        fallback_chunks = os.path.join(ROOT_DIR, "data", "faiss_index", "chunks.pkl")
+        default_vectors = np.load(fallback_index)
+        with open(fallback_chunks, "rb") as f:
             default_chunks = pickle.load(f)
         print(f"  Loaded pre-built base index with {len(default_chunks)} chunks.")
     except Exception as e:
