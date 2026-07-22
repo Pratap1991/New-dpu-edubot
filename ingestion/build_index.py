@@ -17,7 +17,7 @@ load_dotenv()
 
 from openai import OpenAI
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY") or "mock_key")
 EMBED_MODEL = "text-embedding-3-small"
 import tempfile
 INDEX_PATH = os.path.join(tempfile.gettempdir(), "faiss_index", "index.npy")

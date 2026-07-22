@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DPU EduBot — AI Learning Assistant</title>
-  <meta name="description" content="Official AI-powered learning assistant and admin dashboard for students and faculty of Dr. D.Y. Patil Centre for Online Learning." />
+  <meta name="description"
+    content="Official AI-powered learning assistant and admin dashboard for students and faculty of Dr. D.Y. Patil Centre for Online Learning." />
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap"
+    rel="stylesheet" />
 
   <!-- Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
@@ -44,6 +48,7 @@
 
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body class="bg-[#F4F6F9] text-slate-800 font-sans overflow-hidden h-screen">
 
   <!-- Sidebar overlay for mobile -->
@@ -53,7 +58,8 @@
   <div class="flex h-screen w-screen overflow-hidden">
 
     <!-- ===================== SIDEBAR ===================== -->
-    <aside id="sidebar" class="sidebar-panel flex flex-col w-64 shrink-0 bg-[#AE2E2D] text-white border-r border-red-955/20 z-10">
+    <aside id="sidebar"
+      class="sidebar-panel flex flex-col w-64 shrink-0 bg-[#AE2E2D] text-white border-r border-red-955/20 z-10">
 
       <!-- Brand -->
       <div class="flex items-center justify-center px-5 py-4 border-b border-red-900/30 bg-white">
@@ -61,7 +67,8 @@
       </div>
 
       <!-- User Profile Box (DPU Reference Style) — dynamic via JS -->
-      <div id="profile-card" class="mx-3 my-3 p-3 rounded bg-[#E6C35C] text-slate-900 flex flex-col items-center justify-center text-center shadow-sm">
+      <div id="profile-card"
+        class="mx-3 my-3 p-3 rounded bg-[#E6C35C] text-slate-900 flex flex-col items-center justify-center text-center shadow-sm">
         <div id="profile-name" class="text-sm font-extrabold tracking-wider uppercase">STUDENT</div>
         <div id="profile-role" class="text-[10px] text-slate-800 font-medium mt-0.5">Online Learning Portal</div>
       </div>
@@ -137,15 +144,18 @@
     <main class="flex-1 flex flex-col overflow-hidden bg-[#F4F6F9]">
 
       <!-- Top App Bar — Redesigned -->
-      <header id="main-header" class="flex items-center justify-between px-5 py-2.5 border-b border-slate-200/80 bg-white/95 backdrop-blur-md shrink-0 shadow-sm z-20">
+      <header id="main-header"
+        class="flex items-center justify-between px-5 py-2.5 border-b border-slate-200/80 bg-white/95 backdrop-blur-md shrink-0 shadow-sm z-20">
         <div class="flex items-center gap-3">
           <!-- Hamburger (mobile only) -->
-          <button id="hamburger-btn" onclick="toggleSidebar()" aria-label="Toggle menu" class="text-slate-500 hover:text-slate-800 transition-colors">
+          <button id="hamburger-btn" onclick="toggleSidebar()" aria-label="Toggle menu"
+            class="text-slate-500 hover:text-slate-800 transition-colors">
             <span class="material-icons-round text-2xl">menu</span>
           </button>
           <div>
             <h1 id="page-title" class="text-base font-bold text-slate-800 leading-tight">Student Chat</h1>
-            <p id="page-subtitle" class="text-[11px] text-slate-400 mt-0">Ask anything about your program, exams, fees, LMS, or support tickets.</p>
+            <p id="page-subtitle" class="text-[11px] text-slate-400 mt-0">Ask anything about your program, exams, fees,
+              LMS, or support tickets.</p>
           </div>
         </div>
 
@@ -162,7 +172,8 @@
               <option value="ERP006">ERP006 — Sneha</option>
               <option value="ERP009">ERP009 — Vikram</option>
             </select>
-            <span class="material-icons-round text-slate-400 text-xs absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+            <span
+              class="material-icons-round text-slate-400 text-xs absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
           </div>
           <div class="relative">
             <select id="student-batch" onchange="updateBatch()"
@@ -170,19 +181,29 @@
               <option value="mba_jan_26_sem1">MBA Jan 26 — Sem 1</option>
               <option value="bba_jan_26_sem1">BBA Jan 26 — Sem 1</option>
             </select>
-            <span class="material-icons-round text-slate-400 text-xs absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+            <span
+              class="material-icons-round text-slate-400 text-xs absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
           </div>
+          <!-- Voice Mode Toggle Button -->
+          <button id="voice-mode-btn" onclick="toggleVoiceMode()"
+            class="flex items-center gap-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-semibold px-2.5 py-1.5 rounded-lg outline-none cursor-pointer transition-all duration-200"
+            title="Toggle Voice Mode (Reads answers aloud and auto-sends voice queries)">
+            <span id="voice-mode-icon" class="material-icons-round text-slate-500 text-sm">volume_off</span>
+            <span id="voice-mode-text" class="hidden sm:inline">Voice Mode</span>
+          </button>
         </div>
 
         <!-- Admin Tab Bar (hidden by default) -->
-        <div id="admin-toolbar" class="hidden flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-lg p-1">
+        <div id="admin-toolbar"
+          class="hidden flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-lg p-1">
           <button class="tab-btn active" onclick="switchAdminTab('dashboard')">
             <span class="material-icons-round text-sm">insights</span> Dashboard
           </button>
           <button class="tab-btn" onclick="switchAdminTab('escalations')">
             <span class="material-icons-round text-sm">confirmation_number</span>
             Queue
-            <span class="ml-1 bg-red-500 text-white text-xs font-bold px-1.5 rounded-full" id="escalation-badge">3</span>
+            <span class="ml-1 bg-red-500 text-white text-xs font-bold px-1.5 rounded-full"
+              id="escalation-badge">3</span>
           </button>
           <button class="tab-btn" onclick="switchAdminTab('sla')">
             <span class="material-icons-round text-sm">timer</span> SLA
@@ -197,7 +218,8 @@
       </header>
 
       <!-- ===================== STUDENT VIEW — PREMIUM REDESIGN ===================== -->
-      <section id="view-student" class="view-section flex-1 flex flex-col overflow-hidden relative" style="background: #FFFFFF;">
+      <section id="view-student" class="view-section flex-1 flex flex-col overflow-hidden relative"
+        style="background: #FFFFFF;">
 
         <!-- Hero Banner (shown when chat is empty) -->
         <div id="chat-hero" class="flex flex-col items-center justify-center gap-5 py-10 px-6 animate-hero-in">
@@ -207,7 +229,8 @@
           </div>
           <div class="text-center">
             <h2 class="text-2xl font-extrabold text-slate-850 tracking-tight">DPU EduBot</h2>
-            <p class="text-slate-500 text-sm mt-1 max-w-sm mx-auto leading-relaxed">Your verified AI assistant for Dr. D.Y. Patil Centre for Online Learning. Ask anything about your program.</p>
+            <p class="text-slate-500 text-sm mt-1 max-w-sm mx-auto leading-relaxed">Your verified AI assistant for Dr.
+              D.Y. Patil Centre for Online Learning. Ask anything about your program.</p>
           </div>
           <!-- Quick Action Cards -->
           <div class="grid grid-cols-2 gap-3 w-full max-w-md mt-2">
@@ -235,7 +258,8 @@
         </div>
 
         <!-- Chat Messages -->
-        <div id="chat-messages" class="flex-1 overflow-y-auto px-4 pb-3 flex flex-col gap-3 custom-scroll" style="scrollbar-color: rgba(255,255,255,0.1) transparent;">
+        <div id="chat-messages" class="flex-1 overflow-y-auto px-4 pb-3 flex flex-col gap-3 custom-scroll"
+          style="scrollbar-color: rgba(255,255,255,0.1) transparent;">
           <!-- Populated by JS -->
         </div>
 
@@ -243,23 +267,27 @@
         <div class="chat-input-zone">
           <!-- Quick Suggestion Chips -->
           <div class="flex items-center gap-2 px-4 py-2 overflow-x-auto no-scroll">
-            <button class="suggestion-chip-dark" onclick="suggestQuery('How do I submit my assignment?')">📝 Assignments</button>
-            <button class="suggestion-chip-dark" onclick="suggestQuery('My payment failed — which ticket?')">💳 Payment Issue</button>
-            <button class="suggestion-chip-dark" onclick="suggestQuery('What are my MBA Sem 1 subjects?')">📚 My Subjects</button>
-            <button class="suggestion-chip-dark" onclick="suggestQuery('Where do I check attendance?')">📋 Attendance</button>
-            <button class="suggestion-chip-dark" onclick="suggestQuery('How do I join a live session?')">🎥 Live Class</button>
+            <button class="suggestion-chip-dark" onclick="suggestQuery('How do I submit my assignment?')">📝
+              Assignments</button>
+            <button class="suggestion-chip-dark" onclick="suggestQuery('My payment failed — which ticket?')">💳 Payment
+              Issue</button>
+            <button class="suggestion-chip-dark" onclick="suggestQuery('What are my MBA Sem 1 subjects?')">📚 My
+              Subjects</button>
+            <button class="suggestion-chip-dark" onclick="suggestQuery('Where do I check attendance?')">📋
+              Attendance</button>
+            <button class="suggestion-chip-dark" onclick="suggestQuery('How do I join a live session?')">🎥 Live
+              Class</button>
           </div>
 
           <!-- Input Row -->
           <div class="flex items-center gap-3 px-4 py-3">
             <div class="flex-1 relative flex items-center">
-              <input type="text" id="chat-input"
-                placeholder="Ask EduBot anything about your program..."
-                onkeydown="if(event.key==='Enter') sendChatMessage()"
-                class="chat-input-field w-full" />
+              <input type="text" id="chat-input" placeholder="Ask EduBot anything about your program..."
+                onkeydown="if(event.key==='Enter') sendChatMessage()" class="chat-input-field w-full" />
               <button id="mic-btn" onclick="toggleVoiceInput()"
                 class="absolute right-3 bg-[#AE2E2D]/10 hover:bg-[#AE2E2D]/20 text-[#AE2E2D] p-1.5 rounded-full transition-all duration-200 flex items-center justify-center group">
-                <span id="mic-icon" class="material-icons-round text-lg group-hover:scale-110 transition-transform">mic</span>
+                <span id="mic-icon"
+                  class="material-icons-round text-lg group-hover:scale-110 transition-transform">mic</span>
               </button>
             </div>
             <button onclick="sendChatMessage()" class="chat-send-btn" aria-label="Send message">
@@ -304,19 +332,41 @@
 
           <div class="grid grid-cols-2 gap-4">
             <div class="panel-card !p-0 overflow-hidden flex flex-col">
-              <div class="bg-[#B2EBF2] text-[#006064] px-5 py-3 font-bold text-sm flex items-center gap-2 border-b border-cyan-100">
+              <div
+                class="bg-[#B2EBF2] text-[#006064] px-5 py-3 font-bold text-sm flex items-center gap-2 border-b border-cyan-100">
                 <span class="material-icons-round text-base">bar_chart</span> Top Query Categories
               </div>
               <div class="p-5 flex-1 flex flex-col gap-2.5">
-                <div class="bar-row"><span class="bar-lbl">Exam & Results</span><div class="bar-bg"><div class="bar-fill bg-blue-500" style="width:88%"><span>88</span></div></div><span class="bar-pct">35%</span></div>
-                <div class="bar-row"><span class="bar-lbl">Fee & Payments</span><div class="bar-bg"><div class="bar-fill bg-emerald-500" style="width:72%"><span>72</span></div></div><span class="bar-pct">29%</span></div>
-                <div class="bar-row"><span class="bar-lbl">LMS & Sessions</span><div class="bar-bg"><div class="bar-fill bg-amber-500" style="width:61%"><span>61</span></div></div><span class="bar-pct">24%</span></div>
-                <div class="bar-row"><span class="bar-lbl">Assignments</span><div class="bar-bg"><div class="bar-fill bg-purple-500" style="width:45%"><span>45</span></div></div><span class="bar-pct">18%</span></div>
-                <div class="bar-row"><span class="bar-lbl">Books & Dispatch</span><div class="bar-bg"><div class="bar-fill bg-[#AE2E2D]" style="width:30%"><span>30</span></div></div><span class="bar-pct">12%</span></div>
+                <div class="bar-row"><span class="bar-lbl">Exam & Results</span>
+                  <div class="bar-bg">
+                    <div class="bar-fill bg-blue-500" style="width:88%"><span>88</span></div>
+                  </div><span class="bar-pct">35%</span>
+                </div>
+                <div class="bar-row"><span class="bar-lbl">Fee & Payments</span>
+                  <div class="bar-bg">
+                    <div class="bar-fill bg-emerald-500" style="width:72%"><span>72</span></div>
+                  </div><span class="bar-pct">29%</span>
+                </div>
+                <div class="bar-row"><span class="bar-lbl">LMS & Sessions</span>
+                  <div class="bar-bg">
+                    <div class="bar-fill bg-amber-500" style="width:61%"><span>61</span></div>
+                  </div><span class="bar-pct">24%</span>
+                </div>
+                <div class="bar-row"><span class="bar-lbl">Assignments</span>
+                  <div class="bar-bg">
+                    <div class="bar-fill bg-purple-500" style="width:45%"><span>45</span></div>
+                  </div><span class="bar-pct">18%</span>
+                </div>
+                <div class="bar-row"><span class="bar-lbl">Books & Dispatch</span>
+                  <div class="bar-bg">
+                    <div class="bar-fill bg-[#AE2E2D]" style="width:30%"><span>30</span></div>
+                  </div><span class="bar-pct">12%</span>
+                </div>
               </div>
             </div>
             <div class="panel-card !p-0 overflow-hidden flex flex-col">
-              <div class="bg-[#C8E6C9] text-[#1B5E20] px-5 py-3 font-bold text-sm flex items-center gap-2 border-b border-emerald-100">
+              <div
+                class="bg-[#C8E6C9] text-[#1B5E20] px-5 py-3 font-bold text-sm flex items-center gap-2 border-b border-emerald-100">
                 <span class="material-icons-round text-base">confirmation_number</span> Recent Escalations
               </div>
               <div id="dashboard-recent-escalations" class="p-5 flex-1 flex flex-col gap-2"></div>
@@ -327,10 +377,22 @@
         <!-- Escalation Queue Tab -->
         <div id="admin-tab-escalations" class="admin-tab-content hidden">
           <div class="grid grid-cols-4 gap-3 mb-5">
-            <div class="stat-card"><div class="stat-value text-red-600">2</div><div class="stat-label">Open</div></div>
-            <div class="stat-card"><div class="stat-value text-amber-600">2</div><div class="stat-label">In Progress</div></div>
-            <div class="stat-card"><div class="stat-value text-emerald-600">1</div><div class="stat-label">Resolved Today</div></div>
-            <div class="stat-card"><div class="stat-value text-blue-600">12</div><div class="stat-label">Resolved This Week</div></div>
+            <div class="stat-card">
+              <div class="stat-value text-red-600">2</div>
+              <div class="stat-label">Open</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value text-amber-600">2</div>
+              <div class="stat-label">In Progress</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value text-emerald-600">1</div>
+              <div class="stat-label">Resolved Today</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value text-blue-600">12</div>
+              <div class="stat-label">Resolved This Week</div>
+            </div>
           </div>
           <div class="flex items-center gap-3 mb-4">
             <label class="text-xs text-slate-500 font-semibold">Filter:</label>
@@ -342,20 +404,26 @@
                 <option value="In Progress">In Progress</option>
                 <option value="Resolved">Resolved</option>
               </select>
-              <span class="material-icons-round text-slate-400 text-sm absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+              <span
+                class="material-icons-round text-slate-400 text-sm absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
             </div>
           </div>
           <div class="grid grid-cols-2 gap-4">
-            <div id="tickets-queue-container" class="flex flex-col gap-2 overflow-y-auto max-h-[500px] custom-scroll"></div>
+            <div id="tickets-queue-container" class="flex flex-col gap-2 overflow-y-auto max-h-[500px] custom-scroll">
+            </div>
             <div class="panel-card flex flex-col">
-              <h3 class="panel-heading"><span class="material-icons-round text-lg text-primary">reply_all</span> AI Reply Composer</h3>
-              <div id="composer-ticket-preview" class="text-sm text-slate-400 italic mb-3">Select a ticket to draft a reply.</div>
+              <h3 class="panel-heading"><span class="material-icons-round text-lg text-primary">reply_all</span> AI
+                Reply Composer</h3>
+              <div id="composer-ticket-preview" class="text-sm text-slate-400 italic mb-3">Select a ticket to draft a
+                reply.</div>
               <div id="composer-reply-box" class="hidden flex-1 flex flex-col gap-3">
                 <textarea id="ai-reply-text" rows="10"
                   class="w-full bg-slate-50 text-slate-800 text-xs font-mono border border-slate-200 rounded-lg p-3 outline-none focus:border-[#AE2E2D] resize-none custom-scroll"></textarea>
                 <div class="flex justify-end gap-2">
-                  <button onclick="copyReplyText()" class="btn-secondary text-xs"><span class="material-icons-round text-sm">content_copy</span> Copy</button>
-                  <button onclick="markTicketResolved()" class="btn-primary text-xs"><span class="material-icons-round text-sm">check_circle</span> Mark Resolved</button>
+                  <button onclick="copyReplyText()" class="btn-secondary text-xs"><span
+                      class="material-icons-round text-sm">content_copy</span> Copy</button>
+                  <button onclick="markTicketResolved()" class="btn-primary text-xs"><span
+                      class="material-icons-round text-sm">check_circle</span> Mark Resolved</button>
                 </div>
               </div>
             </div>
@@ -365,19 +433,26 @@
         <!-- SLA Tracker Tab -->
         <div id="admin-tab-sla" class="admin-tab-content hidden">
           <div class="panel-card mb-4 !p-0 overflow-hidden flex flex-col">
-            <div class="bg-[#FFE0B2] text-[#E65100] px-5 py-3 font-bold text-sm flex items-center gap-2 border-b border-orange-100">
+            <div
+              class="bg-[#FFE0B2] text-[#E65100] px-5 py-3 font-bold text-sm flex items-center gap-2 border-b border-orange-100">
               <span class="material-icons-round text-base">schedule</span> DPU COL SLA Policy Matrix
             </div>
             <div class="p-5 grid grid-cols-5 gap-3">
-              <div class="sla-chip text-red-600 bg-red-50 border-red-200"><span class="font-bold text-lg">24h</span><span class="text-xs mt-1">Accounts & Fees</span></div>
-              <div class="sla-chip text-blue-600 bg-blue-50 border-blue-200"><span class="font-bold text-lg">48h</span><span class="text-xs mt-1">Academics</span></div>
-              <div class="sla-chip text-amber-600 bg-amber-50 border-amber-200"><span class="font-bold text-lg">24h</span><span class="text-xs mt-1">Examinations</span></div>
-              <div class="sla-chip text-green-600 bg-green-50 border-green-200"><span class="font-bold text-lg">48h</span><span class="text-xs mt-1">Students Section</span></div>
-              <div class="sla-chip text-purple-600 bg-purple-50 border-purple-200"><span class="font-bold text-lg">72h</span><span class="text-xs mt-1">Books Dispatch</span></div>
+              <div class="sla-chip text-red-600 bg-red-50 border-red-200"><span
+                  class="font-bold text-lg">24h</span><span class="text-xs mt-1">Accounts & Fees</span></div>
+              <div class="sla-chip text-blue-600 bg-blue-50 border-blue-200"><span
+                  class="font-bold text-lg">48h</span><span class="text-xs mt-1">Academics</span></div>
+              <div class="sla-chip text-amber-600 bg-amber-50 border-amber-200"><span
+                  class="font-bold text-lg">24h</span><span class="text-xs mt-1">Examinations</span></div>
+              <div class="sla-chip text-green-600 bg-green-50 border-green-200"><span
+                  class="font-bold text-lg">48h</span><span class="text-xs mt-1">Students Section</span></div>
+              <div class="sla-chip text-purple-600 bg-purple-50 border-purple-200"><span
+                  class="font-bold text-lg">72h</span><span class="text-xs mt-1">Books Dispatch</span></div>
             </div>
           </div>
           <div class="panel-card !p-0 overflow-hidden flex flex-col">
-            <div class="bg-[#B2EBF2] text-[#006064] px-5 py-3 font-bold text-sm flex items-center gap-2 border-b border-cyan-100">
+            <div
+              class="bg-[#B2EBF2] text-[#006064] px-5 py-3 font-bold text-sm flex items-center gap-2 border-b border-cyan-100">
               <span class="material-icons-round text-base">warning</span> Active SLA Countdowns
             </div>
             <div id="sla-countdown-container" class="p-5 flex flex-col gap-4"></div>
@@ -396,9 +471,11 @@
                 <option value="examination">Examinations</option>
                 <option value="dispatch">Books Dispatch</option>
               </select>
-              <span class="material-icons-round text-slate-400 text-sm absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+              <span
+                class="material-icons-round text-slate-400 text-sm absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
             </div>
-            <button onclick="toggleAddFAQModal()" class="btn-primary text-xs"><span class="material-icons-round text-sm">add</span> Add FAQ</button>
+            <button onclick="toggleAddFAQModal()" class="btn-primary text-xs"><span
+                class="material-icons-round text-sm">add</span> Add FAQ</button>
           </div>
 
           <div id="add-faq-form" class="hidden panel-card mb-4">
@@ -418,7 +495,8 @@
               </div>
               <div class="flex flex-col gap-1 col-span-2">
                 <label class="text-xs text-slate-500 font-semibold">Answer</label>
-                <textarea id="new-faq-a" rows="3" placeholder="Enter verified answer..." class="mui-input text-sm resize-none"></textarea>
+                <textarea id="new-faq-a" rows="3" placeholder="Enter verified answer..."
+                  class="mui-input text-sm resize-none"></textarea>
               </div>
               <div class="flex flex-col gap-1 col-span-2">
                 <label class="text-xs text-slate-500 font-semibold">Tags (comma-separated)</label>
@@ -427,7 +505,8 @@
             </div>
             <div class="flex justify-end gap-2 mt-3">
               <button onclick="toggleAddFAQModal()" class="btn-secondary text-xs">Cancel</button>
-              <button onclick="saveFAQ()" class="btn-primary text-xs"><span class="material-icons-round text-sm">save</span> Save FAQ</button>
+              <button onclick="saveFAQ()" class="btn-primary text-xs"><span
+                  class="material-icons-round text-sm">save</span> Save FAQ</button>
             </div>
           </div>
 
@@ -438,11 +517,15 @@
         <div id="admin-tab-kb" class="admin-tab-content hidden">
           <div class="grid grid-cols-2 gap-4">
             <div class="panel-card">
-              <h3 class="panel-heading mb-4"><span class="material-icons-round text-lg text-primary">sync</span> Vector Index Builder</h3>
-              <p class="text-xs text-slate-500 mb-4">Recompile the cosine-similarity vector store from the current knowledge base and staged batch documents.</p>
+              <h3 class="panel-heading mb-4"><span class="material-icons-round text-lg text-primary">sync</span> Vector
+                Index Builder</h3>
+              <p class="text-xs text-slate-500 mb-4">Recompile the cosine-similarity vector store from the current
+                knowledge base and staged batch documents.</p>
               <div class="bg-slate-50 rounded-lg p-3 mb-4 text-xs flex flex-col gap-2 border border-slate-200">
-                <div class="flex justify-between"><span class="text-slate-500">Vector Store:</span><strong class="text-slate-800">NumPy Cosine Similarity</strong></div>
-                <div class="flex justify-between"><span class="text-slate-500">Chunks Indexed:</span><strong class="text-slate-800" id="kb-chunks-count">Loading...</strong></div>
+                <div class="flex justify-between"><span class="text-slate-500">Vector Store:</span><strong
+                    class="text-slate-800">NumPy Cosine Similarity</strong></div>
+                <div class="flex justify-between"><span class="text-slate-500">Chunks Indexed:</span><strong
+                    class="text-slate-800" id="kb-chunks-count">Loading...</strong></div>
               </div>
               <button id="btn-rebuild-index" onclick="rebuildIndexAPI()" class="btn-primary w-full justify-center">
                 <span class="material-icons-round text-base">refresh</span> Rebuild Vector Index
@@ -453,7 +536,8 @@
               </div>
             </div>
             <div class="panel-card">
-              <h3 class="panel-heading mb-4"><span class="material-icons-round text-lg text-[#AE2E2D]">upload_file</span> Upload Batch Document</h3>
+              <h3 class="panel-heading mb-4"><span
+                  class="material-icons-round text-lg text-[#AE2E2D]">upload_file</span> Upload Batch Document</h3>
               <form id="doc-upload-form" onsubmit="uploadDocumentAPI(event)" class="flex flex-col gap-3">
                 <div class="flex flex-col gap-1">
                   <label class="text-xs text-slate-500 font-semibold">Target Batch</label>
@@ -491,20 +575,23 @@
       <section id="view-faculty" class="view-section hidden flex-1 overflow-y-auto p-4 custom-scroll">
         <div class="grid grid-cols-2 gap-4">
           <div class="panel-card">
-            <h3 class="panel-heading mb-4"><span class="material-icons-round text-lg text-[#AE2E2D]">calendar_month</span> Batch Quick Reference</h3>
+            <h3 class="panel-heading mb-4"><span
+                class="material-icons-round text-lg text-[#AE2E2D]">calendar_month</span> Batch Quick Reference</h3>
             <div class="relative mb-4">
               <select id="faculty-batch-select" onchange="renderFacultyBatchInfo()"
                 class="appearance-none w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm font-medium pl-3 pr-8 py-2 rounded-lg outline-none cursor-pointer">
                 <option value="mba_jan_26_sem1">MBA Jan 2026 — Semester 1</option>
                 <option value="bba_jan_26_sem1">BBA Jan 2026 — Semester 1</option>
               </select>
-              <span class="material-icons-round text-slate-400 text-sm absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+              <span
+                class="material-icons-round text-slate-400 text-sm absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
             </div>
             <div id="faculty-batch-info" class="text-sm text-slate-600 flex flex-col gap-2"></div>
           </div>
 
           <div class="panel-card">
-            <h3 class="panel-heading mb-4"><span class="material-icons-round text-lg text-[#AE2E2D]">upload</span> Upload Study Material</h3>
+            <h3 class="panel-heading mb-4"><span class="material-icons-round text-lg text-[#AE2E2D]">upload</span>
+              Upload Study Material</h3>
             <form id="faculty-upload-form" onsubmit="uploadFacultyDoc(event)" class="flex flex-col gap-3">
               <div class="flex flex-col gap-1">
                 <label class="text-xs text-slate-500 font-semibold">Target Batch</label>
@@ -534,13 +621,34 @@
 
             <hr class="border-slate-200 my-4" />
 
-            <h3 class="panel-heading mb-3"><span class="material-icons-round text-lg text-blue-500">query_stats</span> Top Query Topics</h3>
+            <h3 class="panel-heading mb-3"><span class="material-icons-round text-lg text-blue-500">query_stats</span>
+              Top Query Topics</h3>
             <div class="flex flex-col gap-2.5">
-              <div class="topic-row"><span class="topic-lbl text-slate-600">Exam & Hall Ticket</span><div class="bar-bg bg-slate-100"><div class="bar-fill bg-blue-500" style="width:88%"></div></div><span class="text-xs text-slate-400">88</span></div>
-              <div class="topic-row"><span class="topic-lbl text-slate-600">Fee Payment</span><div class="bar-bg bg-slate-100"><div class="bar-fill bg-blue-500" style="width:72%"></div></div><span class="text-xs text-slate-400">72</span></div>
-              <div class="topic-row"><span class="topic-lbl text-slate-600">Assignment Submission</span><div class="bar-bg bg-slate-100"><div class="bar-fill bg-blue-500" style="width:61%"></div></div><span class="text-xs text-slate-400">61</span></div>
-              <div class="topic-row"><span class="topic-lbl text-slate-600">LMS Access</span><div class="bar-bg bg-slate-100"><div class="bar-fill bg-blue-500" style="width:55%"></div></div><span class="text-xs text-slate-400">55</span></div>
-              <div class="topic-row"><span class="topic-lbl text-slate-600">Support Tickets</span><div class="bar-bg bg-slate-100"><div class="bar-fill bg-blue-500" style="width:45%"></div></div><span class="text-xs text-slate-400">45</span></div>
+              <div class="topic-row"><span class="topic-lbl text-slate-600">Exam & Hall Ticket</span>
+                <div class="bar-bg bg-slate-100">
+                  <div class="bar-fill bg-blue-500" style="width:88%"></div>
+                </div><span class="text-xs text-slate-400">88</span>
+              </div>
+              <div class="topic-row"><span class="topic-lbl text-slate-600">Fee Payment</span>
+                <div class="bar-bg bg-slate-100">
+                  <div class="bar-fill bg-blue-500" style="width:72%"></div>
+                </div><span class="text-xs text-slate-400">72</span>
+              </div>
+              <div class="topic-row"><span class="topic-lbl text-slate-600">Assignment Submission</span>
+                <div class="bar-bg bg-slate-100">
+                  <div class="bar-fill bg-blue-500" style="width:61%"></div>
+                </div><span class="text-xs text-slate-400">61</span>
+              </div>
+              <div class="topic-row"><span class="topic-lbl text-slate-600">LMS Access</span>
+                <div class="bar-bg bg-slate-100">
+                  <div class="bar-fill bg-blue-500" style="width:55%"></div>
+                </div><span class="text-xs text-slate-400">55</span>
+              </div>
+              <div class="topic-row"><span class="topic-lbl text-slate-600">Support Tickets</span>
+                <div class="bar-bg bg-slate-100">
+                  <div class="bar-fill bg-blue-500" style="width:45%"></div>
+                </div><span class="text-xs text-slate-400">45</span>
+              </div>
             </div>
           </div>
         </div>
@@ -549,8 +657,10 @@
   </div>
 
   <!-- ===================== LOGIN DIALOG ===================== -->
-  <div id="login-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center">
-    <div class="login-dialog w-full max-w-sm mx-4 bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden">
+  <div id="login-overlay"
+    class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center">
+    <div
+      class="login-dialog w-full max-w-sm mx-4 bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden">
       <!-- Dialog Header -->
       <div class="px-6 pt-6 pb-4 border-b border-slate-100">
         <div class="flex items-center justify-between">
@@ -563,7 +673,8 @@
               <p id="login-dialog-subtitle" class="text-xs text-slate-400">Sign in to your learning or staff portal</p>
             </div>
           </div>
-          <button onclick="closeLoginDialog()" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors">
+          <button onclick="closeLoginDialog()"
+            class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors">
             <span class="material-icons-round text-slate-400 text-lg">close</span>
           </button>
         </div>
@@ -589,19 +700,18 @@
 
         <!-- ERP ID / Username Field (shown for Student) -->
         <div id="login-username-container" class="relative mb-3">
-          <input type="text" id="login-username"
-            placeholder="Enter your ERP ID (e.g. ERP001)..."
+          <input type="text" id="login-username" placeholder="Enter your ERP ID (e.g. ERP001)..."
             class="mui-input w-full text-sm pr-10" />
-          <span class="material-icons-round text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 text-base">school</span>
+          <span
+            class="material-icons-round text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 text-base">school</span>
         </div>
 
         <!-- Password Field -->
         <div class="relative mb-4">
-          <input type="password" id="login-password"
-            placeholder="Enter first name as password (e.g. Pratap)..."
-            onkeydown="if(event.key==='Enter') submitLogin()"
-            class="mui-input w-full text-sm pr-10" />
-          <span class="material-icons-round text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 text-base">key</span>
+          <input type="password" id="login-password" placeholder="Enter first name as password (e.g. Pratap)..."
+            onkeydown="if(event.key==='Enter') submitLogin()" class="mui-input w-full text-sm pr-10" />
+          <span
+            class="material-icons-round text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 text-base">key</span>
         </div>
 
         <!-- Error Message -->
@@ -611,8 +721,7 @@
         </p>
 
         <!-- Submit Button -->
-        <button onclick="submitLogin()"
-          class="btn-primary w-full justify-center py-2.5">
+        <button onclick="submitLogin()" class="btn-primary w-full justify-center py-2.5">
           <span class="material-icons-round text-base">login</span>
           Sign In
         </button>
@@ -621,8 +730,10 @@
   </div>
 
   <!-- ===================== RAISE TICKET DIALOG ===================== -->
-  <div id="ticket-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center">
-    <div class="login-dialog w-full max-w-md mx-4 bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden">
+  <div id="ticket-overlay"
+    class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center">
+    <div
+      class="login-dialog w-full max-w-md mx-4 bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden">
       <!-- Dialog Header -->
       <div class="px-6 pt-6 pb-4 border-b border-slate-100">
         <div class="flex items-center justify-between">
@@ -635,7 +746,8 @@
               <p class="text-xs text-slate-400">Submit a formal grievance to DPU Support</p>
             </div>
           </div>
-          <button onclick="closeRaiseTicketDialog()" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors">
+          <button onclick="closeRaiseTicketDialog()"
+            class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors">
             <span class="material-icons-round text-slate-400 text-lg">close</span>
           </button>
         </div>
@@ -670,7 +782,8 @@
         <!-- Description -->
         <div class="flex flex-col gap-1">
           <label class="text-xs text-slate-500 font-semibold">Detailed Description</label>
-          <textarea id="ticket-desc" rows="4" placeholder="Describe your issue in detail..." class="mui-input text-sm resize-none"></textarea>
+          <textarea id="ticket-desc" rows="4" placeholder="Describe your issue in detail..."
+            class="mui-input text-sm resize-none"></textarea>
         </div>
 
         <!-- Submit Button -->
@@ -684,4 +797,5 @@
 
   <script src="main.js"></script>
 </body>
+
 </html>

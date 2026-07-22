@@ -9,6 +9,9 @@
 // ──────────────────────────────────────────────────────────
 let authRole = null; // null | 'admin' | 'faculty' | 'student'
 let loginRoleSelected = 'student'; // default to student
+let voiceModeActive = false; // two-way voice chat active
+let voiceSynthesisInstance = null; // track current speech utterance
+const USE_OPENAI_TTS = false; // toggle to true if you want premium OpenAI voices (uses API key)
 
 function openLoginDialog() {
   const overlay = document.getElementById('login-overlay');
@@ -159,7 +162,7 @@ const MOCK_STUDENT_METADATA = {
 };
 
 function applyAuthState() {
-  const isAdmin   = authRole === 'admin';
+  const isAdmin = authRole === 'admin';
   const isFaculty = authRole === 'faculty';
   const isStudent = authRole === 'student';
   const isLoggedIn = isAdmin || isFaculty || isStudent;
@@ -256,10 +259,10 @@ function switchAdminTab(tab) {
   });
 
   if (tab === 'escalations') renderEscalationQueue();
-  if (tab === 'dashboard')   renderDashboardEscalations();
-  if (tab === 'sla')         renderSLACountdowns();
-  if (tab === 'faqs')        renderFAQList();
-  if (tab === 'kb')          loadKBStats();
+  if (tab === 'dashboard') renderDashboardEscalations();
+  if (tab === 'sla') renderSLACountdowns();
+  if (tab === 'faqs') renderFAQList();
+  if (tab === 'kb') loadKBStats();
 }
 
 // ──────────────────────────────────────────────────────────
@@ -287,6 +290,13 @@ async function sendChatMessage() {
   if (!query) return;
   input.value = '';
 
+  // Cancel active speech when sending a new message
+  window.speechSynthesis?.cancel();
+  if (voiceSynthesisInstance) {
+    voiceSynthesisInstance.pause();
+    voiceSynthesisInstance = null;
+  }
+
   appendMessage('user', query);
   const typingId = appendTypingIndicator();
 
@@ -304,13 +314,16 @@ async function sendChatMessage() {
 
     if (data.error) {
       appendMessage('assistant', data.error, [], null);
+      speakResponse(data.error);
     } else {
       const erpAction = data.erp_action || (data.erp_link ? { url: data.erp_link, label: data.erp_label } : null);
       appendMessage('assistant', data.answer, data.sources || [], erpAction, data.escalate || false);
+      speakResponse(data.answer);
     }
   } catch (err) {
     removeTypingIndicator(typingId);
     appendMessage('assistant', 'Connection error. Please check the server and retry.');
+    speakResponse('Connection error. Please check the server and retry.');
   }
 }
 
@@ -400,23 +413,23 @@ async function checkIndexStatus() {
   try {
     const r = await fetch('/api/kb_status');
     const d = await r.json();
-    const dot  = document.getElementById('index-dot');
+    const dot = document.getElementById('index-dot');
     const text = document.getElementById('index-text');
-    const stat  = document.getElementById('stat-index-status');
-    const sub   = document.getElementById('stat-index-sub');
+    const stat = document.getElementById('stat-index-status');
+    const sub = document.getElementById('stat-index-sub');
     const kbChunks = document.getElementById('kb-chunks-count');
 
     const chunks = d.chunks_count || d.chunks || 0;
     if (d.ready) {
-      dot.className  = 'w-2 h-2 rounded-full bg-green-400';
+      dot.className = 'w-2 h-2 rounded-full bg-green-400';
       text.textContent = `Index: ${chunks} chunks`;
       if (stat) { stat.textContent = 'Ready'; stat.className = 'stat-value text-green-400'; }
-      if (sub)  sub.textContent = `${chunks} chunks indexed`;
+      if (sub) sub.textContent = `${chunks} chunks indexed`;
     } else {
-      dot.className  = 'w-2 h-2 rounded-full bg-red-400';
+      dot.className = 'w-2 h-2 rounded-full bg-red-400';
       text.textContent = 'Index: Not Built';
       if (stat) { stat.textContent = 'Not Ready'; stat.className = 'stat-value text-red-400'; }
-      if (sub)  sub.textContent = 'Rebuild required';
+      if (sub) sub.textContent = 'Rebuild required';
     }
     if (kbChunks) kbChunks.textContent = chunks ? `${chunks} vectors` : 'Not built';
   } catch {
@@ -429,7 +442,7 @@ async function checkIndexStatus() {
 // ESCALATION DATA — persisted in localStorage for cross-session
 // ──────────────────────────────────────────────────────────
 function saveTickets() {
-  try { localStorage.setItem('dpu_tickets', JSON.stringify(mockTickets)); } catch(e) {}
+  try { localStorage.setItem('dpu_tickets', JSON.stringify(mockTickets)); } catch (e) { }
 }
 function loadPersistedTickets() {
   try {
@@ -448,7 +461,7 @@ function loadPersistedTickets() {
       // Sort by id desc (student-submitted appear first)
       mockTickets.sort((a, b) => b.id.localeCompare(a.id));
     }
-  } catch(e) {}
+  } catch (e) { }
 }
 
 function autoRefreshAdminData() {
@@ -591,7 +604,7 @@ function renderEscalationQueue() {
 
     const catMap = { accounts: 'accounts', exam: 'exam', academic: 'academic', dispatch: 'dispatch' };
     const catClass = `cat-${catMap[tkt.category] || 'academic'}`;
-    const priClass  = `pri-${tkt.priority}`;
+    const priClass = `pri-${tkt.priority}`;
 
     el.innerHTML = `
       <div class="flex-1 min-w-0">
@@ -666,9 +679,9 @@ function renderDashboardEscalations() {
 // SLA COUNTDOWNS
 // ──────────────────────────────────────────────────────────
 const slaData = [
-  { id: 'ESC-001', student: 'Rahul Patil', category: 'Accounts & Fees', slaHours: 24, elapsedHours: 2,  priority: 'high' },
-  { id: 'ESC-002', student: 'Priya Shah',  category: 'Examinations',    slaHours: 24, elapsedHours: 5,  priority: 'high' },
-  { id: 'ESC-003', student: 'Arjun Mehta', category: 'Academic & LMS',  slaHours: 48, elapsedHours: 24, priority: 'medium' },
+  { id: 'ESC-001', student: 'Rahul Patil', category: 'Accounts & Fees', slaHours: 24, elapsedHours: 2, priority: 'high' },
+  { id: 'ESC-002', student: 'Priya Shah', category: 'Examinations', slaHours: 24, elapsedHours: 5, priority: 'high' },
+  { id: 'ESC-003', student: 'Arjun Mehta', category: 'Academic & LMS', slaHours: 48, elapsedHours: 24, priority: 'medium' },
 ];
 
 function renderSLACountdowns() {
@@ -843,7 +856,7 @@ async function rebuildIndexAPI() {
 
 async function uploadDocumentAPI(e) {
   e.preventDefault();
-  const form   = document.getElementById('doc-upload-form');
+  const form = document.getElementById('doc-upload-form');
   const status = document.getElementById('upload-status');
   const formData = new FormData(form);
 
@@ -913,7 +926,7 @@ function renderFacultyBatchInfo() {
 
 async function uploadFacultyDoc(e) {
   e.preventDefault();
-  const form   = document.getElementById('faculty-upload-form');
+  const form = document.getElementById('faculty-upload-form');
   const status = document.getElementById('faculty-upload-status');
   const formData = new FormData(form);
 
@@ -979,6 +992,11 @@ function init() {
   applyAuthState();
   checkIndexStatus();
 
+  // Restore Voice Mode
+  const savedVoice = sessionStorage.getItem('dpu_voice_mode');
+  voiceModeActive = savedVoice === 'true';
+  updateVoiceModeUI();
+
   // Personalized welcome message
   const savedErpId2 = sessionStorage.getItem('dpu_erp_id');
   const studentName = savedErpId2 && MOCK_STUDENT_METADATA[savedErpId2]
@@ -1000,7 +1018,7 @@ function init() {
 
   // Load student-submitted tickets from localStorage so Admin can see them
   loadPersistedTickets();
-  
+
   // Initialize escalation badge count on load
   const badge = document.getElementById('escalation-badge');
   if (badge) {
@@ -1018,7 +1036,7 @@ function init() {
 document.addEventListener('DOMContentLoaded', init);
 
 // Close login on overlay click outside the dialog
-document.getElementById('login-overlay')?.addEventListener('click', function(e) {
+document.getElementById('login-overlay')?.addEventListener('click', function (e) {
   if (e.target === this) closeLoginDialog();
 });
 
@@ -1051,6 +1069,98 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
 });
 
 // ──────────────────────────────────────────────────────────
+// TWO-WAY VOICE MODE (TTS & AUTO-SUBMIT STT)
+// ──────────────────────────────────────────────────────────
+function toggleVoiceMode() {
+  voiceModeActive = !voiceModeActive;
+  sessionStorage.setItem('dpu_voice_mode', voiceModeActive);
+
+  if (!voiceModeActive) {
+    window.speechSynthesis?.cancel();
+    if (voiceSynthesisInstance) {
+      voiceSynthesisInstance.pause();
+      voiceSynthesisInstance = null;
+    }
+  }
+
+  updateVoiceModeUI();
+  showToast(`Voice Mode ${voiceModeActive ? 'Enabled' : 'Disabled'}`);
+}
+
+function updateVoiceModeUI() {
+  const btn = document.getElementById('voice-mode-btn');
+  const icon = document.getElementById('voice-mode-icon');
+  if (!btn || !icon) return;
+
+  if (voiceModeActive) {
+    btn.className = 'flex items-center gap-1.5 border border-[#AE2E2D]/30 bg-[#AE2E2D]/5 text-[#AE2E2D] text-[11px] font-semibold px-2.5 py-1.5 rounded-lg outline-none cursor-pointer transition-all duration-200';
+    icon.textContent = 'volume_up';
+    icon.className = 'material-icons-round text-[#AE2E2D] text-sm animate-pulse';
+  } else {
+    btn.className = 'flex items-center gap-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-semibold px-2.5 py-1.5 rounded-lg outline-none cursor-pointer transition-all duration-200';
+    icon.textContent = 'volume_off';
+    icon.className = 'material-icons-round text-slate-500 text-sm';
+  }
+}
+
+async function speakResponse(text) {
+  if (!voiceModeActive) return;
+
+  // Clean formatting/emojis/markdown for speech
+  const cleanText = text
+    .replace(/<[^>]*>/g, '') // remove HTML tags
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // simplify markdown links
+    .replace(/[\*\_`#\-]/g, ' ') // remove markdown formatting
+    .trim();
+
+  if (!cleanText) return;
+
+  if (USE_OPENAI_TTS) {
+    try {
+      const r = await fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: cleanText, voice: 'nova' })
+      });
+      if (!r.ok) throw new Error('TTS API error');
+
+      const blob = await r.blob();
+      const url = URL.createObjectURL(blob);
+
+      window.speechSynthesis?.cancel();
+      if (voiceSynthesisInstance) voiceSynthesisInstance.pause();
+
+      const audio = new Audio(url);
+      voiceSynthesisInstance = audio;
+      audio.play();
+    } catch (e) {
+      console.warn("Premium TTS failed, falling back to browser synthesis:", e);
+      speakWithBrowser(cleanText);
+    }
+  } else {
+    speakWithBrowser(cleanText);
+  }
+}
+
+function speakWithBrowser(cleanText) {
+  window.speechSynthesis?.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(cleanText);
+  const voices = window.speechSynthesis?.getVoices() || [];
+  let matchingVoice = voices.find(v => v.lang === 'en-IN' || v.name.includes('India') || v.name.includes('Rishi') || v.name.includes('Heera'));
+  if (!matchingVoice) {
+    matchingVoice = voices.find(v => v.lang.startsWith('en'));
+  }
+  if (matchingVoice) utterance.voice = matchingVoice;
+
+  utterance.rate = 1.0;
+  utterance.pitch = 1.0;
+
+  voiceSynthesisInstance = utterance;
+  window.speechSynthesis?.speak(utterance);
+}
+
+// ──────────────────────────────────────────────────────────
 // SPEECH RECOGNITION (VOICE INPUT)
 // ──────────────────────────────────────────────────────────
 let recognition = null;
@@ -1078,6 +1188,13 @@ function initSpeechRecognition() {
     }
     const chatInput = document.getElementById('chat-input');
     if (chatInput) chatInput.placeholder = `Listening... Speak now...`;
+
+    // Cancel active speech
+    window.speechSynthesis?.cancel();
+    if (voiceSynthesisInstance) {
+      voiceSynthesisInstance.pause();
+      voiceSynthesisInstance = null;
+    }
   };
 
   recognition.onend = () => {
@@ -1096,6 +1213,11 @@ function initSpeechRecognition() {
     const chatInput = document.getElementById('chat-input');
     if (chatInput) {
       chatInput.value = transcript;
+      if (voiceModeActive && transcript.trim()) {
+        setTimeout(() => {
+          sendChatMessage();
+        }, 300);
+      }
     }
   };
 
@@ -1134,7 +1256,12 @@ function toggleVoiceInput() {
   if (isListening) {
     recognition.stop();
   } else {
-    // Default to en-IN for universal transcription supporting English and Hinglish phrases
+    // Cancel active speech
+    window.speechSynthesis?.cancel();
+    if (voiceSynthesisInstance) {
+      voiceSynthesisInstance.pause();
+      voiceSynthesisInstance = null;
+    }
     recognition.lang = 'en-IN';
     recognition.start();
   }
@@ -1224,4 +1351,5 @@ function submitGrievanceTicket() {
   // Re-render escalation lists if open
   if (currentAdminTab === 'escalations') renderEscalationQueue();
   if (currentAdminTab === 'dashboard') renderDashboardEscalations();
+}
 }

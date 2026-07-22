@@ -95,6 +95,25 @@ async def rebuild_index():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+class TTSRequest(BaseModel):
+    text: str
+    voice: str = "alloy"
+
+@app.post("/api/tts")
+async def tts_endpoint(payload: TTSRequest):
+    try:
+        from fastapi.responses import Response
+        from rag.pipeline import client
+        response = client.audio.speech.create(
+            model="tts-1",
+            voice=payload.voice,
+            input=payload.text
+        )
+        audio_content = response.read()
+        return Response(content=audio_content, media_type="audio/mpeg")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.post("/api/upload_doc")
 async def upload_document(
     batch_id: str = Form(...),
@@ -144,4 +163,5 @@ async def upload_document(
 if not os.environ.get("VERCEL"):
     os.makedirs("public", exist_ok=True)
     app.mount("/", StaticFiles(directory="public", html=True), name="public")
+
 

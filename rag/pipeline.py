@@ -20,7 +20,7 @@ load_dotenv()
 
 from openai import OpenAI
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY") or "mock_key")
 
 EMBED_MODEL = "text-embedding-3-small"
 CHAT_MODEL = "gpt-4o-mini"
@@ -467,6 +467,13 @@ CONTEXT FROM DPU VERIFIED KNOWLEDGE BASE:
 
     return {
         "answer": bot_answer,
+        "sources": sources,
+        "confidence": confidence,
+        "escalate": confidence < CONF_THRESHOLD,
+        "is_redirect": False,
+        "erp_link": None,
+        "erp_label": None
+    }
         "sources": sources,
         "confidence": confidence,
         "escalate": confidence < CONF_THRESHOLD,
