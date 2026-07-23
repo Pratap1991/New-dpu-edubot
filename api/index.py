@@ -15,7 +15,7 @@ if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
 from dotenv import load_dotenv
-load_dotenv()
+load_dotenv(os.path.join(ROOT, ".env"))
 
 from rag.pipeline import answer, index_exists, INDEX_PATH, CHUNKS_PATH, KB_PATH
 from ingestion.build_index import build_index

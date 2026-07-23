@@ -14,9 +14,10 @@ import pickle
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 from dotenv import load_dotenv
-load_dotenv()
+load_dotenv(os.path.join(ROOT_DIR, ".env"))
 
 from openai import OpenAI
 
@@ -26,7 +27,6 @@ EMBED_MODEL = "text-embedding-3-small"
 CHAT_MODEL = "gpt-4o-mini"
 CONF_THRESHOLD = 0.50
 import tempfile
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INDEX_PATH = os.path.join(tempfile.gettempdir(), "faiss_index", "index.npy")
 CHUNKS_PATH = os.path.join(tempfile.gettempdir(), "faiss_index", "chunks.pkl")
 KB_PATH = os.path.join(ROOT_DIR, "data", "knowledge_base.json")
@@ -246,8 +246,9 @@ def retrieve(query: str, batch_id: str, index, chunks: list, top_k: int = 5) -> 
         elif chunk["batch_id"] == "all":
             general_results.append(entry)
 
-    # Combine: batch first, then general, up to top_k
+    # Combine and sort by score descending (giving a small 0.02 boost to batch-specific chunks to prioritize them if scores are close)
     combined = batch_results + general_results
+    combined.sort(key=lambda x: x[0] + (0.02 if x[1]["batch_id"] == batch_id else 0.0), reverse=True)
     return combined[:top_k]
 
 
