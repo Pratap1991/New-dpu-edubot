@@ -479,10 +479,4 @@ CONTEXT FROM DPU VERIFIED KNOWLEDGE BASE:
         "erp_link": None,
         "erp_label": None
     }
-        "sources": sources,
-        "confidence": confidence,
-        "escalate": confidence < CONF_THRESHOLD,
-        "is_redirect": False,
-        "erp_link": None,
-        "erp_label": None
-    }
+
