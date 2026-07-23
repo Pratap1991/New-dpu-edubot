@@ -65,8 +65,12 @@ async def kb_status():
         
         # Load chunks size if built
         chunks_count = 0
-        if os.path.exists(CHUNKS_PATH):
-            with open(CHUNKS_PATH, "rb") as f:
+        target_chunks_path = CHUNKS_PATH
+        if not os.path.exists(target_chunks_path):
+            target_chunks_path = os.path.join(ROOT, "data", "faiss_index", "chunks.pkl")
+            
+        if os.path.exists(target_chunks_path):
+            with open(target_chunks_path, "rb") as f:
                 chunks = pickle.load(f)
                 chunks_count = len(chunks)
                 

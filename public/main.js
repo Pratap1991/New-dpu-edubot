@@ -1352,4 +1352,3 @@ function submitGrievanceTicket() {
   if (currentAdminTab === 'escalations') renderEscalationQueue();
   if (currentAdminTab === 'dashboard') renderDashboardEscalations();
 }
-}
